@@ -1,0 +1,119 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage[T1]{fontenc}
+\usepackage{array}
+\usepackage{booktabs}
+\usepackage{ragged2e}
+\usepackage{algpseudocode}
+\usepackage{algorithm}
+
+\begin{document}
+\section{Introduction}
+\begin{FlushLeft}
+    In order to have a better understanding of how entity matching algorithms and frameworks
+    are useful, we need to better understand their context. We've explained our proposed
+    approach for doing this in our project proposal on the matter.
+\end{FlushLeft}
+\begin{FlushLeft}
+    Our approach relies on having an initial dataset that we're going to call the
+    \textbf{golden master}. The terminology is borrowed from the music industry
+    where the golden master is the initial (or ``gold'') copy of a recording. In our case,
+    this dataset has two purposes:
+    \begin{itemize}
+        \item splitting it into multiple datasets \textit{and}
+        \item comparing the results of the entity matching algorithm against it.
+    \end{itemize}
+\end{FlushLeft}
+\begin{FlushLeft}
+    This document improves our understanding of the datasets that will serve as
+    our golden masters for entity matching algorithm comparison. First, we'll 
+    enumerate the datasets, highlighting their data representation and size as
+    we go along. Then, we'll choose one dataset to serve as the golden master
+    for our initial set of experiments. Lastly, we'll describe the chosen golden
+    master in terms of items and their features.
+\end{FlushLeft}
+\section{Considered Candidate Datasets}
+For our experiments we've taken into account a number of candidate
+datasets. To ease the data ingestion process, we've only taken into account
+those datasets that have a tabular representation. One of the extension
+points of the resulting project is to remove this limitation on data
+representation.
+\begin{center}
+\begin{tabular}{llc}
+    \toprule
+    Name & Item Count & Data Structure \\
+    \midrule
+    DBLP2 & 2616 & tabular \\
+    ACM & 2294 & tabular \\
+    Abt & 1081 & tabular \\
+    Buy & 1092 & tabular \\
+    \bottomrule
+\end{tabular}
+\end{center}
+\begin{FlushLeft}
+    We have chosen the \textbf{DBLP2} as the initial golden master dataset.
+\end{FlushLeft}
+\section{DBLP2 Dataset}
+    This dataset represents half of the DBLP-Scholar dataset. The reason we
+    don't need the other half is because of the generational nature of our
+    approach.
+\subsection{Dataset Description}
+    DBLP2 is a tabular dataset which means the data is represented as rows
+    and columns. We call each row a \textbf{data record} and each column a
+    \textbf{feature}. Each data record in the golden master has the
+    following features.
+    \begin{center}
+        \begin{tabular}{llll}
+            \toprule
+            Feature & Data Type & Example Value \\
+            \midrule
+            id & string & ``journals/sigmod/Mackay99' \\
+            title & string & ``Estimation of Query-Result Distribution and its Application in Parallel-Join Load Balancing' \\
+            authors & list of strings & ``Viswanath Poosala, Yannis E. Ioannidis' \\
+            venue & string & ``SIGMOD Record' \\
+            year & number & 2012 \\
+            \bottomrule
+        \end{tabular}
+    \end{center}
+\subsection{Usage}
+\begin{FlushLeft}
+    Each DBLP2 data record contains information about a real-world entity.
+    To allow comparing entity matching strategies we must provide the same
+    starting point. To make things easier for ourselves, we will consider
+    the DBLP2 dataset as the perfect matching result. This means that the
+    DBLP2 dataset can't be an input to the entity matching algorithm.
+\end{FlushLeft}
+\begin{FlushLeft}
+    Instead, we're proposing to process each data record in the DBLP2 dataset
+    so that features are extracted from it repeatedly. We refer to the way
+    this task is performed as the data record processing \textbf{strategy}.
+    By using a data record processing strategy, we will obtain multiple
+    datasets. We shall call these \textbf{remix} datasets. The derived
+    datasets are very important because these are the input datasets for the
+    entity matching algorithm.
+\end{FlushLeft}
+\section{Basic Data Record Processing Strategy}
+\begin{FlushLeft}
+    For our initial data record processing strategy, we'll use a simple feature
+    splitting strategy. For all data record, at each pass of running this strategy,
+    it is going to extract some mandatory features and a few other randomly
+    determined features.
+\end{FlushLeft}
+\begin{FlushLeft}
+    This strategy will rely  on two parameters:
+    \begin{itemize}
+        \item the \textbf{overlap} represents the list of features that should always be extracted
+        \item the \textbf{divergence size} represents the number of features, other than the overlapping ones, that should be extracted
+    \end{itemize}
+\end{FlushLeft}
+\begin{FlushLeft}
+    This strategy can create as many tabular remix datasets as necessary based on
+    the initial dataset. The main drawback of this strategy is that by running it
+    twice, we may obtain the same resulting dataset. This drawback can be overcome
+    by running it as many times as necessary until we obtain different remixes.
+\end{FlushLeft}
+\begin{algorithmic}
+\Require$m := len($record$)$
+\Function{Split}{$record$,$m$}
+\EndFunction
+\end{algorithmic}
+\end{document}
