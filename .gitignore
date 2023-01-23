@@ -1,5 +1,7 @@
 .DS_Store
 *.tmp
+*.pdf
+
 ## Core latex/pdflatex auxiliary files:
 *.aux
 *.lof
