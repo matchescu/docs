@@ -40,12 +40,12 @@ representation.
 \begin{center}
 \begin{tabular}{llc}
     \toprule
-    Name & Item Count & Data Structure \\
+    Name & Item Count & Data Structure & Reference \\
     \midrule
-    DBLP2 & 2616 & tabular \\
-    ACM & 2294 & tabular \\
-    Abt & 1081 & tabular \\
-    Buy & 1092 & tabular \\
+    DBLP2 & 2616 & tabular & \\
+    ACM & 2294 & tabular & \\
+    Abt & 1081 & tabular & \\
+    Buy & 1092 & tabular & \\
     \bottomrule
 \end{tabular}
 \end{center}
@@ -58,7 +58,7 @@ representation.
     approach.
 \subsection{Dataset Description}
     DBLP2 is a tabular dataset which means the data is represented as rows
-    and columns. We call each row a \textbf{data record} and each column a
+    and columns. We call each row an \textbf{entity} and each column a
     \textbf{feature}. Each data record in the golden master has the
     following features.
     \begin{center}
@@ -76,22 +76,22 @@ representation.
     \end{center}
 \subsection{Usage}
 \begin{FlushLeft}
-    Each DBLP2 data record contains information about a real-world entity.
+    Each DBLP2 entity contains information about a real-world entity.
     To allow comparing entity matching strategies we must provide the same
     starting point. To make things easier for ourselves, we will consider
     the DBLP2 dataset as the perfect matching result. This means that the
     DBLP2 dataset can't be an input to the entity matching algorithm.
 \end{FlushLeft}
 \begin{FlushLeft}
-    Instead, we're proposing to process each data record in the DBLP2 dataset
+    Instead, we're proposing to process each entity in the DBLP2 dataset
     so that features are extracted from it repeatedly. We refer to the way
-    this task is performed as the data record processing \textbf{strategy}.
-    By using a data record processing strategy, we will obtain multiple
+    this task is performed as the entity processing \textbf{strategy}.
+    Applying an entity processing strategy repeatedly, we will obtain multiple
     datasets. We shall call these \textbf{remix} datasets. The derived
     datasets are very important because these are the input datasets for the
     entity matching algorithm.
 \end{FlushLeft}
-\section{Basic Data Record Processing Strategy}
+\section{Basic Entity Processing Strategy}
 \begin{FlushLeft}
     For our initial data record processing strategy, we'll use a simple feature
     splitting strategy. For all data record, at each pass of running this strategy,
