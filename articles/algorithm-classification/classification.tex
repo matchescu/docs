@@ -1,6 +1,8 @@
 \documentclass[a4paper,12pt]{article}
 \usepackage[T1]{fontenc}
 \usepackage{ragged2e}
+\usepackage{array}
+\usepackage{booktabs}
 
 \begin{document}
 
@@ -54,22 +56,38 @@ costs.
 whether it uses an external knowledge base, for what purpose and how.
 
 \subsection{Algorithm Family}
+
 \paragraph{}In the current context, the algorithm family simply refers
-to the class of the algorithm without going into too many specific
-details. For example, if an algorithm is a rule-based processing engine
-that uses some distance formula to determine whether entity features are
-similar then the family will simply be \textit{rule-based}. We won't
-go into the details of exactly what rules are used unless we need to
-(to disambiguate between two algorithms, for example).
+to the class of the algorithm without going into much detail. For example,
+we will refer to rule-based algorithms as \textit{rule-based}, regardless of the
+distance function they use. We won't go into the details of exactly what rules
+are used unless we need to (to disambiguate between two algorithms, for example).
+
 \paragraph{}An algorithm may belong to multiple classes. In such a case,
 we will use the classification assigned to it by its creator. If such a
 classification wasn't provided, we'll assign it the class that suits our
-interests the best. This means that you, the reader, should be mindful
-that this the classification here is subjective.
+interests the best. For the reader this means that our classification is
+subjective and should be taken with a grain of salt.
 
 \section{Entity Matching Algorithms}
 % table of entity matching algorithms with their classification according to the
 % criteria written above (TBW)
+For our initial version we'll start by enumerating simple algorithms that
+work on top of tabular data.
+
+\begin{center}
+    \begin{tabular}{llc}
+        \toprule
+        Name & Category & Reference \\
+        \midrule
+        Fellegi-Sunter & 2616 & tabular & \\
+        ACM & 2294 & tabular & \\
+        Abt & 1081 & tabular & \\
+        Buy & 1092 & tabular & \\
+        \bottomrule
+    \end{tabular}
+\end{center}
+
 \section{Conclusion}
 % the best entity matching algorithm to start with + a bit of explanation
 \end{document}
