@@ -1,0 +1,93 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage[T1]{fontenc}
+\usepackage{ragged2e}
+\usepackage{array}
+\usepackage{booktabs}
+
+\begin{document}
+
+\section{Introduction}
+\paragraph{}This document follows up on the proposal to build a
+framework that would allow comparing entity matching algorithms.
+Such frameworks have been built before, however the current one
+aims to be
+\begin{itemize}
+    \item more generic in terms of the data input they allow
+    \item more accurate in terms of the analysis of the results
+    \item friendlier for the end-user to use
+\end{itemize}
+\paragraph{}In order to achieve these goals, the project benefits
+from understading the types of algorithms it tackles. Moreover,
+every software development process can only be parallelized so much
+before needing to execute certain actions in sequence. This leads
+us to the conclusion that we should prioritise the entity matching
+algorithms we would experiment with.
+\section{Classification Criteria}
+\paragraph{}In order to do an efficient prioritisation over the entity matching
+algorithms, we would classify them according to a few criteria.
+
+\subsection{Feature Types}
+\paragraph{}Browsing the literature on the subject, there's a panoply of entity
+matching, entity clustering, data linkage and other articles that all refer to
+the same problem. We've discussed this issue at length in the project proposal
+and will not detail it further here. One interesting aspect about these
+algorithms is their variety with respect to the data they're able to run on.
+Some algorithms work on unstructured text to match ideas, others have structured
+databases wherein they need to match table records from the same or separate 
+tables. However most of them support a few select data types that they're able
+to perform matching on.
+\paragraph{}In order to find a good first candidate for our experiments, we will
+write down the data types that are supported by each entity matching algorithm,
+respectively.
+\paragraph{}Another way to look at this criterion is through the lens of how
+well does the input data for the algorithm need to be structured. From this
+point of view, we'll also note whether the entity matching algorithm works with
+structured, semi-structured or unstructured data.
+
+\subsection{Use of an External Knowledge Base}
+\paragraph{}The broadness of the entity matching problem poses another question:
+does the algorithm require an external database to function or not? For example,
+a matching algorithm that works across alphabets would typically require using
+a support knowledge base containing those alphabets. For our experiments we're
+primarily looking for entity matching solutions that work by themselves in the
+first stage of the project. This is mostly due to wanting to avoid extra setup
+costs.
+\paragraph{}For each entity matching algorithm that we're visiting, we'll note
+whether it uses an external knowledge base, for what purpose and how.
+
+\subsection{Algorithm Family}
+
+\paragraph{}In the current context, the algorithm family simply refers
+to the class of the algorithm without going into much detail. For example,
+we will refer to rule-based algorithms as \textit{rule-based}, regardless of the
+distance function they use. We won't go into the details of exactly what rules
+are used unless we need to (to disambiguate between two algorithms, for example).
+
+\paragraph{}An algorithm may belong to multiple classes. In such a case,
+we will use the classification assigned to it by its creator. If such a
+classification wasn't provided, we'll assign it the class that suits our
+interests the best. For the reader this means that our classification is
+subjective and should be taken with a grain of salt.
+
+\section{Entity Matching Algorithms}
+% table of entity matching algorithms with their classification according to the
+% criteria written above (TBW)
+For our initial version we'll start by enumerating simple algorithms that
+work on top of tabular data.
+
+\begin{center}
+    \begin{tabular}{llc}
+        \toprule
+        Name & Category & Reference \\
+        \midrule
+        Fellegi-Sunter & 2616 & tabular & \\
+        ACM & 2294 & tabular & \\
+        Abt & 1081 & tabular & \\
+        Buy & 1092 & tabular & \\
+        \bottomrule
+    \end{tabular}
+\end{center}
+
+\section{Conclusion}
+% the best entity matching algorithm to start with + a bit of explanation
+\end{document}
