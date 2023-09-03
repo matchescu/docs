@@ -1,0 +1,222 @@
+%! Author = andrei.olar@ubbcluj.ro
+%! Date = 03.09.2023
+
+% Preamble
+\documentclass[11pt]{article}
+
+% Packages
+\usepackage{amsmath}
+
+% Document
+\begin{document}
+    \section{Abstract}
+    \section{Introduction}
+    Entity resolution is the task of finding out whether two pieces of information refer to the same real world item or
+    not.
+    An entity profile is a collection of data that an entity resolution task deems as referring to the same real-world
+    item.
+    \begin{itemize}
+    \item why does the item have to be real?
+    \item what are some well-known applications of entity resolution?
+    \end{itemize}
+    The better we are at the entity resolution task, the better we are at solving these real-world problems.
+    How good an entity resolution algorithm is often depends on the business context in which it is run.
+    This means that an entity resolution algorithm would perform better on certain datasets than on others
+    (citation needed).
+    Because of that, it makes sense to come up with ways in which we can compare entity resolution tasks both from a
+    qualitative and a quantitative perspective.
+    And since to compare we must first evaluate, this paper puts a twist on old discussions about how to approach
+    qualitative evaluation of entity resolution results.
+
+    \subsection[related]{Related Work}
+
+    Systems that evaluate entity resolution task performance:
+    \begin{itemize}
+        \item FEBRL http://users.cecs.anu.edu.au/~Peter.Christen/Febrl/febrl-0.3/febrldoc-0.3/manual.html
+        \item FEVER https://dbs.uni-leipzig.de/en/research/projects/data_integration/fever
+        \item JedAI https://github.com/scify/JedAIToolkit/tree/master
+        \item Magellan https://sites.google.com/site/anhaidgroup/current-projects/magellan?authuser=0
+        \item Papers With Code https://github.com/paperswithcode
+        \item Oyster ER https://bitbucket.org/oysterer/oyster/src/master/
+        \item SERF http://infolab.stanford.edu/serf/
+    \end{itemize}
+
+    Works that synthesize ER evaluation: (to be cited)
+
+    The related work provides a very solid place to start on our journey to evaluate entity resolution tasks
+    qualitatively.
+    The body of work shows us which metrics we could be looking as well as how the state of the art at the time of
+    writing performs.
+    The body of work does \textit{not} accentuate the importance of the mathematical model that powers a particular
+    implementation of the entity resolution task.
+    The vast majority of the body of work we have consulted so far goes to great lengths to categorize entity resolution
+    implementation based on all sorts of criteria, save for the underlying mathematical model.
+    This is understandable because there's no clear-cut way to claim that an entity resolution task implements a given
+    mathematical model more than it does the others.
+    After all, each mathematical model for entity resolution is supported by all entity resolution tasks.
+    However, just as in everyday life we all have our perspectives, we shall see that each mathematical model provides a
+    unique perspective over the performance of an entity resolution task.
+    Furthermore, we will see that not all entity resolution tasks are created equal with respect to all mathematical
+    models.
+    Finally, we argue that one can choose a dominant mathematical model for any entity resolution algorithm and provide
+    easy to use, empirical criteria to do so.
+    None of these works, however, goes on to say the way in which the mathematical model influences our ability to
+    reason about the qualitative performance of the entity resolution implementation under study.
+    In particular, Talburt https://learning.oreilly.com/library/view/entity-resolution-and/9780123819734/
+    provides us with terrific insight into the mathematical models that power the entity resolution task.
+    Even though a fourth model based on graph theory is arguably applicable to entity resolution (citation needed), we
+    will restrain the scope of our analysis to the three models presented by Talburt.
+
+    \subsection[fsm]{Fellegi-Sunter Model}
+    \begin{itemize}
+        \item based on probability theory
+        \item models entity resolution around three key probabilities: match certainty, non-match certainty, ambiguity
+        \item works well if all we care about is matching (e.g for removing duplicates)
+        \item does not work well if we care about transitive matches or identity resolution
+        \item the entity profile is a pair
+    \end{itemize}
+
+    \subsection[serf]{Stanford Entity Resolution Framework Model}
+    \begin{itemize}
+        \item views entity resolution as the result of applying a match function, a merge function and a domination
+        relationship on top of a set
+        \item allows evaluating transitive matches
+        \item the match function can be anything as long as we can act with a yes/no action on its result
+        \item the merge function should be distributive (merge(a, merge(b, c)) = merge(merge(a, b), c))
+        \item provides a very flexible way of modeling entity resolution (the comparison and addition of integer numbers
+        is a valid basis for an entity resolution task on the set of integer numbers)
+        \item the entity profile is either one of the original input items or an information that dominates all the
+        information that was used to create it
+    \end{itemize}
+
+    \subsection[algebraic]{Algebraic Model}
+    John R. Talburt proposes this model.
+    \begin{itemize}
+        \item ER is an equivalence relation on a set of items
+        \item reflexive, symmetric, transitive
+        \item ER is the same as the partition generated by a given equivalence relation over an input set
+        \item very easy to work with and very comprehensive (transitivity, identity resolution, etc)
+        \item the entity profile is a partition class (a cluster)
+    \end{itemize}
+
+    \section{Data Structures}
+    Each of the above models assumes the output of an entity resolution task has a certain shape.
+    In programming, this shape can be approximated by using certain abstract data types.
+    If we accept that entity resolution tasks use tuples as the most basic data structure they operate on then each of
+    the mathematical model produces more complex abstract data types that contain tuples.
+    FSM produces a list of pairs of tuples (i.e. it produces matches).
+    The algebraic model produces a partition over the set containing all the items that we are running the
+    entity resolution task on.
+    The SERF model is very flexible and the best way we could imagine its output is a stream of tuples.
+    What the tuples actually look like, depends on the merge function.
+    That means that the SERF model can have the exact same output as the algebraic model.
+    On the other hand, if we run entity resolution over a set of input items that only have string attributes, and we
+    use a merge function that concatenates the corresponding attributes of matching items -> we end up with an output that contains tuples of
+    the same size as the input tuples, but with different content.
+
+    \section{Metrics}\label{sec:metrics}
+    Just as we have different data structures we can expect each mathematical model to output, we can expect to be able
+    to apply different metrics depending on the mathematical model.
+
+    \subsection[fsm]{Fellegi-Sunter Model}\label{subsec:fellegi-sunter-model}
+    For the F-S model, we can use standard probabilistic methods that rely on the notions of true or false positive or
+    negative (explain what a TP is in the context of ER; same for FP, FN, TN).
+    Compound measures like the precision, recall, F-score, accuracy, sensitivity, and others can also be used.
+
+    \subsection[serf]{Stanford Entity Resolution Framework}\label{subsec:stanford-entity-resolution-framework}
+    Given the flexibility of the SERF entity resolution model, it needs a very generic way of evaluating the quality of
+    the entity resolution task.
+    This measure is the generalized merge distance.
+    A few other measurements can be derived from the merge distance between the ground truth and the entity resolution
+    task's result: variation of information, pairwise precision, pairwise recall, pairwise f1.
+
+    \subsection[algebraic]{Algebraic model}
+    The algebraic model relies on partitions over the initial set of items.
+    Therefore, we can apply clustering metrics most easily for this model: talburt-wang index, rand index, adjusted rand
+    index, pairwise precision, pairwise recall, cluster precision, cluster recall, pairwise and cluster f1 measure.
+
+    \subsection[why-bother]{Consequences of Choosing a Model}
+    We can't compare precision with pairwise precision or with cluster precision.
+    This speaks to the fact that once we choose a mathematical model to evaluate an algorithm, we can compare the
+    results of that algorithm only with other results obtained for the same mathematical model.
+    Furthermore, any merge distance depends very much on the chosen merge function.
+    The data output by the entity resolution task has a different structure based on that function.
+    Therefore, the pairwise measures output by the SERF are not comparable to the pairwise measures output by the
+    algebraic model.
+    Another thing to take into account is the format in which the ground truth supplied for a standard entity resolution
+    data set is provided.
+    If the ground truth is provided as a list of pairs, we will have to provide the same type of data structure for the
+    evaluation.
+    Similar indications for ground truths provided as partitions or lists of items.
+
+    \subsection[applying]{How to Apply Models}
+    One could argue that we could translate from one ground truth to another.
+    This is trivial in some cases, but not so in others.
+    The translation from algebraic to SERF is trivial: the match function is the equivalence relationship whereas the
+    merge function groups matching items within a container (a list or a tuple).
+    The translation from the SERF model to the algebraic model can be performed only if there's a way to translate from
+    the results provided by the entity resolution task to a partition over the set of input items.
+    Converting from partitions to pairs of matches is also trivial.
+    Converting from whatever SERF outputs based on the merge function to pairs might even be impossible (see
+    concatenation example).
+    In light of all this we argue that some algorithms simply prefer some mathematical model over others.
+
+    \section{Identifying the Mathematical Model of an Entity Resolution Implementation}
+    All entity resolution tasks are very easily explained in terms of the FSM\@.
+    However, some entity resolution tasks cannot do transitive matching, i.e.\ if a matches b and b matches c then a
+    matches c.
+    As we shall see, those tasks can't be expressed in terms of the algebraic model or in terms of the SERF model
+    without adapting their output to the data structure expected by those models.
+    The entity resolution systems that are based on the Swoosh family of algorithms (citation needed), such as Oyster
+    fall under the SERF family of models.
+    The rest of the algorithms that provide transitive matching can be expressed primarily via the algebraic entity
+    resolution model.
+    Again, the obvious missing elephant in the room is graphs.
+
+    \section{Experiment}
+    As a walkthrough for the concepts discussed thus far, we present an experiment where we use an FSM algorithm and
+    adapt it to the algebraic and SERF models.
+
+    \subsection[algo]{Algorithm}
+    ppjoin - description, why is it FSM
+
+    \subsection[data]{Data}
+    We generate a data set based on the Abt-Buy data set for entity resolution provided by the University in Leipzig.
+    We split the Abt data into two data sets.
+    We keep 2 columns in common between the two data sets.
+    We assign the rest randomly between the output data sets.
+    We do this because we want to operate ppjoin in a controlled environment.
+
+    \subsection[adapters]{Output Adapters}
+    PPJoin outputs a list of pairs.
+    We write an adapter for transforming the list of pairs to a partition over the initial set considering the list of
+    pairs to define the equivalence relation between matching items.
+    We write a different adapter for transforming the list of pairs to a list of generic items by reusing a sample merge
+    function that we provide to the SERF model.
+
+    \subsection[method]{Methodology}
+    We run ppjoin at 3 different Jaccard thresholds and note the differences between the measurements supplied by each
+    model.
+    The thresholds are 0.0, 0.4 and 0.7.
+    We interpret the results for each model for the three thresholds.
+    We also discuss the differences between models for each threshold.
+
+    \subsection[results]{Results}
+    We notice that for 0.0, FSM thinks the algorithm performs very well, but SERF and the algebraic model give us
+    additional information about the consistency of the results.
+    SERF thinks there's a huge distance between what we should be getting and what we're actually getting (the variation
+    of information is also off the charts).
+    The algebraic model reveals very poor cluster metrics.
+
+    Do a similar analysis for 0.4 and 0.7.
+
+    \section[conclusion]{Conclusions}
+    The work speaks about how we can use mathematical models to evaluate entity resolution results. It also provides
+    easy rules of thumb to identify the model that's best suited to interpret the results of an ER task.
+    Future work:
+    \begin{itemize}
+        \item result translation between math models
+        \item ground truth and data generation for ER tasks
+    \end{itemize}
+
+\end{document}
