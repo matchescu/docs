@@ -8,33 +8,313 @@
 \usepackage{amsmath}
 \usepackage{hyperref}
 \usepackage{xcolor}
-
+\usepackage{cite}
+\usepackage{amsthm}
 
 % Document
 \begin{document}
-
-    \section{Abstract}\label{section:abstract}
-
-
-    \section{Introduction}\label{section:introduction}
-
-    Entity resolution is the task of finding out whether two pieces of information refer to the same real world item or not. An entity profile is a collection of data that an entity resolution task deems as referring to the same real-world item.
-    \begin{itemize}
-        \item why does the item have to be real?
-        \item what are some well-known applications of entity resolution?
-    \end{itemize}
-    The better we are at the entity resolution task, the better we are at solving these real-world problems. How good an entity resolution algorithm is often depends on the business context in which it is run. This means that an entity resolution algorithm would perform better on certain datasets than on others  (citation needed). Because of that, it makes sense to come up with ways in which we can compare entity resolution tasks both from a qualitative and a quantitative perspective. And since to compare we must first evaluate, this paper puts a twist on old discussions about how to approach qualitative evaluation of entity resolution results.
-
-    \textcolor{green}{cred ca ar fi utila si o sectiune scurta in care sa reiei definitia problemei (ce se da, ce se cere) intr-un mod formal (adica se da o multime de obiecte, cu proprietati, care pot fi "Separate" pe diferite surse; se cere: identificarea obiectelor care se aliniaza). Poti folosi formalizari ca si in articolele:} \href{https://d1wqtxts1xzle7.cloudfront.net/30672623/A11SEP-CD-libre.pdf?1391815744=&response-content-disposition=inline%3B+filename%3DA_Uniform_Dependency_Language_for_Improv.pdf&Expires=1693931642&Signature=G-sCf5o-XZNgP~WX0yxCtzzbvCqj4~Tu4dka6QLKrOk6zPZ5XTrOZD5kqcQxJJa48w5-2Ya31rd4b~BV1bR5kJMwuFcsGzAPcQqDhpRhVxoki41kZUSYU73pVTcfyqeE3l7gTg6Qriuowj8xM3LgHfHUft80iguUhSMUDmC2FLg7WGjHWETeKquMv51t9sKpyIQHG11wggW2XMkcx1tygkd92b339bqEX-urQhQN9irKBou-dmrJvF2O7qb2LxZsb4fwYLvwi0vOZ6fzVguOdsRIcqm6uzdmQn3tPV1oMpcx4Qy6q-dUWNm4uzJZ9PbzW5Wo351FXZVogeepZGXFcw__&Key-Pair-Id=APKAJLOHF5GGSLRBV4ZA#page=53}{aici} 
-    \textcolor{green}{, la pag 57, e destul de succint prezentat.}
+    \theoremstyle{definition}
+    \newtheorem{defn}{Definition}[section]
     
-    \textcolor{green}{O alta ref bunautila ar fi aici: Whang, S. E., Garcia-Molina, H. (2013). Joint entity resolution on multiple datasets. The VLDB journal, 22, 773-795. sau aici} \href{https://pages.cs.wisc.edu/~anhai/papers1/deepmatcher-sigmod18.pdf}{link}
+    \section{Abstract}\label{sec:abstract}
+
+
+    \section{Introduction}\label{sec:introduction}
+    Entity resolution is the task of finding out whether two pieces of
+    information refer to the same real-world item or not.
+    There's more restrictive definitions of entity resolution as the task of
+    identifying and linking representations of data from two or more
+    sources\cite{Qia17}.
+    We share the opinion that identifying and linking data consitutes a more
+    specialized process\cite{Tal11}.
+    The task of gathering information about a generic pound of potatoes across
+    various markets is still an entity resolution task, in our view.
+    
+    Probably because of its generic nature, entity resolution also goes by many
+    different names such as: record linkage, data deduplication, merge-purge,
+    named entity recognition, entity alignment or entity
+    matching\cite{Tal11,fever2009}.
+
+    Entity resolution has many practical applications ranging from linking
+    medical records to doing background checks on persons of interest to 
+    identifying plagiarism.
+    As an aside, combining information from different media (sound, images,
+    motion, smell, etc) is also a form of entity resolution and opens up many
+    avenues into its future as an area of study.
+
+    The glue that binds all of the above examples has at least the following
+    ingredients:
+    \begin{itemize}
+        \item\textit{a concern for a real-world entity}, for if the task were
+        not about a something from our world, the resolution would not have a
+        clear goal;
+        \item\textit{no implication as to the used method}, because if we
+        stipulated a certain way to perform entity resolution, we might not be
+        able to;
+        \item\textit{the representation of information is computer friendly},
+        because if it weren't, it might not be possible to study the task by
+        means of computer science.
+    \end{itemize}
+
+    We must clarify regarding the concern for a real-world entity that entity
+    resolution tasks do not deal with real-world entities directly but with
+    information about them\cite{Tal11}.
+    In other words, entity resolution tasks typically don't know about the real-
+    world objects or entities they are meant to resolve\cite{Chen09}.
+
+    \section{Terminology}\label{sec:terminology}
+
+    Given that we have just reserved the term ``entity'' for real-world items,
+    we have to come up with new terms for the concepts used in the context of
+    entity resolution.
+    We start by saying that entity resolution operates on information sources.
+
+    \begin{defn}
+        An \textit{information source} represents a sequence of decoded messages
+        that originate somewhere and can be processed by the entity resolution
+        task which reads them over a communication channel.
+    \end{defn}
+
+    The terms `decoded', `message' and `communication channel' refer to concepts
+    from the field of information theory\cite{ash2012it}.
+    
+    An entity resolution task can operate on one or multiple information
+    sources.
+    Information sources may be bounded (such as files or databases) or unbounded
+    (such as streams).
+    
+    In the context of the above definition, the entity resolution task is the
+    computer program doing the processing.
+    What sets entity resolution programs apart is the notions they use to
+    process information from a particular source.
+
+    \begin{defn}
+        An \textit{attribute} is information about an entity that has a certain
+        meaning in a context given by a frame of reference and certain rules of
+        interpretation.
+    \end{defn}
+
+    Attributes by themselves are not enough to describe an entity.
+    For example, `red' fully describes an entity only if we are looking for
+    colors.
+    If we're looking for fruit, `red' is only one of several attributes that
+    help describe fruit.
+    For example we might be interested in `sour' or `sweet' as well as in
+    `small', `medium' or `large'.
+
+    \begin{defn}
+        An \textit{entity reference} is a collection of attributes that refer
+        to a real-world entity which can be formed by following an organizing
+        principle (or order) of the information source where the attributes are
+        all located.
+    \end{defn}
+
+    The organizing principle of an information source is simply an order that
+    facilitates processing that information source.
+    For example, in a CSV file it would be the rule that up until the first
+    comma on each line we should find a color value.
+    For operations on databases such as joins, the organizing principles is
+    built around data records.
+    For named entity recognition, the organizing principle is built around
+    mentions.
+
+    A good generalization of the notions in the above examples put in the
+    context of entity resolution might be that of a
+    \textit{reference}\cite{Ben2009Swoosh}.
+    For in this context the rules for processing records, mentions or lines in
+    CSV files are used simply to find references to real-world entities.
+
+    The organizing principle of an information source shouldn't be confused with
+    the structure of the information in that source.
+    A single table record in a database might have a few attribute that
+    reference one entity (for example a company or a person) and a few other
+    attributes that reference another entity (a building).
+    For entity resolution tasks that value geolocation above other things, the 
+    fields that reference the building will constitute the entity reference.
+    For tasks that identify people, the entity reference will be comprised from
+    the attributes that reference a person or a company.
+    The organizing principle of the information source by which attributes are
+    collected as entity references by the entity resolution task is extrinsic to
+    the information source and is somehow linked to the entity resolution task
+    itself.
+    We say `linked' because the organizing principle may or may not be an
+    integral part of the entity resolution task.
+    For instance, entity alignment tasks rely on external knowledge bases and
+    entity matchers based on deep learning rely on machine learning for
+    determining the organizing principle of every data source they consume.
+
+    The other important distinction is that the attributes that make up an
+    entity reference are collected from the same information source.
+    This creates a clear belonging relationship between entity reference and
+    information source.
+    
+    Let's suppose that we are looking to identify colors across multiple
+    information sources.
+    In one information source the colors are represented as `red', `green' or 
+    `blue'.
+    In another information source they are represented as `CC0000', `00CC00' or
+    `0000CC'.
+    Because we are looking for colors we decide that our organizing principle
+    should dictate that references contain only one attribute.
+    However, up until now we haven't articulated a way to tell the entity
+    resolution task that.
+    Namely: how do we tell the entity resolution task that it's looking for
+    something that is a \textit{color}.
+    Or, formulated as a question: what is \textit{color}?
+
+    \begin{defn}
+        A \textit{trait} is a semantic rule that guides the entity resolution
+        task in recognizing the organizing principle of each information source
+        that it uses as input.
+    \end{defn}
+
+    Every entity resolution task has goals it must accomplish.
+    Some tasks stitch news articles together, others help organize content
+    across social networks or deduplicate the information stored in database
+    tables.
+    For each task there are rules of interpreting the information at hand that
+    stand out above others.
+    In our case, we must simply tell our task that it should be interested only
+    in colors and how those colors might look like depending on information
+    source.
+    
+    The notion that's the most similar to that of a trait is the `feature':
+    \textit{an individual measurable property or characteristic of a
+    phenomenon}\cite{bishop2006pattern}.
+    The mechanics of how traits and features function is near identical.
+    The difference between a trait as defined here and a feature is a matter of
+    perspective.
+    Features are part of a more objective perspective on information.
+    Traits as they are defined here are concerned with the contextual meaning of
+    things.
+    In the broadest sense, they are nothing more than algorithms that extract
+    information according to the subjective goal of the entity resolution task.
+    A trait can help the entity resolution task extract one or more attributes
+    for a given entity reference that can't be inferred from the underlying
+    information alone.
+    For example, a trait called `profitable' is different from a physical
+    representation in the form of a table column or a JSON property.
+    Imagine an entity resolution task that is meant to find companies across
+    databases.
+    One of the traits this entity resolution task is looking for is the company
+    profitability.
+    In a database table, it looks at values stored in a column called `profit'.
+    In a no-SQL collection, it looks at the values stored under the
+    `isProfitable' property.
+    Yet, the entity resolution task simply looks for the `profitable' trait in
+    both these information sources to help shape the entity references it finds.
+
+    To sum up, an attribute of an entity reference always exists in an
+    information source, whereas a trait of the entity resolution task does not.
+    Entity resolution tasks extract attributes that they assign to entity
+    references based on the traits specific to each task.
+    This point of view is supported by the need to design entity resolution
+    systems that are extensible based on their sources of
+    information\cite{fever2009}\cite{magellan2020}\cite{oyster2012}.
+
+    So far we have not discussed what happens if entity references point to the
+    same real-world entity.
+    
+    \begin{defn}
+        We refer to the logical group of entity references that point to
+        the same real-world entity according to the entity resolution task's
+        parameters as the \textit{entity profile} of that real-world entity.
+    \end{defn}
+
+    It is important to understand that the entity profile and the real-world
+    entity are not the same.
+    The entity profiles are simply manifestations of the input parameters of the
+    entity resolution task (namely the information sources and the traits) and
+    they represent the output of the entity resolution task.
+    
+    By using the terms \textit{information source}, \textit{attribute},
+    \textit{trait}, \textit{entity reference} and \textit{entity profile} we can
+    finally define the entity resolution problem.
+
+    \section{Problem Definition}\label{sec:problem}
+
+    We are given n pairs ((Si, ki), 1<=i<=n, ki belongs to N), where Si is an information source and ki is
+    the number of messages in that source.
+    We are also given a number of m traits, (tj, 1<=j<=m).
+    For each information source, the entity resolution task applies the m traits
+    to come up with kij entity references.
+    Let X denote the domain where all of the entity references resulted by
+    applying the m traits to (Si, ki) are found.
+    Let Y denote the domain of entity profiles.
+    Entity resolution is then a function E: X -> Y that converts individual
+    entity references to entity profiles based on whether they refer to the
+    same real-world entity or not.
+
+    This formulation is deliberately vague because there are more than one ways
+    to formalize it and we will go over three of them shortly.
+    
+    The representation of traits, entity references and attributes, however, is
+    common to all approaches.
+
+    Let O be the domain of objects with attributes.
+    Formally, an object is a tuple containing as many items as the number of
+    attributes of the object.
+    Each of the values in the tuple is an attribute.
+    Then traits are simply functions t:Si -> O where t(x) results in a tuple
+    (a1, ... , an) where ai are attributes, n > 0.
+    
+    The entity resolution task applies multiple traits and then merges the
+    resulting objects to produce entity references which as a result are still
+    just objects.
+    The order in which the attributes appear in the entity references
+    is determined by the entity resolution task based on its traits.
+    The phase of the entity resolution task where this happens is generally
+    referred to as feature extraction.
+    Many people feel the need to provide descriptions for the attributes.
+    We believe traits are a sufficient concept to explain how entity references
+    appear.
+    The da
+
+
+    \section{Contributions}\label{sec:contributions}
+
+    Our paper makes the following contributions:
+
+    \begin{itemize}
+        \item materializes the connection between mathematical model and entity
+        resolution task
+        \item provides a generic framework for measuring the qualitative
+        performance of entity resolution tasks
+        \item introduces a software system that uses this framework
+    \end{itemize}
+    
+    \textcolor{green}{cred ca ar fi utila si o sectiune scurta in care sa reiei definitia problemei (ce se da, ce se
+    cere) intr-un mod formal (adica se da o multime de obiecte, cu proprietati, care pot fi "Separate" pe diferite
+    surse; se cere: identificarea obiectelor care se aliniaza). Poti folosi formalizari ca si in articolele:}
+    \href{https://d1wqtxts1xzle7.cloudfront.net/30672623/A11SEP-CD-libre.pdf?1391815744=&response-content-disposition=inline%3B+filename%3DA_Uniform_Dependency_Language_for_Improv.pdf&Expires=1693931642&Signature=G-sCf5o-XZNgP~WX0yxCtzzbvCqj4~Tu4dka6QLKrOk6zPZ5XTrOZD5kqcQxJJa48w5-2Ya31rd4b~BV1bR5kJMwuFcsGzAPcQqDhpRhVxoki41kZUSYU73pVTcfyqeE3l7gTg6Qriuowj8xM3LgHfHUft80iguUhSMUDmC2FLg7WGjHWETeKquMv51t9sKpyIQHG11wggW2XMkcx1tygkd92b339bqEX-urQhQN9irKBou-dmrJvF2O7qb2LxZsb4fwYLvwi0vOZ6fzVguOdsRIcqm6uzdmQn3tPV1oMpcx4Qy6q-dUWNm4uzJZ9PbzW5Wo351FXZVogeepZGXFcw__&Key-Pair-Id=APKAJLOHF5GGSLRBV4ZA#page=53}{aici}
+    \textcolor{green}{, la pag 57, e destul de succint prezentat.}
+
+    \textcolor{green}{O alta ref buna utila ar fi aici: Whang, S. E., Garcia-Molina, H. (2013). Joint entity resolution
+    on multiple datasets. The VLDB journal, 22, 773-795. sau aici}
+    \href{https://pages.cs.wisc.edu/~anhai/papers1/deepmatcher-sigmod18.pdf}{link}
 
     \textcolor{green}{chiar si un exemplu (input, output = ground truth) ar fi util si cand ajungi la "forma" outputului unui model matem, poti arata atat ce forma are outputul (ca si formalism matematic), dar si empiric (pe exemplu)}
 
     \section[related]{Related Work}\label{section:related-work}
 
     Systems that evaluate entity resolution task performance:
+    \section{Related Work}\label{sec:related}
+
+    At the dawn of the 21st century, FEBRL\cite{febrl2002} emerged as one of the
+    first extensible systems to tackle measuring entity resolution performance.
+    It was succeeded by FEVER\cite{fever2009} and OYSTER\cite{oyster2012}. 
+    These systems have all paved the way to generalizing our understanding about
+    entity resolution and to ever more improvements in the quality of entity
+    resolution tasks.
+
+    Later on, systems like `Papers with Code'\cite{papwithcode2019} brought in
+    a social dimension to how we compare the qualitative performance of entity
+    resolution tasks.
+    Other systems that resemble frameworks more than they do cohesive
+    applications have also emerged\cite{magellan2020,jedai2017}.
+    These systems are open-source and encourage social collaboration around
+    entity resolution, too.
+
     \begin{itemize}
         \item FEBRL \href{http://users.cecs.anu.edu.au/~Peter.Christen/Febrl/febrl-0.3/febrldoc-0.3/manual.html}{link}
         \item FEVER \href{https://dbs.uni-leipzig.de/en/research/projects/data_integration/fever}{link}
@@ -44,6 +324,15 @@
         \item Oyster ER \href{https://bitbucket.org/oysterer/oyster/src/master/}{link}
         \item SERF \href{http://infolab.stanford.edu/serf/}{link}
     \end{itemize}
+
+    There exist numerous syntheses on the theoretical models for entity
+    resolution\cite{fs1969,Ben2009Swoosh,Tal11}.
+    Some of the available models have been compared and
+    explained\cite{Tal11,tal2013}.
+
+    Ways in which entity resolution tasks are similar even though they seem
+    to have nothing in common have been discussed in papers that deal with
+    certain steps of the entity resolution process\cite{Pap19,Chen09}.
 
     Works that synthesize ER evaluation: (to be cited)
 
@@ -172,4 +461,6 @@
         \item ground truth and data generation for ER tasks
     \end{itemize}
 
+    \bibliographystyle{plain} % We choose the "plain" reference style
+    \bibliography{er-general,er-related-work,er-additional-references}
 \end{document}
