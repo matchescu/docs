@@ -233,15 +233,16 @@
 
     \section{Problem Definition}\label{sec:problem}
 
-    We are given n pairs ((Si, ki), 1<=i<=n, ki belongs to N), where Si is an information source and ki is
+    We are given $n$ pairs (($S_i$, $k_i$), ) $1 \leq i \leq n$, $k_i \in N$), 
+    where $S_i$ is an information source and $k_i$ is
     the number of messages in that source.
-    We are also given a number of m traits, (tj, 1<=j<=m).
-    For each information source, the entity resolution task applies the m traits
-    to come up with kij entity references.
-    Let X denote the domain where all of the entity references resulted by
-    applying the m traits to (Si, ki) are found.
-    Let Y denote the domain of entity profiles.
-    Entity resolution is then a function E: X -> Y that converts individual
+    We are also given a number of $m$ traits, ($t_j$, $1 \leq j \leq m$).
+    For each information source, the entity resolution task applies the $m$ traits
+    to come up with $k_{ij}$ entity references.
+    Let $X$ denote the domain where all of the entity references resulted by
+    applying the $m$ traits to ($S_i$, $k_i$) are found.
+    Let $Y$ denote the domain of entity profiles.
+    Entity resolution is then a function $E: X 	\rightarrow Y$ that converts individual
     entity references to entity profiles based on whether they refer to the
     same real-world entity or not.
 
@@ -255,8 +256,8 @@
     Formally, an object is a tuple containing as many items as the number of
     attributes of the object.
     Each of the values in the tuple is an attribute.
-    Then traits are simply functions t:Si -> O where t(x) results in a tuple
-    (a1, ... , an) where ai are attributes, n > 0.
+    Then traits are simply functions $t:S_i	\rightarrow O$ where $t(x)$ results in a tuple
+    $(a_1, \ldots, a_n)$ where $a_i$ are attributes, $n > 0$.
     
     The entity resolution task applies multiple traits and then merges the
     resulting objects to produce entity references which as a result are still
