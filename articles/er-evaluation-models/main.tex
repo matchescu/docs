@@ -337,10 +337,26 @@
 
     Works that synthesize ER evaluation: (to be cited)
 
-    The related work provides a very solid place to start on our journey to evaluate entity resolution tasks qualitatively. The body of work shows us which metrics we could be looking as well as how the state of the art at the time of writing performs. The body of work does \textit{not} accentuate the importance of the mathematical model that powers a particular implementation of the entity resolution task. The vast majority of the body of work we have consulted so far goes to great lengths to categorize entity resolution implementation based on all sorts of criteria, save for the underlying mathematical model. This is understandable because there's no clear-cut way to claim that an entity resolution task implements a given mathematical model more than it does the others. After all, each mathematical model for entity resolution is supported by all entity resolution tasks. However, just as in everyday life we all have our perspectives, we shall see that each mathematical model provides a unique perspective over the performance of an entity resolution task. Furthermore, we will see that not all entity resolution tasks are created equal with respect to all mathematical models. Finally, we argue that one can choose a dominant mathematical model for any entity resolution algorithm and provide easy to use, empirical criteria to do so. None of these works, however, goes on to say the way in which the mathematical model influences our ability to reason about the qualitative performance of the entity resolution implementation under study. In particular, Talburt \href{https://learning.oreilly.com/library/view/entity-resolution-and/9780123819734/}{link} provides us with terrific insight into the mathematical models that power the entity resolution task. Even though a fourth model based on graph theory is arguably applicable to entity resolution (citation needed), we will restrain the scope of our analysis to the three models presented by Talburt.
+    From a process perspective, entity resolution is usually comprised of four
+    different activities\cite{Pap19,Tal11}:
+    \begin{itemize}
+        \item blocking - grouping entities that share the same traits and thus
+        have a higher chance of matching
+        \item filtering - rooting our entities that simply will not match one
+        another
+        \item matching - the defining activity of the entity resolution process
+        \item clustering - results that point to the same real-world entity are
+        usually grouped together in clusters
+    \end{itemize}
 
     \subsection[fsm]{Fellegi-Sunter Model}\label{subsec:fsm}
+    In the late 1960s Ivan Fellegi and Alan Sunter wrote the seminal
+    paper\cite{fs1969} for everything that would regard entity resolution tasks
+    as a problem best described in terms of probabilities.
+    In fact most entity resolution systems to date have implemented this
+    perspective on entity resolution.
 
+    This mathematical model of matching two entity references 
     \textcolor{green}{Please mention the model's parents and add a reference!}
     \begin{itemize}
         \item based on probability theory
