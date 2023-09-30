@@ -340,32 +340,95 @@
     From a process perspective, entity resolution is usually comprised of four
     different activities\cite{Pap19,Tal11}:
     \begin{itemize}
-        \item blocking - grouping entities that share the same traits and thus
-        have a higher chance of matching
-        \item filtering - rooting our entities that simply will not match one
-        another
-        \item matching - the defining activity of the entity resolution process
-        \item clustering - results that point to the same real-world entity are
-        usually grouped together in clusters
+        \item \textit{blocking} --- grouping together entities that share
+        similar traits and thus have a higher chance of matching with the
+        explicit purpose of narrowing down the scope for the rest of the
+        activities enumerated here;
+        \item \textit{filtering} --- typically refers to rooting out entities
+        that have a very small chance of matching other entities
+        \item matching --- the defining activity of the entity resolution
+        process
+        \item clustering --- results that point to the same real-world entity
+        are usually grouped together in entity profiles
     \end{itemize}
+
+    Out of the above activities, we choose to focus only on matching and
+    clustering especially since the performance of filtering and blocking was
+    already studied extensively\cite{Pap19}.
+    Matching and clustering are the core tasks that drive the overall quality of
+    an entity resolution task.
+    We shall see that we can get significant hints from the mathematical models
+    that underpin entity resolution tasks about which qualitative measurements
+    we can use and how.
+    More notably, we note that each mathematical model constrains the data
+    representation that can be used by the entity resolution task.
+
+    There are a few mathematical models that deal with entity resolution.
+    They range from models based on complex networks and graph
+    theory\cite{Li2020} to probabilistic and algebraic ones.
+    In this paper we describe three of these models and the data structures they
+    constrain the outputs of the entity resolution tasks to.
 
     \subsection[fsm]{Fellegi-Sunter Model}\label{subsec:fsm}
+
     In the late 1960s Ivan Fellegi and Alan Sunter wrote the seminal
-    paper\cite{fs1969} for everything that would regard entity resolution tasks
-    as a problem best described in terms of probabilities.
-    In fact most entity resolution systems to date have implemented this
-    perspective on entity resolution.
+    paper\cite{fs1969} for regarding entity resolution as a probabilistic
+    phenomenon.
+    To this day, this is the most popular way of describing the entity
+    resolution problem from a mathematical perspective even though it is not
+    a complete perspective relative to the activities that comprise the entity
+    resolution process.
 
-    This mathematical model of matching two entity references 
-    \textcolor{green}{Please mention the model's parents and add a reference!}
-    \begin{itemize}
-        \item based on probability theory
-        \item models entity resolution around three key probabilities: match certainty, non-match certainty, ambiguity
-        \item works well if all we care about is matching (e.g for removing duplicates)
-        \item does not work well if we care about transitive matches or identity resolution
-        \item the entity profile is a pair
-    \end{itemize}
+    In this mathematical model, entity resolution is defined in the context of
+    making probabilistic decisions.
+    The three decisions any entity resolution task can make are
+    \textit{link ($A_1$)}, \textit{non-link ($A_3$)} and
+    \textit{possible link ($A_2$)}.
+    The statistical errors
+    $\mu=\sum_{\gamma \in \varGamma}u(\gamma)P(A_1|\gamma)$ and
+    $\lambda=\sum_{\gamma \in \varGamma}m(\gamma)P(A_3|\gamma)$ express the type
+    one and type two errors when it comes to entity resolution.
+    $\gamma$ represents a comparison vector that contains the results of
+    comparing two entity references by for each shared trait. The function
+    $u(\gamma)$ is the probability that the entity references do \textit{not}
+    realize $\gamma$, while $m(\gamma)$ is the probability that they \textit{do}.
+    $\varGamma$ represents the entire space of possible realizations of $\gamma$.
 
+    In this context, entity resolution is defined as a function that assigns the
+    probabilities $P(A_1|\gamma)$, $P(A_2|\gamma)$ and $P(A_3|\gamma)$ for each
+    $(\mu, \lambda)$ such that $P(A_2)$ is minimal at those error levels.
+    In other words, entity resolution is a task that will strive to decide with
+    as little ambiguity as possible whether two entity references match or don't
+    match based on their attributes and the traits of the entity resolution
+    task.
+
+    Because the Fellegi-Sunter model defines entity resolution as a statistical
+    optimization function, it works very well for both
+    rule-based\cite{oyster2012} and machine learning\cite{deepm2020}
+    implementations.
+    The qualitative performance of the implementations of this model can then be
+    measured using standard statistical measures.
+    With the type 1 and type 2 errors defined, the notions of true positive,
+    true negative, false positive and false negative can be derived immediately.
+    And with these notions, we can use measures such as precision, recall or
+    the $F_1$ score.
+    $$Precision=\frac{TP}{TP+FP}$$
+    $$Recall=\frac{TP}{TP+FN}$$
+    $$F_1=2 \cdot \frac{Precision \cdot Recall}{Precision+Recall}$$
+
+    However, there is more to be said about this model.
+    Since it only addresses \textit{matching}, this model only accounts for
+    the result of comparing two entity references at a time\cite{Kon19}.
+    Among other things, this means that this model does not support transitive
+    linkage rules\cite{Tal11}.
+
+    Using our terminology, the attributes will be the basic building blocks for
+    how information is represented.
+    In the Fellegi-Sunter model we would then represent entity references as
+    tuples $t=(a_1,a_2,\ldots,a_n)$, where $n>0$.
+    The result of any entity resolution task that implements this model can be
+    represented as a list of pairs of tuples.
+    
     \subsection[serf]{Stanford Entity Resolution Framework Model}\label{subsec:serf}
 
     \textcolor{green}{Please mention the model's parents and add a reference!}
