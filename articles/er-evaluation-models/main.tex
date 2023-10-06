@@ -513,21 +513,36 @@
 
     \subsection[data]{Data}\label{subsec:data}
     
-    We generate a data set based on the Abt-Buy data set for entity resolution provided by the University in Leipzig. We split the Abt data into two data sets. We keep 2 columns in common between the two data sets. We assign the rest randomly between the output data sets. We do this because we want to operate ppjoin in a controlled environment.
+    We generate a data set based on the Abt-Buy dataset 
+    \textcolor{green}{add a ref} 
+    for entity resolution provided by the University in Leipzig. We split the Abt data into two sub-datasets. We keep 2 columns
+    \textcolor{green}{I would use the same terms as in section 4. Pb def.; eg: we keep two attribbutes} 
+    in common between the two datasets. We assign the rest of attributes randomly between the output data sets. We do this splitting because we want to operate ppjoin in a controlled environment.
 
     \subsection[adapters]{Output Adapters}\label{subsec:adapters}
 
-    PPJoin outputs a list of pairs. We write an adapter for transforming the list of pairs to a partition over the initial set considering the list of pairs to define the equivalence relation between matching items. We write a different adapter for transforming the list of pairs to a list of generic items by reusing a sample merge function that we provide to the SERF model.
+    PPJoin outputs a list of pairs. We develope an adapter for transforming the list of pairs to a partition over the initial set considering the list of pairs to define the equivalence relation between matching items. We implement a different adapter for transforming the list of pairs to a list of generic items by reusing a sample merge function that we provide to the SERF model.
 
     \subsection[method]{Methodology}\label{subsec:methodology}
 
-    We run ppjoin at 3 different Jaccard thresholds and note the differences between the measurements supplied by each model. The thresholds are 0.0, 0.4 and 0.7. We interpret the results for each model for the three thresholds. We also discuss the differences between models for each threshold.
+    We run ppjoin at different Jaccard thresholds and note the differences between the measurements supplied by each model. 
+    \textcolor{green}{The thresholds are 0.0, 0.4 and 0.7. - I would move this st into the numerical results; here is about how to do, only}     
+    We interpret the results for each threshold-based model. We also discuss the differences between models for each threshold.
 
     \subsection[results]{Results}\label{subsec:results}
 
-    We notice that for 0.0, FSM thinks the algorithm performs very well, but SERF and the algebraic model give us additional information about the consistency of the results. 
+    Three values of Jaccard threshold have been investigated.
+    \textcolor{green}{Please add an argument why only these three values. How did you slect them?} 
+
+    \textcolor{green}{please add the numerical results (tables, figures)}
+
+    We notice that for 0.0, FSM thinks the algorithm 
+    \textcolor{green}{it's a little bit confusing: a model thinks that an algo do something :D; furthermore, give more details about the aim of the algorithm; it is ppjoin?} 
+    performs very well, but SERF and the algebraic model give us additional information about the consistency of the results. 
     SERF thinks there's a huge distance between what we should be getting and what we're actually getting (the variation of information is also off the charts).
     The algebraic model reveals very poor cluster metrics.
+
+    \textcolor{green}{some examples, with the correctly and wrong matched entities, could be helpful} 
 
     Do a similar analysis for 0.4 and 0.7.
 
