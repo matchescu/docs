@@ -5,6 +5,7 @@
 \documentclass[11pt]{article}
 
 % Packages
+\usepackage{amsfonts}
 \usepackage{amsmath}
 \usepackage{hyperref}
 \usepackage{xcolor}
@@ -59,8 +60,85 @@
     We must clarify regarding the concern for a real-world entity that entity
     resolution tasks do not deal with real-world entities directly but with
     information about them\cite{Tal11}.
-    In other words, entity resolution tasks typically don't know about the real-
-    world objects or entities they are meant to resolve\cite{Chen09}.
+    In other words, entity resolution tasks typically don't know about the
+    real-world objects or entities they are meant to resolve\cite{Chen09}.
+    Naturally, entity resolution tasks will not perform perfectly from a
+    qualitative standpoint.
+    We are interested to find common ground for measuring entity resolution
+    performance.
+    
+    Historically, entity resolution performance was measured in many ways, some
+    of which (true positive rate, false positive rate) have been contested for
+    certain use cases\cite{Goga2015}.
+    Our work means to standardize qualitative entity resolution quality
+    measurement across the board.
+    We base our methodology on the mathematical models that underpin entity
+    resolution tasks.
+
+    The first sections of this paper go over the contributions it makes and the
+    work related to this paper.
+    Afterwards we start our journey towards the main subject by introducing some
+    basic entity resolution terminology which is used throughout the paper.
+    Following that, we describe the scientific problem of comparing the
+    performance of entity resolution tasks.
+    Next we go through three classical mathematical models and show how each of
+    them influences entity resolution evaluation.
+    After the conceptual framework is ready, we provide experimental data to see
+    how the concepts map to practice.
+    In the closing sections, we provide some insights that we are now able to 
+    glean from the results, draw some conclusions and finally hint towards
+    future work on this topic.
+
+    \section{Contributions}\label{sec:contributions}
+
+    This paper makes the following contributions:
+
+    \begin{itemize}
+        \item materializes the connection between mathematical model and entity
+        resolution task
+        \item provides a generic framework for measuring the qualitative
+        performance of entity resolution tasks
+        \item introduces a software system that uses this framework
+    \end{itemize}
+
+    \section{Related Work}\label{sec:related}
+    
+    Because of the generality of the topic, there is much existing work that
+    relates in some way or another to this paper.
+    However, three categories of papers share the most concerns with this one:
+    entity resolution system presentations, syntheses of theoretical models for
+    entity resolution and syntheses of evaluation metrics for entity resolution.
+
+    The papers that introduce entity resolution systems relate to this one
+    through the shared goal of generalizing how entity resolution tasks are run
+    and, therefore, evaluated.
+    Most of the systems referenced here provide at least a few generic metrics
+    to evaluate entity resolution performance.
+    They 
+
+    At the dawn of the 21st century, FEBRL\cite{febrl2002} emerged as one of the
+    first extensible systems to tackle measuring entity resolution performance.
+    It was succeeded by FEVER\cite{fever2009} and OYSTER\cite{oyster2012}. 
+    These systems have all paved the way to generalizing our understanding about
+    entity resolution and to ever more improvements in the quality of entity
+    resolution tasks.
+    Later on, systems like `Papers with Code'\cite{papwithcode2019} brought in
+    a social dimension to how we compare the qualitative performance of entity
+    resolution tasks.
+    Newer systems resemble frameworks more than they resemble
+    applications\cite{magellan2020,jedai2017}.
+    These systems are open-source and encourage social collaboration around
+    entity resolution, too.
+
+    
+    There exist numerous syntheses on the theoretical models for entity
+    resolution\cite{fs1969,Ben2009Swoosh,Tal11}.
+    Some of the available models have been compared and
+    explained\cite{Tal11,tal2013}.
+
+    Ways in which entity resolution tasks are similar even though they seem
+    to have nothing in common have been discussed in papers that deal with
+    certain steps of the entity resolution process\cite{Pap19,Chen09}.
 
     \section{Terminology}\label{sec:terminology}
 
@@ -233,109 +311,164 @@
 
     \section{Problem Definition}\label{sec:problem}
 
-    We are given $n$ pairs (($S_i$, $k_i$), ) $1 \leq i \leq n$, $k_i \in N$), 
-    where $S_i$ is an information source and $k_i$ is
-    the number of messages in that source.
-    We are also given a number of $m$ traits, ($t_j$, $1 \leq j \leq m$).
-    For each information source, the entity resolution task applies the $m$ traits
-    to come up with $k_{ij}$ entity references.
-    Let $X$ denote the domain where all of the entity references resulted by
-    applying the $m$ traits to ($S_i$, $k_i$) are found.
-    Let $Y$ denote the domain of entity profiles.
-    Entity resolution is then a function $E: X 	\rightarrow Y$ that converts individual
-    entity references to entity profiles based on whether they refer to the
-    same real-world entity or not.
-
-    This formulation is deliberately vague because there are more than one ways
-    to formalize it and we will go over three of them shortly.
-    
-    The representation of traits, entity references and attributes, however, is
-    common to all approaches.
-
-    Let O be the domain of objects with attributes.
-    Formally, an object is a tuple containing as many items as the number of
-    attributes of the object.
-    Each of the values in the tuple is an attribute.
-    Then traits are simply functions $t:S_i	\rightarrow O$ where $t(x)$ results in a tuple
-    $(a_1, \ldots, a_n)$ where $a_i$ are attributes, $n > 0$.
-    
-    The entity resolution task applies multiple traits and then merges the
-    resulting objects to produce entity references which as a result are still
-    just objects.
-    The order in which the attributes appear in the entity references
-    is determined by the entity resolution task based on its traits.
-    The phase of the entity resolution task where this happens is generally
-    referred to as feature extraction.
-    Many people feel the need to provide descriptions for the attributes.
-    We believe traits are a sufficient concept to explain how entity references
-    appear.
-    The da
-
-
-    \section{Contributions}\label{sec:contributions}
-
-    Our paper makes the following contributions:
-
+    Given:
     \begin{itemize}
-        \item materializes the connection between mathematical model and entity
-        resolution task
-        \item provides a generic framework for measuring the qualitative
-        performance of entity resolution tasks
-        \item introduces a software system that uses this framework
+        \item $n \in N^*$ pairs (($S_i$, $n_i$), $1 \leq i \leq n$, $n_i \in N$), 
+        where $S_i$ is an information source and $n_i$ is the number of messages
+        in $S_i$,
+        \item $m_i \in N^*$ traits, ($t_{ij}$, $1 \leq j \leq m_i$) for each
+        information source $S_i$ so that
+        \item each trait $t_{ij}$ can generate at most $a_{ij} \in N^*$
+        attributes,
     \end{itemize}
+    an entity resolution task $ER$ applies each trait $t_{ij}$ onto the source
+    $S_i$, ($1 \leq i \leq n$, $1 \leq j \leq m_i$), in order to extract
+    $r_{{S_i}k}$ entity references where
+    ($0 \leq k \leq n_i \cdot \sum^{m_i}_{j=1}a_{ij}$).
+    We denote with $R$ the domain of all the $r_{{S_i}k}$ entity references that
+    were extracted by $ER$.
+    Similarly, we denote with $P$ the domain of all entity profiles.
+    The matching and clustering step of the $ER$ task is a function
+    $E: R \rightarrow P$ that converts individual references to entity profiles.
+    The exact definition of this function is specific for each mathematical
+    model that underpins entity resolution.
+    The data representation of the entity profiles in $P$ also varies according
+    to the mathematical model of choice.
+    On the other hand, the data representations of the concepts that are part of
+    building $R$ do not differ between mathematical models.
+
+    The most basic building block in the context of entity resolution is the
+    humble attribute.
+    We denote with $A$ the domain of all possible attributes that can be used by
+    the task $ER$ described above.
+
+    In this context, let $r_{{S_i}{k_j}}$ denote the $k_j$th ($1 \leq j \leq k$)
+    entity reference from the source $S_i$.
+    Then $r_{{S_i}{k_j}}$ is always represented as a tuple
+    ($a_r$, $r \in N^*$, $a_r \in A$), $r_{{S_i}{k_j}} \in A^r$.
+    Note that $r$ varies for each $k_j$.
+    The concept of an order external to the information source and the manner in
+    which we defined traits serves as the reason why tuples express entity
+    references sufficiently well.
+
+    A trait is then a function that helps construct entity references.
+    The definition domain of this function materializes only when the $ER$ task
+    extracts a given entity reference $r_{{S_i}{k_j}}$.
+    The domain of this function is then the domain of all of the attributes in
+    the source $S_i$ that could be meaningful in the context of constructing the
+    entity reference $r_{{S_i}{k_j}}$ from a certain subjective perspective.
+    We denote this domain with $A_{{S_i}{k_j}}$.
+    Then the trait is defined as a function $t: S_i \rightarrow A^x$, where
+    $x \in N^*$ and $x$ varies with $k_j$ as defined above for entity
+    references.
+    This formal definition of the trait satisfies the needs of any extraction
+    process specific to entity resolution.
+
+    During the extraction process, the entity resolution task applies multiple
+    traits with the end result of building the domain of entity references:
+
+    \[
+        Ref = \bigcup_{i \in N^*,1 \leq j \leq k} r_{{S_i}{k_j}}
+        \textrm{, with r, S and k specified above}
+    \]
+
+    All existing processes concerning entity resolution extraction processes can
+    be adapted to this formal definition, as already noted\cite{Pap19}.
     
-    \textcolor{green}{cred ca ar fi utila si o sectiune scurta in care sa reiei definitia problemei (ce se da, ce se
-    cere) intr-un mod formal (adica se da o multime de obiecte, cu proprietati, care pot fi "Separate" pe diferite
-    surse; se cere: identificarea obiectelor care se aliniaza). Poti folosi formalizari ca si in articolele:}
-    \href{https://d1wqtxts1xzle7.cloudfront.net/30672623/A11SEP-CD-libre.pdf?1391815744=&response-content-disposition=inline%3B+filename%3DA_Uniform_Dependency_Language_for_Improv.pdf&Expires=1693931642&Signature=G-sCf5o-XZNgP~WX0yxCtzzbvCqj4~Tu4dka6QLKrOk6zPZ5XTrOZD5kqcQxJJa48w5-2Ya31rd4b~BV1bR5kJMwuFcsGzAPcQqDhpRhVxoki41kZUSYU73pVTcfyqeE3l7gTg6Qriuowj8xM3LgHfHUft80iguUhSMUDmC2FLg7WGjHWETeKquMv51t9sKpyIQHG11wggW2XMkcx1tygkd92b339bqEX-urQhQN9irKBou-dmrJvF2O7qb2LxZsb4fwYLvwi0vOZ6fzVguOdsRIcqm6uzdmQn3tPV1oMpcx4Qy6q-dUWNm4uzJZ9PbzW5Wo351FXZVogeepZGXFcw__&Key-Pair-Id=APKAJLOHF5GGSLRBV4ZA#page=53}{aici}
-    \textcolor{green}{, la pag 57, e destul de succint prezentat.}
+    At its core, an entity resolution task can then be formalized as a function:
+    \[
+        e : Ref \rightarrow \{P_x \mid x \in \mathbb{N}, P_x \in P \},
+    \]
+    
+    where $P$ is the domain of entity profiles and $x$ is the number of
+    resulting entity profiles.
+    We denote with $Res=\{P_x \mid x \in \mathbb{N}, P_x \in P\}$ as the domain
+    of all entity resolution task results.
 
-    \textcolor{green}{O alta ref buna utila ar fi aici: Whang, S. E., Garcia-Molina, H. (2013). Joint entity resolution
-    on multiple datasets. The VLDB journal, 22, 773-795. sau aici}
-    \href{https://pages.cs.wisc.edu/~anhai/papers1/deepmatcher-sigmod18.pdf}{link}
+    It stands to reason that the domain $Res$ contains a result which is the
+    closest to our understanding of the real world from a given perspective in
+    a given context.
 
-    \textcolor{green}{chiar si un exemplu (input, output = ground truth) ar fi util si cand ajungi la "forma" outputului unui model matem, poti arata atat ce forma are outputul (ca si formalism matematic), dar si empiric (pe exemplu)}
+    \begin{defn}
+        We define the \textit{ground truth} $G$ of an input entity reference
+        domain $Ref$ the entity resolution result comprised of entity profiles
+        such that
+        $\{P_g \mid g \in N\textrm{, $P_g$ describes a real-world entity
+        completely}\}$.
+    \end{defn}
 
-    \section[related]{Related Work}\label{section:related-work}
+    In other words the ground truth is the ideal entity resolution result for 
+    given input data, but in a given context, from a given perspective.
+    This result contains only those profiles that describe real-world entities.
 
-    Systems that evaluate entity resolution task performance:
-    \section{Related Work}\label{sec:related}
+    Now that we know what the ideal result of an entity resolution task looks
+    like, we can at least formulate a measure of the task's relative qualitative
+    performance with respect to the ground truth of the task's input.
+    
+    \begin{defn}
+    Given an entity resolution task $e: Ref \rightarrow Res$ and the ground
+    truth $G$ for the input entity reference domain $Ref$, a \textit{qualitative
+    evaluator} is an idempotent function $q: Res \rightarrow \mathbb{R}$ that
+    measures the similarity between the input of the function and $G$.
+    \end{defn}
 
-    At the dawn of the 21st century, FEBRL\cite{febrl2002} emerged as one of the
-    first extensible systems to tackle measuring entity resolution performance.
-    It was succeeded by FEVER\cite{fever2009} and OYSTER\cite{oyster2012}. 
-    These systems have all paved the way to generalizing our understanding about
-    entity resolution and to ever more improvements in the quality of entity
-    resolution tasks.
+    In practice, we should strive to implement qualitative evaluators as
+    \textit{pure} functions in the sense that running them on a computer will
+    not entail any side-effects.
 
-    Later on, systems like `Papers with Code'\cite{papwithcode2019} brought in
-    a social dimension to how we compare the qualitative performance of entity
-    resolution tasks.
-    Other systems that resemble frameworks more than they do cohesive
-    applications have also emerged\cite{magellan2020,jedai2017}.
-    These systems are open-source and encourage social collaboration around
-    entity resolution, too.
+    As stated before, the shape and structure of the items in $Res$, including
+    $G$, depends on the mathematical model underpining a specific entity
+    resolution task implementation.
+    Because the input domain of the qualitative evaluators changes according to
+    the used mathematical model, the set of qualitative evaluators available for
+    describing the qualitative performance of a certain entity resolution task
+    $Q = \{q_y \mid y \in \mathbb{N}\}$ is dependent on the mathematical model
+    used for implementing that task.
 
-    \begin{itemize}
-        \item FEBRL \href{http://users.cecs.anu.edu.au/~Peter.Christen/Febrl/febrl-0.3/febrldoc-0.3/manual.html}{link}
-        \item FEVER \href{https://dbs.uni-leipzig.de/en/research/projects/data_integration/fever}{link}
-        \item JedAI \href{https://github.com/scify/JedAIToolkit/tree/master}{link}
-        \item Magellan \href{https://sites.google.com/site/anhaidgroup/current-projects/magellan?authuser=0}{link}
-        \item Papers With Code \href{https://github.com/paperswithcode}{link}
-        \item Oyster ER \href{https://bitbucket.org/oysterer/oyster/src/master/}{link}
-        \item SERF \href{http://infolab.stanford.edu/serf/}{link}
-    \end{itemize}
+    In the strictest sense, comparing two entity resolution tasks is possible as
+    long as they can be evaluated using the same set $Q$ of qualitative
+    evaluators.
+    Note that if the entity resolution $e_1$ can be evaluated using a set of
+    qualitative evaluators $Q_1$ and $e_2$ can be evaluated using a set of
+    qualitative evaluators $Q_2$ such that $Q_1 \cap Q_2 \neq \emptyset$, we
+    have a set of qualitative evaluators $Q_\cap = Q_1 \cap Q_2$ that allows us
+    to compare $e_1$ and $e_2$ based on $Q_\cap$.
+    Future developments will seek to further loosen this constraint to allow
+    comparing entity resolution tasks that do not share a set of qualitative
+    evaluators.
 
-    There exist numerous syntheses on the theoretical models for entity
-    resolution\cite{fs1969,Ben2009Swoosh,Tal11}.
-    Some of the available models have been compared and
-    explained\cite{Tal11,tal2013}.
+    \begin{defn}
+        Given
+        \begin{itemize}
+            \item the set of entity references $Ref$,
+            \item a set of qualitative evaluators $Q$ that are common to all
+            entity resolution tasks $e_i : Ref -> Res$, $i \in \mathbb{N}$
+            \item the ground truth $G$ for the input domain $Ref$,
+            \item the qualitative evaluator results $V_i=\{q_{i} \mid q_{i} = q(G, e_i), q \in Q\},
+            i \in \mathbb{N}$,
+        \end{itemize}   
+        we define the comparison of the entity resolution tasks above as
+        $C : (
+            \{V_i \mid i \in \mathbb{N}\}
+            \times
+            \{V_j \mid j \in \mathbb{N}\},
+            i \neq j
+        ) \rightarrow \{-1, 0, 1\}$ such that:
+        \[ 
+C(V_i, V_j) = \left\{
+\begin{array}{ll}
+      -1,~\textrm{if $e_i$ is less fit for purpose than $e_j$}\\
+      0,~\textrm{if $e_i$ is as fit for purpose as $e_j$}\\
+      1,~\textrm{if $e_i$ is better fit for purpose than $e_j$}\\
+\end{array} 
+\right. 
+\]
 
-    Ways in which entity resolution tasks are similar even though they seem
-    to have nothing in common have been discussed in papers that deal with
-    certain steps of the entity resolution process\cite{Pap19,Chen09}.
-
+    \end{defn}
+    
     Works that synthesize ER evaluation: (to be cited)
+
+    \section[ere]{Entity Resolution Evaluation}\label{sec:ere}
 
     From a process perspective, entity resolution is usually comprised of four
     different activities\cite{Pap19,Tal11}:
