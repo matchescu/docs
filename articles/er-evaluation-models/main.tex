@@ -7,10 +7,11 @@
 % Packages
 \usepackage{amsfonts}
 \usepackage{amsmath}
+\usepackage{amsthm}
 \usepackage{hyperref}
 \usepackage{xcolor}
 \usepackage{cite}
-\usepackage{amsthm}
+\usepackage{array}
 
 % Document
 \begin{document}
@@ -611,76 +612,189 @@ C(V_i, V_j) = \left\{
         \item the entity profile is a partition class (a cluster)
     \end{itemize}
 
-    \section{Experimental Setup}
+    \section{Experiments}
 
-    To understand why all of the above is not just jibber-jabber, we propose an
-    experiment that shows how entity resolution results vary according to the
-    mathematical model chosen for an entity resolution function.
+    In order to highlight the differences between what each mathematical model
+    can provide us with, we have designed an experiment.
+    In our experiment we will run an entity resolution task using all three
+    mathematical models presented thus far.
 
-    In our methodology for elaborating the experiment we set aside any notions
-    about input sample size so that blocking and filtering don't play a part in
-    our results.
+    \subsection{Methodology}
 
-    Furthermore, since we are not concerned with the actual score, but with
-    showcasing the differences induced by using different mathematical models
-    for our entity resolution tasks, we will use a synthetic data set derived
-    from the DBLP dataset\cite{vldb2010}.
-    The data is derived by splitting the dataset into two datasets by column and
-    keeping two common columns (the `id' and `title').
-    The `authors' column will be assigned to the first dataset and the remaining
-    two columns will be assigned to the second dataset.
+    Because we are interested only in qualitative differences in results induced
+    by the mathematical model being used and because these differences are
+    visible even on small dataset, we will not monitor questions of scale in
+    this experiment.
+    Since we are not concerned with the actual score obtained by a certain
+    algorithm either, we will use the first 10 items from the `Buy' table which
+    is a part of the Abt-Buy dataset\cite{vldb2010}.
+    
+    We split the Buy table into two tables having the following columns:
+    \begin{itemize}
+        \item the first table will contain the data in the `name', `id',
+        `manufacturer' and `price' columns from the original table;
+        \item the second table will contain the data in the `description', `id'
+        and `name' columns from the original table.
+    \end{itemize}
+    These two tables will be the input information sources for our experiments.
 
-    For simplicity, our extraction traits will produce one value per column per
-    record.
-    This means that each record in each dataset is going to be an entity
-    reference.
-    The entity references in the first dataset are going to be comprised of
-    three attributes, while the entity references from the second dataset are
-    going have four attributes each.
+    We have designed the entity reference extraction such that it causes minimal
+    tampering with the qualitative performance readings for the entity
+    resolution tasks.
+    The information sources are stored on disk as CSV files.
+    Each CSV file has a first row containing the column headings and subsequent
+    rows containing records within which the fields are separated by comma.
+    The traits built into our extraction pipeline are mapped one-to-one to the
+    names of the columns in the CSV file.
+    For each record, the traits extract a single attribute for each column.
+    The ordering of the data enforced by the traits is left-to-right,
+    top-to-bottom order.
+    This setup results in all entity references being tuples that each have
+    three attributes.
 
-    For example, let's say we were given this data from the DBLP dataset.
+    For example, let's say we have the following dataset with a single record.
+    \begin{center}
+        \begin{tabular}[b]{|l|l|l|l|l|}
+            \hline
+            id&name&description&manufacturer&price\\
+            \hline
+            10333848&Linksys EtherFast&24x10/100Base-TX LAN&LINKSYS&64.99 \\
+            \hline
+        \end{tabular}
+    \end{center}
 
-    \begin{tabular}{lllll}
-        id& title & authors & venue  & year \\
-        \hline
-        journals/sigmod/Liu02 & Editor's Notes & Ling Liu & SIGMOD Record & 2002 \\
-    \end{tabular}
+    Our data generation strategy will then create the following two datasets.
+    The first dataset will contain the `name', `id', `manufacturer' and `price'
+    columns.
+    
+    \begin{center}
+        \begin{tabular}[b]{|l|l|l|l|}
+            \hline
+            name&id&manufacturer&price \\
+            \hline
+            Linksys EtherFast&10333848&LINKSYS&64.99 \\
+            \hline
+        \end{tabular}
+    \end{center}
 
-    We then generate dataset 1 to be the following:
+    The second dataset will contain the `description', `id' and `name' columns.
 
-    \begin{tabular}{lll}
-        id& title & authors \\
-        \hline
-        journals/sigmod/Liu02 & Editor's Notes & Ling Liu  \\
-    \end{tabular}
+    \begin{center}
+        \begin{tabular}[b]{|l|l|l|}
+            \hline
+            description&id&name \\
+            \hline
+            24x10/100Base-TX LAN&10333848&Linksys EtherFast \\
+            \hline
+        \end{tabular}
+    \end{center}
 
-    Finally we generate dataset 2 to be the following:
+    The two generated datasets become the two information sources for the entity
+    resolution task.
+    The traits we have built for this experiment will extract exactly one entity
+    reference from each of the two information sources thus generated:
+    \begin{itemize}
+        \item (\texttt{Linksys EtherFast,10333848,LINKSYS,64.99}),
+        \item (\texttt{24x10/100Base-TX LAN,10333848,Linksys EtherFast}).
+    \end{itemize}
 
-    \begin{tabular}{lllll}
-        id& title & venue & year \\
-        \hline
-        journals/sigmod/Liu02 & Editor's Notes & SIGMOD Record & 2002 \\
-    \end{tabular}
+    The entity resolution task receives as input all of the entity references
+    provided by the extraction phase.
+    It can also make use of the information about how data is ordered because
+    the traits used for extraction are available to it.
 
-
-    The first dataset contains the entity reference (
-    \texttt{`journals/sigmod/Liu02',`Editor's Notes',`Ling Liu'}).
-    The second dataset contains the entity reference (
-        \texttt{`journals/sigmod/Liu02',`Editor's Notes',`SIGMOD Record',`2002'}
-    ).
+    As a last observation, because we are in full control of the input sources
+    of data we can generate the ground truth, too.
+    Now let us see what is influenced by the choice of mathematical model.
 
     \subsection{Fellegi-Sunter Model Results}
     
+    With the F-S model both the ground truth and the results of the entity
+    resolution algorithm are represented as a set of pairs.
+    We generate the ground truth for the F-S model by iterating over both
+    input data sources using the same cursor and outputting pairs of records.
+    We notice duplicate CSV records that only differ on the `id' column.
+    These surely refer to the same real-world entity, however the F-S model is
+    unable to capture this information.
+
+    We run an entity matching algorithm of choice and evaluate its performance
+    by using the qualitative evaluators specific for the F-S model on the
+    results versus the ground truth.
+    
+    We choose to use the \texttt{ppjoin}\cite{ppjoin} matching algorithm on the
+    input datasets, but any probabilistic matching algorithm will do.
+    PPJoin matches entities based on prefix strings and in this paper we use it
+    only in conjunction with Jaccard similarity.
+    Intuition tells us that for values of the Jaccard similarity threshold that
+    are either too low or too high we should have lower precision.
+    For higher thresholds we should also have lower recall values, whereas for
+    lower values the recall should be higher.
+
+    \begin{center}
+        \begin{tabular}[b]{|cccc|}
+            \hline
+            t & precision & recall & f1 score \\
+            \hline
+            0.99 & 1.0 & 0.0009 & 0.0018 \\
+            0.75 & 1.0 & 0.2179 & 0.3578 \\
+            0.4 & 0.9595 & 1.0 & 0.9793 \\
+            0.2 & 0.6920 & 1.0 & 0.8179 \\
+            \hline
+        \end{tabular}
+    \end{center}
+
+    When the Jaccard similarity threshold is set high ($t > 0.75$), we end up
+    with very few matches, but those matches are true.
+    As we lower the threshold ($0.4 < t leq 0.75$), recall increases and
+    precision does not drop.
+    However, when we lower the threshold too much ($t leq 0.4$) we start losing
+    precision.
+    
+    All of these results are expected.
+    So what can we learn from here?
+
+    For starters, we reach high levels of recall only when we start losing
+    precision.
+    If we were tuning the Jaccard threshold the granularity for doing so would
+    be extremely coarse.
+    The recall for $0.4 < t \leq 0.75$ is always $0.3578$ and we have no insight
+    as to why.
+    This all leads us to understand that we don't know how much each entity
+    reference matches another.
+    This shortcoming is inherent in the probabilistic model of entity matching
+    because in this model something is either a link, a non-link or could be a
+    link, but we minimize the probability of ever finding that third option.
+    
+    Another aspect has to do with duplicates.
+    We never reach perfect precision even though it really seems that we should.
+    The reason behind that is that \texttt{ppjoin} sometimes finds matches it
+    shouldn't. 
+    For example, if we have two entity references that only differs on the `id'
+    attribute while everything else is identical, \texttt{ppjoin} will flag the
+    two references as pointing to the same real-world entity.
+    However because the F-S model allows only matching, we have to assume that
+    these are in fact different real-world entities in the ground truth.
+    Describing this situation more accurately requires a more comprehensive
+    model.
+
+    \subsection{Algebraic Model}
+
+    \textit{TODO}
+
+    \subsection{Stanford Entity Resolution Framework Model}
+
+    \textit{TODO}
 
     \section[conclusion]{Conclusions}\label{section:conclusions}
 
     The work speaks about how we can use mathematical models to evaluate entity resolution results. It also provides easy rules of thumb to identify the model that's best suited to interpret the results of an ER task.
     
-    Future work:
+    \section[future]{Future Work}\label{section:future}
     \begin{itemize}
         \item result translation between math models
         \item ground truth and data generation for ER tasks
     \end{itemize}
+
 
     \bibliographystyle{plain} % We choose the "plain" reference style
     \bibliography{er-general,er-related-work,er-additional-references}
