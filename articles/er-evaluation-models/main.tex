@@ -367,7 +367,7 @@
     the task $ER$ described above.
 
     In this context, let $r_{{S_i}{k_j}}$ denote the $k_j$th ($1 \leq j \leq k$)
-    entity reference from the source $S_i$.
+    entity reference extracted from the source $S_i$.
     Then $r_{{S_i}{k_j}}$ is always represented as a tuple
     ($a_r$, $r \in N^*$, $a_r \in A$), $r_{{S_i}{k_j}} \in A^r$.
     Note that $r$ varies for each $k_j$.
@@ -396,10 +396,20 @@
         \textrm{, with r, S and k specified above}
     \]
 
-    All existing processes concerning entity resolution extraction processes can
-    be adapted to this formal definition, as already noted\cite{Pap19}.
+    The $Ref$ domain is constructed through entity reference extraction and
+    after the entities have been extracted, we are no longer concerned with the
+    input information sources.
+    Another observation is that every type of entity resolution task can be made
+    to work on such an input domain\cite{Pap19}.
+    A task that uses two or more input sources can be reduced by concatenating
+    entity references extracted from those sources.
+    So, every entity resolution task can be viewed at its core as either a
+    data deduplication or a clustering task.
+    Regardless of the optics, the input domain contains only entity references.
+    In our view, the entity resolution task is agnostic of the provenance of the
+    entity references it processes.
     
-    At its core, an entity resolution task can then be formalized as a function:
+    That allows us to formalize the entity resolution task as a function:
     \[
         e : Ref \rightarrow \{P_x \mid x \in \mathbb{N}, P_x \in P \},
     \]
@@ -408,6 +418,10 @@
     resulting entity profiles.
     We denote with $Res=\{P_x \mid x \in \mathbb{N}, P_x \in P\}$ as the domain
     of all entity resolution task results.
+    Note that $Res$ \textit{is a set} because the nature of the entity
+    resolution task is to cluster or deduplicate, both operations being widely
+    understood as operations that result in creating unique items (be they
+    clusters or unique entity references).
 
     It stands to reason that the domain $Res$ contains a result which is the
     closest to our understanding of the real world from a given perspective in
@@ -516,78 +530,227 @@ C(V_i, V_j) = \left\{
     \subsection[fsm]{Fellegi-Sunter Model}\label{subsec:fsm}
 
     In the late 1960s Ivan Fellegi and Alan Sunter wrote the seminal
-    paper\cite{fs1969} for regarding entity resolution as a probabilistic
-    phenomenon.
-    To this day, this is the most popular way of describing the entity
-    resolution problem from a mathematical perspective even though it is not
-    a complete perspective relative to the activities that comprise the entity
-    resolution process.
+    paper\cite{fs1969} for what they called record linkage and what would later
+    become known as entity resolution.
+    To this day, their mathematical model based on probability theory is the
+    most popular way of formalizing the entity resolution problem.
+    In this mathematical model, entity resolution is a function that aids in 
+    probabilistic decision making.
+    
+    \subsubsection[fsm-desc]{Description}\label{subsec:fsm-desc}
 
-    In this mathematical model, the entity resolution function is defined in the
-    context of making probabilistic decisions.
-    The three decisions any entity resolution task can make are
-    \textit{link ($A_1$)}, \textit{non-link ($A_3$)} and
-    \textit{possible link ($A_2$)}.
-    The statistical errors
-    $\mu=\sum_{\gamma \in \varGamma}u(\gamma)P(A_1|\gamma)$ and
-    $\lambda=\sum_{\gamma \in \varGamma}m(\gamma)P(A_3|\gamma)$ express the type
-    one and type two errors when it comes to entity resolution.
-    $\gamma$ represents a comparison vector that contains the results of
-    comparing two entity references by for each shared trait. The function
-    $u(\gamma)$ is the probability that the entity references do \textit{not}
-    realize $\gamma$, while $m(\gamma)$ is the probability that they \textit{do}.
-    $\varGamma$ represents the entire space of possible realizations of $\gamma$.
+    The original model defines record linkage as an operation over two input
+    sets, $A$ and $B$.
+    The result of the operation is a set containing pairs of items
+    $X = \{(a, b), a \in A, b \in B\}$ or $X = A \times B$.
+    
+    The model then deconstructs $X$ to two disjoint subsets: $M$ for pairs that
+    contain matching items and $U$ for pairs that contain non-matching items.
 
-    The entity resolution function internally assigns the probabilities
-    $P(A_1|\gamma)$, $P(A_2|\gamma)$ and $P(A_3|\gamma)$ for each $(\mu,
-    \lambda)$ such that $P(A_2)$ is minimal at those error levels.
-    In other words, the function will output pairs of entity references such
-    that there is the least possible ambiguity as to whether they match or not
-    based on the probabilities that their attributes match or not.
+    \begin{align}
+        M &= \{(a, b) | a == b, a \in A, b \in B\}~\textrm{and} \\
+        U &= \{(a, b) | a \neq b, a \in A, b \in B\}
+    \end{align}
 
-    Because the Fellegi-Sunter model defines entity resolution as a statistical
-    optimization function, it works very well for both
-    rule-based\cite{oyster2012} and machine learning\cite{deepm2020}
+    The model proposes that if $a \in A$ and $b \in B$ are two vectors, their
+    comparison will also a vector denoted $\gamma \in \varGamma$, where
+    $\varGamma$ denotes the set of all possible values of $\gamma$.
+    The comparison between $a$ and $b$ is performed between each corresponding
+    element in each of the two vectors.
+    The elements of $\gamma$ vary according to the type of comparison that is
+    performed\cite{winkler1990}.
+
+    In this context, a match decision function can make one of three decisions
+    regarding a pair from $X$ according to the F-S model:
+    
+    \begin{itemize}
+        \item consider it a \textit{link ($A_1$)} between the items;
+        \item consider it a \textit{non-link ($A_3$)} between the items, and
+        \item leave things undecided, thus marking it as a \textit{possible link
+              ($A_2$)}.
+    \end{itemize}
+    
+    Then a linkage rule is a function $L:\varGamma \rightarrow D$,
+    $D=\{d(\gamma)\}$, where
+
+    \begin{align}
+        &d(\gamma) = \{P(A_1|\gamma),P(A_2)|\gamma,P(A_3)|\gamma\};
+        \gamma \in \varGamma\nonumber\nonumber\\
+        &\textrm{so that}~\sum_{i=1}^{3}P(A_i|\gamma) = 1\nonumber
+    \end{align}
+
+    When using this model the purpose of entity resolution is to find the
+    optimal linkage rule.
+    The F-S theorem defines it as the linkage rule that minimizes
+    $P(A_2|\gamma)$.
+    In other words, the optimal linkage rule according to the F-S model is the
+    linkage rule without uncertainties.
+    This optimization inclination of the model makes it very well suited for
+    both rule-based\cite{oyster2012} and machine learning\cite{deepm2020}
     implementations.
     
-    Another observation is that this model always compares two entity references
-    and, at most, it can link them\cite{Tal11,Kon19}.
-    It has been extended to handle comparisons between more than two entity
-    references\cite{Kon19}, but this is out of the scope of the current paper.
-    
-    With the original FS model, we can represent an entity profile only as a
-    pair of entity references.
-    Remembering that entity references are always represented as tuples of
-    attributes, entity profiles will be represented in this model as pairs 
-    ($R_a, R_b$) where $R_a$ and $R_b$ are entity references.
-    This in turn means that the representation of the ground truth is a set
-    of these types of pairs.
+    In this universe, two conditional probabilities become interesting:
 
-    Let's suppose there are are $n$ entity references in the input domain $Ref$
-    of the entity resolution function. In the Fellegi-Sunter model the output domain
-    $Res$ of the function is defined as:
-    \[
-        \{(r_i,r_j), i \neq j, 1 \leq i,j \leq n\}\textrm{, where}
-    \]
-    \[
-        r_x=(a_1,\ldots,a_x; x \in \mathbb{N}^*, a_x \in A)
-    \]
+    \begin{align}
+        m(\gamma)&=P(\gamma(a, b) | (a, b) \in M)~\textrm{and}\nonumber\\
+        u(\gamma)&=P(\gamma(a, b) | (a, b) \in U)\textrm{.}\nonumber
+    \end{align}
 
-    The qualitative evaluators for this mathematical model are among the most
-    well known.
-    Given that the model clearly defines type 1 and type 2 errors, we can use
-    the notions of true positive, true negative, false positive and false
-    negative to build a robust evaluator set.
+    $m(\gamma)$ is the probability of a $\gamma$ comparison vector given an
+    $(a, b)$ \textit{link}.
+    $u(\gamma)$ is the probability of a $\gamma$ comparison vector given an
+    $(a, b)$ \textit{non-link}.
+    For brevity, we have not used the complete notation pertaining to records
+    from the original paper.
+
+    The two probabilities outlined above are important because they help us
+    express the probabilities of the Type I and Type II statistical errors
+    associated with the decision function that sits at the core of the linkage
+    rule definition above.
+    The probabilities of the two types of error are expressed as:
+
+    \begin{align}
+        \mu&=\sum_{\gamma \in \varGamma}u(\gamma)P(A_1|\gamma)\textrm{,~and}\nonumber\\
+        \lambda&=\sum_{\gamma \in \varGamma}m(\gamma)P(A_3|\gamma)\nonumber
+    \end{align}
+
+    where:
+
+    \begin{itemize}
+        \item $\mu$ represents the Type I error of items that were erroneusly
+        linked (i.e pairs in $M$ that do not belong in $M$), and
+        \item $\lambda$ represents the Type II error of items that were
+        erroneously \textit{not} linked (i.e. pairs in $U$ that do not belong in
+        $U$).
+    \end{itemize}
+
+    \subsubsection[fms-term]{How Does It Relate}\label{fsm-term}
+
+    To link the Fellegi-Sunter model to our own terminology, let's start by
+    talking about $a \in A$ and $b \in B$.
+    The original F-S model calls $A$ and $B$ ``populations'' and $a$ and $b$,
+    ``population elements''.
+    A distinction is made between records, denoted with $\alpha(a)$ and
+    $\beta(b)$, and population elements.
+    Most of the original paper refers to records.
+
+    It is safe for the reader to assume that in our terminology the population
+    elements correspond to real-world entities and the records correspond to
+    entity references.
+    However, our view on $\alpha(a)$ and $\beta(b)$ is more broad in that we
+    think of them not merely as records, but as functions that transform the
+    population elements (information about real-world entities) into records
+    (entity references).
+    We used the notion of traits or extraction traits to express this concept.
         
-    $$Precision=\frac{TP}{TP+FP}$$
-    $$Recall=\frac{TP}{TP+FN}$$
-    $$F_1=2 \cdot \frac{Precision \cdot Recall}{Precision+Recall}$$
+    The $A$ and $B$ populations equate roughly to our notion of information
+    sources.
+    The ``population'' concept is a particularization of our information source
+    concept because it is defined as a set in the original paper whereas our
+    definition includes other possible data representations.
+    The concept is also more general than our own concept because we defined
+    information sources under the assumption of machines being able to process
+    the information within them, whereas a population is a more general concept
+    to which this restriction need not apply.
 
-    One last observation is that this model does not support transitive
-    linking of entity references\cite{Tal11}.
-    This means that if three references match, i.e. $r_1$ matches $r_2$ and
-    $r_2$ matches $r_3$, this model does not allow us to infer that $r_1$
-    matches $r_3$.
+    The Fellegi-Sunter model works under the assumption that there are two
+    populations $A$ and $B$ and defines the linkage rule as a function that uses
+    conditional probabilities that involve both populations.
+    On the other hand, our $Ref$ domain for entity references is clearly
+    solitary.
+    Using our terminology we would denote $A$ with $S_1$ and $B$ with $S_2$.
+    We start constructing our $Ref$ domain by using traits to extract $n_1$
+    entity references from $S_1$ and $n_2$ entity references from $S_2$.
+    Then $Ref = \{r_{{S_i}{k_i}},~1 \leq k_i \leq n_i, i \in {1, 2} \}$.
+
+    The result domain is expressed as $X = A \times B$ in this model.
+    It is subsequently split into $M$ and $U$ the sets of matching and
+    non-matching pairs in $X$, respectively.
+    The $X$ in the original model is equivalent to $Res$ in our terminology.
+    $Res$ can be defined as:
+    \begin{align}
+        &Res = \{(r_{{S_i}{k}}, r_{{S_j}{l}}),~1 \leq k \leq |S_i|,~1
+        \leq l \leq |S_j|, i \neq j, i,j \in {1, 2}\}\textrm{,}\nonumber
+    \end{align}
+    where $|S_i|$ denotes the number of entity references extracted from the
+    source $S_i$.
+    Our concept of an entity profile translates to a pair of entity references,
+    with $M$ being the set containing the entity profiles that refer to the same
+    real-world entity and $U$ being the set of entity profiles that don't refer
+    to the same real-world entity.
+
+    Recall that the shape of the ground truth and that of the output of the
+    entity resolution tasks that use this model is determined by the definition
+    of the output domain of the entity resolution function.
+    Concretely, we expect entity resolution tasks that implement this model to
+    output a set of pairs of tuples.
+
+    A natural question is whether, instead of a single set of pairs of tuples we
+    should expect two sets of pairs of tuples that would correspond to the two
+    subsets $M$ and $U$ from the original paper.
+    For $M$ this doesn't seem to be a problem because in practice $M$'s growth
+    would be correlated to the maximum number of entity references extracted
+    from a single information source.
+    On the other hand, constructing $U$ seems to be prohibitively expensive.
+    Let's imagine that we're grouping the extracted entity references in vectors
+    by their information source of provenance.
+    Then $U$ will grow proportionally to the length of the vector product of
+    these vectors.
+    So, for practical reasons, we are of the opinion that the output of the
+    entity resolution function as well as the ground truth should contain only
+    the items that should be in $M$.
+
+    With the above definition for $Res$ we also observe that this model always
+    compares two entity references and can not explain linking more than two
+    entities\cite{Tal11}.
+    While there is work that extended the model to compare more than two 
+    entity references\cite{Kon19}, we will not touch upon that in this paper.
+    
+    As a consequence, we can't represent transitive links between entity
+    references with this model.
+    This means that if the entity reference $r_1$ matches $r_2$ and
+    $r_2$ matches $r_3$, we can't infer that $r_1$ matches $r_3$ by using this
+    model\cite{Tal11}.
+
+    \subsubsection[fms-measure]{Measurements}\label{fsm-measure}
+
+    The qualitative evaluators specific to this mathematical model are among
+    the best known.
+    Because we have a clear definition of the Type I and Type II errors, we can
+    give a clear context for the notions of true and false positive and true and
+    false negative.
+    In defining them we make use of the $M$ and $U$ sets as they are defined in
+    the original paper describing the F-S model.
+
+    Depending on where the pair output by the entity resolution function is
+    expected to be, we define:
+
+    \begin{itemize}
+        \item \textbf{true positives} as pairs in $M$ that should be in $M$,
+        \item \textbf{false positives}, or type I errors, as pairs that should
+        be in $U$, but are in $M$,
+        \item \textbf{true negatives} as pairs in $U$ that belong in $U$, and
+        \item \textbf{false negatives}, or type II errors, as pairs that should
+        be in $M$, but are in $U$.
+    \end{itemize}
+
+    Qualitative evaluators for this model work by comparing a ground truth that
+    containing the set of ideal pairs of tuples to the entity resolution task's
+    output.
+    $M$ is effectively the ground truth in this context.
+    Because using $U$ is prohibitive in practice, we will rely only on concepts
+    that have to do with $M$: true and false positives, as well as false
+    negatives.
+
+    With this in mind we finally define the three qualitative evaluators that
+    are widely used with this model:
+
+    \begin{align}
+    Precision&=\frac{TP}{TP+FP} \\
+    Recall&=\frac{TP}{TP+FN} \\
+    F_1 Score&=2 \cdot \frac{Precision \cdot Recall}{Precision+Recall}
+    \end{align}
+
     \subsection[serf]{Stanford Entity Resolution Framework Model}\label{subsec:serf}
 
     \textcolor{green}{Please mention the model's parents and add a reference!}
@@ -621,13 +784,13 @@ C(V_i, V_j) = \left\{
 
     \subsection{Methodology}
 
-    Because we are interested only in qualitative differences in results induced
-    by the mathematical model being used and because these differences are
-    visible even on small dataset, we will not monitor questions of scale in
-    this experiment.
+    Because we are interested especially in qualitative differences in results
+    induced by the mathematical model being used and because these differences
+    are visible even on small dataset, we will not monitor questions of scale
+    in this experiment.
     Since we are not concerned with the actual score obtained by a certain
-    algorithm either, we will use the first 10 items from the `Buy' table which
-    is a part of the Abt-Buy dataset\cite{vldb2010}.
+    algorithm either, for simplicity we will use the first 10 items from the
+    `Buy' table which is a part of the Abt-Buy dataset\cite{vldb2010}.
     
     We split the Buy table into two tables having the following columns:
     \begin{itemize}
@@ -725,29 +888,32 @@ C(V_i, V_j) = \left\{
     input datasets, but any probabilistic matching algorithm will do.
     PPJoin matches entities based on prefix strings and in this paper we use it
     only in conjunction with Jaccard similarity.
-    Intuition tells us that for values of the Jaccard similarity threshold that
-    are either too low or too high we should have lower precision.
+    Intuition tells us that for values of the Jaccard similarity threshold ($t$)
+    that are either too low or too high we should have lower precision.
     For higher thresholds we should also have lower recall values, whereas for
     lower values the recall should be higher.
 
-    \begin{center}
-        \begin{tabular}[b]{|cccc|}
-            \hline
-            t & precision & recall & f1 score \\
-            \hline
-            0.99 & 1.0 & 0.0009 & 0.0018 \\
-            0.75 & 1.0 & 0.2179 & 0.3578 \\
-            0.4 & 0.9595 & 1.0 & 0.9793 \\
-            0.2 & 0.6920 & 1.0 & 0.8179 \\
-            \hline
-        \end{tabular}
-    \end{center}
+    \begin{table}[htpb]\label{FS results}
+        \caption{FS results}
+        \begin{center}
+            \begin{tabular}[b]{|cccc|}
+                \hline
+                t & precision & recall & f1 score \\
+                \hline
+                0.99 & 1.0 & 0.0009 & 0.0018 \\
+                0.75 & 1.0 & 0.2179 & 0.3578 \\
+                0.4 & 0.9595 & 1.0 & 0.9793 \\
+                0.2 & 0.6920 & 1.0 & 0.8179 \\
+                \hline
+            \end{tabular}
+        \end{center}
+    \end{table}
 
     When the Jaccard similarity threshold is set high ($t > 0.75$), we end up
     with very few matches, but those matches are true.
-    As we lower the threshold ($0.4 < t leq 0.75$), recall increases and
+    As we lower the threshold ($0.4 < t \leq 0.75$), recall increases and
     precision does not drop.
-    However, when we lower the threshold too much ($t leq 0.4$) we start losing
+    However, when we lower the threshold too much ($t \leq 0.4$) we start losing
     precision.
     
     All of these results are expected.
