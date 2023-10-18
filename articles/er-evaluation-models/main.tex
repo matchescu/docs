@@ -544,7 +544,7 @@ C(V_i, V_j) = \left\{
     The result of the operation is a set containing pairs of items
     $X = \{(a, b), a \in A, b \in B\}$ or $X = A \times B$.
     
-    The model then deconstructs $X$ to two disjoint subsets: $M$ for pairs that
+    The model then deconstructs $X$ to two disjoint subsets $X = M \cup U$: $M$ for pairs that
     contain matching items and $U$ for pairs that contain non-matching items.
 
     \begin{align}
@@ -553,7 +553,7 @@ C(V_i, V_j) = \left\{
     \end{align}
 
     The model proposes that if $a \in A$ and $b \in B$ are two vectors, their
-    comparison will also a vector denoted $\gamma \in \varGamma$, where
+    comparison will also be a vector denoted $\gamma \in \varGamma$, where
     $\varGamma$ denotes the set of all possible values of $\gamma$.
     The comparison between $a$ and $b$ is performed between each corresponding
     element in each of the two vectors.
@@ -573,11 +573,16 @@ C(V_i, V_j) = \left\{
     Then a linkage rule is a function $L:\varGamma \rightarrow D$,
     $D=\{d(\gamma)\}$, where
 
+    
     \begin{align}
         &d(\gamma) = \{P(A_1|\gamma),P(A_2)|\gamma,P(A_3)|\gamma\};
         \gamma \in \varGamma\nonumber\nonumber\\
-        &\textrm{so that}~\sum_{i=1}^{3}P(A_i|\gamma) = 1\nonumber
+        &\textrm{so that}~\sum_{i=1}^{3}P(A_i|\gamma) = 1\nonumber.
     \end{align}
+
+    \textcolor{green}{oare e $P(A_2)|\gamma$ sau $P(A_2|\gamma)$? unde se inchide paranteza?}
+
+    \textcolor{green}{oare se poate preciza cum arata functia $L$? s-a zis ca e o functie, s-a precizat domeniul (multimea vectorilor rezultati din compararea a 2 items a si b), codomeniul $D$ (functia $d(\gamma)$), dar nu se zice nimic de functia efectiva}
 
     When using this model the purpose of entity resolution is to find the
     optimal linkage rule.
@@ -596,6 +601,7 @@ C(V_i, V_j) = \left\{
         u(\gamma)&=P(\gamma(a, b) | (a, b) \in U)\textrm{.}\nonumber
     \end{align}
 
+    \noindent
     $m(\gamma)$ is the probability of a $\gamma$ comparison vector given an
     $(a, b)$ \textit{link}.
     $u(\gamma)$ is the probability of a $\gamma$ comparison vector given an
@@ -638,7 +644,9 @@ C(V_i, V_j) = \left\{
     elements correspond to real-world entities and the records correspond to
     entity references.
     However, our view on $\alpha(a)$ and $\beta(b)$ is more broad in that we
-    think of them not merely as records, but as functions that transform the
+    think of them not merely as records, but as functions that transform 
+    \textcolor{green}{I would say "that represent / that associate a representation to"} 
+    the
     population elements (information about real-world entities) into records
     (entity references).
     We used the notion of traits or extraction traits to express this concept.
@@ -662,6 +670,7 @@ C(V_i, V_j) = \left\{
     We start constructing our $Ref$ domain by using traits to extract $n_1$
     entity references from $S_1$ and $n_2$ entity references from $S_2$.
     Then $Ref = \{r_{{S_i}{k_i}},~1 \leq k_i \leq n_i, i \in {1, 2} \}$.
+    \textcolor{green}{both $S$ and $k$ have the same index $i$? If there are two sources ($S_1$ nd $S_2$), then $i$ will be 1 or 2. The $k$ index is used for indexing the references, and I would denote by $1 \leq k \leq n_i$.}
 
     The result domain is expressed as $X = A \times B$ in this model.
     It is subsequently split into $M$ and $U$ the sets of matching and
@@ -670,7 +679,7 @@ C(V_i, V_j) = \left\{
     $Res$ can be defined as:
     \begin{align}
         &Res = \{(r_{{S_i}{k}}, r_{{S_j}{l}}),~1 \leq k \leq |S_i|,~1
-        \leq l \leq |S_j|, i \neq j, i,j \in {1, 2}\}\textrm{,}\nonumber
+        \leq l \leq |S_j|, i \neq j, i,j \in \{1, 2\}\}\textrm{,}\nonumber
     \end{align}
     where $|S_i|$ denotes the number of entity references extracted from the
     source $S_i$.
@@ -680,10 +689,11 @@ C(V_i, V_j) = \left\{
     to the same real-world entity.
 
     Recall that the shape of the ground truth and that of the output of the
-    entity resolution tasks that use this model is determined by the definition
+    entity resolution tasks that this model use is determined by the definition
     of the output domain of the entity resolution function.
     Concretely, we expect entity resolution tasks that implement this model to
     output a set of pairs of tuples.
+    \textcolor{green}{I would give an example for this tuple}
 
     A natural question is whether, instead of a single set of pairs of tuples we
     should expect two sets of pairs of tuples that would correspond to the two
@@ -727,11 +737,16 @@ C(V_i, V_j) = \left\{
 
     \begin{itemize}
         \item \textbf{true positives} as pairs in $M$ that should be in $M$,
+        \textcolor{green}{I would introduce the "prediction" notion; for instance, \textbf{true positives} as pairs predicted to be in $M$ and that should be in $M$,}
         \item \textbf{false positives}, or type I errors, as pairs that should
         be in $U$, but are in $M$,
-        \item \textbf{true negatives} as pairs in $U$ that belong in $U$, and
+        \textcolor{green}{\textbf{false positives}, or type I errors, as pairs that should be in $U$, but they are predicted to be in $M$,}
+        \item \textbf{true negatives} as pairs in $U$ that belong in $U$, 
+        \textcolor{green}{see above!} 
+        and
         \item \textbf{false negatives}, or type II errors, as pairs that should
-        be in $M$, but are in $U$.
+        be in $M$, but are in $U$. 
+        \textcolor{green}{see above!} 
     \end{itemize}
 
     Qualitative evaluators for this model work by comparing a ground truth that
