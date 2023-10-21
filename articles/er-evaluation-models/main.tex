@@ -13,6 +13,8 @@
 \usepackage{xcolor}
 \usepackage{cite}
 \usepackage{array}
+\usepackage{graphicx}
+\graphicspath{ {./img/} }
 
 % Document
 \begin{document}
@@ -573,17 +575,15 @@ C(V_i, V_j) = \left\{
     
     Then a linkage rule is a function $L:\varGamma \rightarrow D$,
     $D=\{d(\gamma)\}$, where
-
     
     \begin{align}
-        &d(\gamma) = \{P(A_1|\gamma),P(A_2)|\gamma,P(A_3)|\gamma\};
-        \gamma \in \varGamma\nonumber\nonumber\\
+        &d(\gamma) = \{P(A_1|\gamma),P(A_2|\gamma),P(A_3|\gamma)\};
         &\textrm{so that}~\sum_{i=1}^{3}P(A_i|\gamma) = 1\nonumber.
+        \gamma \in \varGamma\nonumber
     \end{align}
 
-    \textcolor{green}{oare e $P(A_2)|\gamma$ sau $P(A_2|\gamma)$? unde se inchide paranteza?}
-
-    \textcolor{green}{oare se poate preciza cum arata functia $L$? s-a zis ca e o functie, s-a precizat domeniul (multimea vectorilor rezultati din compararea a 2 items a si b), codomeniul $D$ (functia $d(\gamma)$), dar nu se zice nimic de functia efectiva}
+    In other words, for a $\gamma \in \varGamma$, $L(\gamma) = \{P(A_1|\gamma),
+    P(A_2|\gamma), P(A_3|\gamma)\}$ so that the probabilities sum up to $1$.
 
     When using this model the purpose of entity resolution is to find the
     optimal linkage rule.
@@ -645,11 +645,9 @@ C(V_i, V_j) = \left\{
     elements correspond to real-world entities and the records correspond to
     entity references.
     However, our view on $\alpha(a)$ and $\beta(b)$ is more broad in that we
-    think of them not merely as records, but as functions that transform 
-    \textcolor{green}{I would say "that represent / that associate a representation to"} 
-    the
-    population elements (information about real-world entities) into records
-    (entity references).
+    think of them not merely as records, but as functions that associate a
+    representation as records(entity references) to the population elements
+    (information about real-world entities).
     We used the notion of traits or extraction traits to express this concept.
         
     The $A$ and $B$ populations equate roughly to our notion of information
@@ -672,7 +670,8 @@ C(V_i, V_j) = \left\{
     entity references from $S_1$ and $n_2$ entity references from $S_2$.
     Then $Ref = \{r_{{S_i}{k_i}},~1 \leq k_i \leq n_i, i \in {1, 2} \}$.
     \textcolor{green}{both $S$ and $k$ have the same index $i$? If there are two sources ($S_1$ nd $S_2$), then $i$ will be 1 or 2. The $k$ index is used for indexing the references, and I would denote by $1 \leq k \leq n_i$.}
-
+    \textcolor{orange}{let's say there's 5 elements in $S_1$ and 10 elements in
+    $S_2$. $k_1$ goes from 1 to 5 and $k_2$ goes from 1 to 10}
     The result domain is expressed as $X = A \times B$ in this model.
     It is subsequently split into $M$ and $U$ the sets of matching and
     non-matching pairs in $X$, respectively.
@@ -694,7 +693,9 @@ C(V_i, V_j) = \left\{
     of the output domain of the entity resolution function.
     Concretely, we expect entity resolution tasks that implement this model to
     output a set of pairs of tuples.
-    \textcolor{green}{I would give an example for this tuple}
+    For example, if $r_{11}=(1, 2, 3)$ and $r_{21}=(4, 5, 6)$ are two entity
+    references that refer to the same real-world entity, this model would return
+    the pair $((1, 2, 3), (4, 5, 6))$.
 
     A natural question is whether, instead of a single set of pairs of tuples we
     should expect two sets of pairs of tuples that would correspond to the two
@@ -737,17 +738,14 @@ C(V_i, V_j) = \left\{
     expected to be found, we define:
 
     \begin{itemize}
-        \item \textbf{true positives} as pairs in $M$ that should be in $M$,
-        \textcolor{green}{I would introduce the "prediction" notion; for instance, \textbf{true positives} as pairs predicted to be in $M$ and that should be in $M$,}
-        \item \textbf{false positives}, or type I errors, as pairs that should
-        be in $U$, but are in $M$,
-        \textcolor{green}{\textbf{false positives}, or type I errors, as pairs that should be in $U$, but they are predicted to be in $M$,}
-        \item \textbf{true negatives} as pairs in $U$ that belong in $U$, 
-        \textcolor{green}{see above!} 
-        and
-        \item \textbf{false negatives}, or type II errors, as pairs that should
-        be in $M$, but are in $U$. 
-        \textcolor{green}{see above!} 
+        \item \textbf{true positives} as pairs predicted to be in $M$ that
+        should be in $M$,
+        \item \textbf{false positives}, or type I errors, as pairs predicted to
+        be in $M$, but should be in $U$,
+        \item \textbf{true negatives} as pairs predicted to be in $U$ that
+        should in $U$, and
+        \item \textbf{false negatives}, or type II errors, as pairs predicted to
+        be in $U$, but should be in $M$.
     \end{itemize}
 
     Qualitative evaluators for this model work by comparing a ground truth that
@@ -767,17 +765,16 @@ C(V_i, V_j) = \left\{
     F_1 Score&=2 \cdot \frac{Precision \cdot Recall}{Precision+Recall}
     \end{align}
 
-    \subsection[serf]{Stanford Entity Resolution Framework Model}\label{subsec:serf}
-
-    \textcolor{green}{Please mention the model's parents and add a reference!}
-    \begin{itemize}
-        \item views entity resolution as the result of applying a match function, a merge function and a domination relationship on top of a set
-        \item allows evaluating transitive matches
-        \item the match function can be anything as long as we can act with a yes/no action on its result
-        \item the merge function should be distributive (merge(a, merge(b, c)) = merge(merge(a, b), c))
-        \item provides a very flexible way of modeling entity resolution (the comparison and addition of integer numbers is a valid basis for an entity resolution task on the set of integer numbers)
-        \item the entity profile is either one of the original input items or an information that dominates all the information that was used to create it
-    \end{itemize}
+    \textit{Precision} (or the positivive predictive value) is defined as the
+    number of correct predictions that were made in relation to the total number
+    of predictions that were made.
+    \textit{Recall} (or sensitivity) is defined as the number of correct
+    predictions that were made in relation to the total number of positive
+    predictions that could have been made (which corresponds to the number of
+    items in the ground truth).
+    The \textit{$F_1$} score is the harmonic mean of the precision and the
+    recall and it is used to capture the tradeoff between precision and
+    recall\cite{hitesh2012}.
 
     \subsection[algebraic]{Algebraic Model}\label{subsec:algebraic}
 
@@ -791,172 +788,204 @@ C(V_i, V_j) = \left\{
         \item the entity profile is a partition class (a cluster)
     \end{itemize}
 
+    \subsection[serf]{Stanford Entity Resolution Framework Model}\label{subsec:serf}
+
+    \textcolor{green}{Please mention the model's parents and add a reference!}
+    \begin{itemize}
+        \item views entity resolution as the result of applying a match function, a merge function and a domination relationship on top of a set
+        \item allows evaluating transitive matches
+        \item the match function can be anything as long as we can act with a yes/no action on its result
+        \item the merge function should be distributive (merge(a, merge(b, c)) = merge(merge(a, b), c))
+        \item provides a very flexible way of modeling entity resolution (the comparison and addition of integer numbers is a valid basis for an entity resolution task on the set of integer numbers)
+        \item the entity profile is either one of the original input items or an information that dominates all the information that was used to create it
+    \end{itemize}
+
     \section{Experiments}
 
-    In order to highlight the differences between what each mathematical model
-    can provide us with, we have designed an experiment.
-    In our experiment we will run an entity resolution task using all three
-    mathematical models presented thus far.
+    We have designed an experiment to showcase the insights that are provided by
+    each of the mathematical models presented thus far.
 
     \subsection{Data}
 
     The data for the experiments presented in this paper is available on
     GitHub\cite{expdata2023}.
-    It is comprised of a subset of the Abt-Buy dataset\cite{vldb2010}.
-    Namely, we have chosen ten items from the Buy dataset that help us highlight
-    the differences in interpretation that arise when using different models.
-
-    In order to introduce similar entity references that will be processed by
-    the entity resolution task, we split the Buy table into two tables having
-    the following columns from the original table:
+    It is comprised of a subset of ten items from the `Buy' dataset which is a
+    part of the Abt-Buy dataset\cite{vldb2010}.
+    Most of these items were chosen to be near-duplicates.
     
-    \begin{enumerate}[label=\textbullet~Table~\arabic*,leftmargin=*]
-        \item will contain the `name',`manufacturer' and `price' columns
-        \item the second table will contain the data in the `description',`name' columns from the original table.abc
+    We chose tabular data because of the support this type of data structure has
+    received in the programming community\cite{pandas2010,pandas2023}.
+    From now on it should be assumed that the information sources are tables.
+    The tables are stored on disk in CSV files.
+    Each CSV file has a first row containing the column headings and subsequent
+    rows containing records within which the fields are separated by comma.
+    
+    Since we want full control over the entity resolution process, we choose to
+    generate the data sources from our initial dataset.
+    We split the Buy table into two tables having the following columns:
+    \begin{enumerate}[label=\textbullet~Table~\arabic*:,leftmargin=*]
+        \item `name',`manufacturer' and `price'
+        \item `description',`name'.
     \end{enumerate}
     These two tables will be the input information sources for our experiments.
 
-    We have designed the entity reference extraction such that it causes minimal
-    tampering with the qualitative performance readings for the entity
-    resolution tasks.
-    The information sources are stored on disk as CSV files.
-    Each CSV file has a first row containing the column headings and subsequent
-    rows containing records within which the fields are separated by comma.
-    The traits built into our extraction pipeline are mapped one-to-one to the
-    names of the columns in the CSV file.
-    For each record, the traits extract a single attribute for each column.
+    Our entity reference extraction traits assume that all data is string data.
+    We chose strings because numbers or dates are very easy to disambiguate and
+    in real-world scenarios we very rarely deal with data that is not formatted
+    as strings.
+    The traits built into our extraction pipeline are mapped one-to-one to table
+    columns.
+    For each record, the each trait extracts a single attribute.
     The ordering of the data enforced by the traits is left-to-right,
-    top-to-bottom order.
-    This setup results in all entity references being tuples that each have
-    three attributes.
+    top-to-bottom reading order.
+    This setup results in all entity references from Table 1 being tuples with
+    three values, while entity references from Table 2 will have two values.
 
-    For example, let's say we have the following dataset with a single record.
+    For example, let's use the following record from our initial `Buy' table:
     \begin{center}
         \begin{tabular}[b]{|l|l|l|l|l|}
             \hline
             id&name&description&manufacturer&price\\
             \hline
-            10333848&Linksys EtherFast&24x10/100Base-TX LAN&LINKSYS&64.99 \\
+            205554724&Seiko SXDA04& & &\$138.00\\
             \hline
         \end{tabular}
     \end{center}
 
-    Our data generation strategy will then create the following two datasets.
-    The first dataset will contain the `name', `id', `manufacturer' and `price'
-    columns.
+    Our data generation strategy would split it into two records, each placed
+    in the corresponding table.
+    The first record would be:
     
     \begin{center}
         \begin{tabular}[b]{|l|l|l|l|}
             \hline
-            name&id&manufacturer&price \\
+            name&manufacturer&price \\
             \hline
-            Linksys EtherFast&10333848&LINKSYS&64.99 \\
+            Seiko SXDA04& &\$138.00 \\
             \hline
         \end{tabular}
     \end{center}
 
-    The second dataset will contain the `description', `id' and `name' columns.
+    The second record would look like this:
 
     \begin{center}
         \begin{tabular}[b]{|l|l|l|}
             \hline
-            description&id&name \\
+            description&name \\
             \hline
-            24x10/100Base-TX LAN&10333848&Linksys EtherFast \\
+            &Seiko SXDA04 \\
             \hline
         \end{tabular}
     \end{center}
 
-    The two generated datasets become the two information sources for the entity
-    resolution task.
-    The traits we have built for this experiment will extract exactly one entity
-    reference from each of the two information sources thus generated:
+    Then the traits we have built for this experiment will extract the followin
+    two entity references:
     \begin{itemize}
-        \item (\texttt{Linksys EtherFast,10333848,LINKSYS,64.99}),
-        \item (\texttt{24x10/100Base-TX LAN,10333848,Linksys EtherFast}).
+        \item \texttt{(`Seiko SXDA04', ` ',`\$138.00')},
+        \item \texttt{(` ',`Seiko SXDA04')}.
     \end{itemize}
 
-    The entity resolution task receives as input all of the entity references
-    provided by the extraction phase.
-    It can also make use of the information about how data is ordered because
-    the traits used for extraction are available to it.
+    The entity resolution task receives its input as a list containing two lists
+    each of which contain 10 entity references.
 
-    As a last observation, because we are in full control of the input sources
-    of data we can generate the ground truth, too.
-    Now let us see what is influenced by the choice of mathematical model.
+    Because we are in full control of the input sources for the entity
+    resolution task, we can be very precise about how the ground truth should
+    look like.
+    We posit that each record in our initial `Buy' table refers to a single
+    real-world entity.
+    We also say that there are no two records in the initial `Buy' table that
+    refer to the same real-world entity.
+    Consequently, the two records that we generate from each record in the
+    initial table refer to the same real-world entity.
+    This gives us a very easy way to generate the ground truth in whatever
+    format each mathematical model expects.
+
+    In our experiments we use the \texttt{ppjoin}\cite{ppjoin} matching
+    algorithm because of its simplicity.
+    PPJoin stands for Position Prefix Join and it is an algorithm designed to
+    find similarities between records based on the Jaccard
+    index\cite{jaccard1912,finley1996}.
+    Intuitively, a lower threshold will match a larger number of items because
+    the prefix being used for matching shortens.
+    A higher threshold should match fewer items, but with less chance for error.
+    In our experiments the Jaccard threshold will be denoted with $t$.
+    The mathematical model that fits this algorithm best is the Fellegi-Sunter
+    probabilistic model because it works using records and attributes.
+    The Jaccard threshold manipulates the probabilities whether the attributes
+    match or not.
+    Even so, we shall learn that we can use the other mathematical models to
+    better understand this algorithm's performance.
+
+    As to how we will use the algorithm: we will take 100 measurements of each
+    qualitative evaluator for each mathematical model for incremental values of
+    the Jaccard similarity threshold $t$ within the $[0\ldots0.99]$ closed
+    interval in discrete steps of $0.01$.
 
     \subsection{Fellegi-Sunter Model Results}
     
     With the F-S model both the ground truth and the results of the entity
-    resolution algorithm are represented as a set of pairs.
+    resolution algorithm are represented as a list of pairs of entity
+    references.
     We generate the ground truth for the F-S model by iterating over both
     input data sources using the same cursor and outputting pairs of records.
     We notice duplicate CSV records that only differ on the `id' column.
-    These surely refer to the same real-world entity, however the F-S model is
-    unable to capture this information.
 
-    We run an entity matching algorithm of choice and evaluate its performance
-    by using the qualitative evaluators specific for the F-S model on the
-    results versus the ground truth.
-    
-    We choose to use the \texttt{ppjoin}\cite{ppjoin} matching algorithm on the
-    input datasets, but any probabilistic matching algorithm will do.
-    PPJoin matches entities based on prefix strings and in this paper we use it
-    only in conjunction with Jaccard similarity.
     Intuition tells us that for values of the Jaccard similarity threshold ($t$)
     that are either too low or too high we should have lower precision.
     For higher thresholds we should also have lower recall values, whereas for
     lower values the recall should be higher.
+    This intuition is captured best in \hyperref[fsfig]{the figure} that
+    captures \texttt{ppjoin}'s results at various values of the Jaccard
+    threshold $t$.
 
-    \begin{table}[htpb]\label{FS results}
-        \caption{FS results}
-        \begin{center}
-            \begin{tabular}[b]{|cccc|}
-                \hline
-                t & precision & recall & f1 score \\
-                \hline
-                0.99 & 1.0 & 0.0009 & 0.0018 \\
-                0.75 & 1.0 & 0.2179 & 0.3578 \\
-                0.4 & 0.9595 & 1.0 & 0.9793 \\
-                0.2 & 0.6920 & 1.0 & 0.8179 \\
-                \hline
-            \end{tabular}
-        \end{center}
-    \end{table}
+    \begin{figure}
+        \centering
+        \includegraphics[width=\textwidth]{fsfig}
+        \caption{Fellegi-Sunter Results}\label{fsfig}
+    \end{figure}
 
-    When the Jaccard similarity threshold is set high ($t > 0.75$), we end up
-    with very few matches, but those matches are true.
-    As we lower the threshold ($0.4 < t \leq 0.75$), recall increases and
+    When the Jaccard similarity threshold is set high ($t \geq 0.66$), we end up
+    with few matches, but those matches are true.
+    As we lower the threshold ($0.27 \leq t < 0.66$), recall increases and
     precision does not drop.
-    However, when we lower the threshold too much ($t \leq 0.4$) we start losing
-    precision.
+    However, when we lower the threshold too much ($t < 0.27$) we start losing
+    precision even though we get better and better recall.
     
-    All of these results are expected.
+    These results are exactly what we expect.
     So what can we learn from here?
 
-    For starters, we reach high levels of recall only when we start losing
+    We know that we reach high levels of recall only when we start losing
     precision.
-    If we were tuning the Jaccard threshold the granularity for doing so would
-    be extremely coarse.
-    The recall for $0.4 < t \leq 0.75$ is always $0.3578$ and we have no insight
-    as to why.
-    This all leads us to understand that we don't know how much each entity
-    reference matches another.
-    This shortcoming is inherent in the probabilistic model of entity matching
-    because in this model something is either a link, a non-link or could be a
-    link, but we minimize the probability of ever finding that third option.
+    Though, we should notice that precision and recall are lost in steps, not
+    continually.
+    If we were tuning the algorithm for a specific use case one thing that would
+    definitely be troubling us would be big gap in precision around the $0.27$
+    mark.
+    We have no insight into why that happens and we lose more than half of our
+    precision.
+    One suspicion we could have is that we don't know \textit{how much} each
+    entity reference matches another and that might be the cause of the gap.
+    This shortcoming is inherent to this model of entity matching because the
+    model itself minimizes ambiguity.
     
     Another aspect has to do with duplicates.
-    We never reach perfect precision even though it really seems that we should.
-    The reason behind that is that \texttt{ppjoin} sometimes finds matches it
-    shouldn't. 
-    For example, if we have two entity references that only differs on the `id'
-    attribute while everything else is identical, \texttt{ppjoin} will flag the
-    two references as pointing to the same real-world entity.
-    However because the F-S model allows only matching, we have to assume that
-    these are in fact different real-world entities in the ground truth.
-    Describing this situation more accurately requires a more comprehensive
-    model.
+    We get worse and worse precision as we lower the Jaccard threshold.
+    Again, there's no transparent reason why this happens.
+    We can speculate that if we have two entity references from our original
+    dataset that are near-duplicates, a low Jaccard threshold might cause
+    cross-references of those entities to be predicted as matches.
+    For example, if we have two entity references that have different `id'
+    values while the other attributes are extremely similar, our data generation
+    algorithm will generate four records that are near identical.
+    Then \texttt{ppjoin} will flag matches between all four records, instead of
+    matching them pairwise.
+    On a small, controlled dataset like this it's easy to speculate however on a
+    bigger, real-world data set we would probably like better insight.
+
+    Lastly, we undestand that intuitively by lengthening the Jaccard threshold
+    we are increasing precision and lessening recall, however there is again no
+    insight into why we lose so much of our recall around the $t=0.5$ mark.
+    Could we at least get an order of magnitude for our lack of sensitivity?
 
     \subsection{Algebraic Model}
 
@@ -978,5 +1007,5 @@ C(V_i, V_j) = \left\{
 
 
     \bibliographystyle{plain} % We choose the "plain" reference style
-    \bibliography{er-general,er-related-work,er-additional-references}
+    \bibliography{er-general,er-related-work,er-additional-references,er-software}
 \end{document}
