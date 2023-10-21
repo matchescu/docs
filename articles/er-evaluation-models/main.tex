@@ -8,6 +8,7 @@
 \usepackage{amsfonts}
 \usepackage{amsmath}
 \usepackage{amsthm}
+\usepackage{enumitem}
 \usepackage{hyperref}
 \usepackage{xcolor}
 \usepackage{cite}
@@ -732,8 +733,8 @@ C(V_i, V_j) = \left\{
     In defining them we make use of the $M$ and $U$ sets as they are defined in
     the original paper describing the F-S model.
 
-    Depending on where the pair output by the entity resolution function is
-    expected to be, we define:
+    Depending on where a pair output by the entity resolution function is
+    expected to be found, we define:
 
     \begin{itemize}
         \item \textbf{true positives} as pairs in $M$ that should be in $M$,
@@ -797,23 +798,22 @@ C(V_i, V_j) = \left\{
     In our experiment we will run an entity resolution task using all three
     mathematical models presented thus far.
 
-    \subsection{Methodology}
+    \subsection{Data}
 
-    Because we are interested especially in qualitative differences in results
-    induced by the mathematical model being used and because these differences
-    are visible even on small dataset, we will not monitor questions of scale
-    in this experiment.
-    Since we are not concerned with the actual score obtained by a certain
-    algorithm either, for simplicity we will use the first 10 items from the
-    `Buy' table which is a part of the Abt-Buy dataset\cite{vldb2010}.
+    The data for the experiments presented in this paper is available on
+    GitHub\cite{expdata2023}.
+    It is comprised of a subset of the Abt-Buy dataset\cite{vldb2010}.
+    Namely, we have chosen ten items from the Buy dataset that help us highlight
+    the differences in interpretation that arise when using different models.
+
+    In order to introduce similar entity references that will be processed by
+    the entity resolution task, we split the Buy table into two tables having
+    the following columns from the original table:
     
-    We split the Buy table into two tables having the following columns:
-    \begin{itemize}
-        \item the first table will contain the data in the `name', `id',
-        `manufacturer' and `price' columns from the original table;
-        \item the second table will contain the data in the `description', `id'
-        and `name' columns from the original table.
-    \end{itemize}
+    \begin{enumerate}[label=\textbullet~Table~\arabic*,leftmargin=*]
+        \item will contain the `name',`manufacturer' and `price' columns
+        \item the second table will contain the data in the `description',`name' columns from the original table.abc
+    \end{enumerate}
     These two tables will be the input information sources for our experiments.
 
     We have designed the entity reference extraction such that it causes minimal
