@@ -672,6 +672,8 @@ C(V_i, V_j) = \left\{
     \textcolor{green}{both $S$ and $k$ have the same index $i$? If there are two sources ($S_1$ nd $S_2$), then $i$ will be 1 or 2. The $k$ index is used for indexing the references, and I would denote by $1 \leq k \leq n_i$.}
     \textcolor{orange}{let's say there's 5 elements in $S_1$ and 10 elements in
     $S_2$. $k_1$ goes from 1 to 5 and $k_2$ goes from 1 to 10}
+    \textcolor{green}{new proposal (two different index i and j):  $Ref = \{r_{{S_i}{k_j}},~1 \leq k_j \leq n_i, i \in {1, 2} \}$.}
+    
     The result domain is expressed as $X = A \times B$ in this model.
     It is subsequently split into $M$ and $U$ the sets of matching and
     non-matching pairs in $X$, respectively.
@@ -743,7 +745,7 @@ C(V_i, V_j) = \left\{
         \item \textbf{false positives}, or type I errors, as pairs predicted to
         be in $M$, but should be in $U$,
         \item \textbf{true negatives} as pairs predicted to be in $U$ that
-        should in $U$, and
+        should be in $U$, and
         \item \textbf{false negatives}, or type II errors, as pairs predicted to
         be in $U$, but should be in $M$.
     \end{itemize}
@@ -804,13 +806,13 @@ C(V_i, V_j) = \left\{
     We can represent $R$ as a function $R:X \times X \rightarrow \{0,1\}$ where
     $R(x,y)=1$ if $x$ is in relation $R$ with $y$ and $R(x,y)=0$ otherwise.
     
-    \begin{defn}If R is a binary relation on the set $X$, it is convenient to
+    \begin{defn}If $R$ is a binary relation on the set $X$, it is convenient to
     write $xRy$ when $R(x, y) = 1$. A binary relation R is called:
 
     \begin{enumerate}
         \item reflexive, if $xRx, \forall x \in X$;
-        \item symmetric, if $yRx \implies xRy, \forall x,y \in X$;
-        \item transitive, if $xRz \land yRz \implies xRz, \forall x,y,z \in X$;
+        \item symmetric, if $yRx \implies xRy$, $\forall x,y \in X$;
+        \item transitive, if $xRz \land yRz \implies xRz$, $\forall x,y,z \in X$.
     \end{enumerate}
 
     An \textit{equivalence relation} on $X$ is a reflexive, symmetric, and
@@ -823,19 +825,19 @@ C(V_i, V_j) = \left\{
 
     An equivalence relation over a set $X$ generates an equivalence class.
 
-    \begin{defn}Suppose $R$ is an equivalence relation on the set X. If $x$ is
-    an element of X, let $\bar{x}$ denote the set $\{y \in X | xRy\}$.
+    \begin{defn}Suppose $R$ is an equivalence relation on the set $X$. If $x$ is
+    an element of $X$, let $\bar{x}$ denote the set $\{y \in X | xRy\}$.
     $\bar{x}$ is called the \textit{equivalence class} of $x$ (for the
-    equivalence relation R)\cite{hoffman1971linear}.
+    equivalence relation $R$)\cite{hoffman1971linear}.
     \end{defn}
 
-    Since R is an equivalence relation, the equivalence classes for R have the
+    Since $R$ is an equivalence relation, the equivalence classes for $R$ have the
     following properties\cite{hoffman1971linear}:
     \begin{enumerate}
         \item $xRx \in \bar{x} \implies \bar{x} \neq \emptyset$,
-        \item $y\in\bar{x}\iff~x\in\bar{y},~\forall x,y \in X$ because
+        \item $y\in\bar{x}\iff~x\in\bar{y}$,$~\forall x,y \in X$ because
         equivalence relations are symmetric,
-        \item $\forall x,y \in X$ $\bar{x}$ is either identical with $\bar{y}$
+        \item $\forall x,y \in X$, $\bar{x}$ is either identical with $\bar{y}$
         or they have no elements in common\cite{hoffman1971linear,Tal11}.
     \end{enumerate}
     
@@ -855,14 +857,14 @@ C(V_i, V_j) = \left\{
     \textit{generated} the partition.
 
     When the partition in question is the set of equivalence classes over $X$,
-    then the the induced relation is an equivalence relation.
+    then the induced relation is an equivalence relation.
     Conversely, an equivalence relation $R$ in $X$ will generate a partition
     over $X$ comprised by the equivalence classes of $X$\cite{halmos1960naive,
     Tal11}.
 
     In the algebraic model, entity resolution is stated to be an equivalence
     relation over the set comprising all input entity references.
-    Let's denote this relation with $ER$ and state that if $xERy$ then x and y
+    Let's denote this relation with $ER$ and state that if $xERy$ then $x$ and $y$
     are linked\cite{Tal11}.
 
     It is important to note the difference between the equivalence relation and
@@ -993,7 +995,7 @@ C(V_i, V_j) = \left\{
     \[
         TWI = \frac{\sqrt{|G|\cdot|Ref|}}{|G \cap Ref|},
     \]
-    where if $X$ is a set then $|X|$ represents the size of $X$.
+    where if $X$ is a set then $|X|$ represents the numer of elements in $X$.
 
     The Talburt-Wang index takes values between 0 and 1 as well, with 1
     indicating a perfect match.
