@@ -980,9 +980,9 @@ C(V_i, V_j) = \left\{
     index by using the quantities we defined for the Rand index\cite{Tal11}.
     \[
         Adjusted~Rand~Index = \frac{
-            a - (\frac{(a+b)\dot(a+c)}{a+b+c+d})
+            a - (\frac{(a+b)\cdot(a+c)}{a+b+c+d})
         }{
-            \frac{(2\dot a+b+c)}{2}-(\frac{(a+b)\dot(a+c)}{a+b+c+d})
+            \frac{(2\cdot a+b+c)}{2}-(\frac{(a+b)\cdot(a+c)}{a+b+c+d})
         }
     \]
 
@@ -991,7 +991,7 @@ C(V_i, V_j) = \left\{
     The merit of this metric is that it closely follows the Rand index, but is
     much simpler to compute\cite{Tal11}.
     \[
-        TWI = \frac{\sqrt{|G|\dot|Ref|}}{|G \cap Ref|},
+        TWI = \frac{\sqrt{|G|\cdot|Ref|}}{|G \cap Ref|},
     \]
     where if $X$ is a set then $|X|$ represents the size of $X$.
 
@@ -1000,7 +1000,90 @@ C(V_i, V_j) = \left\{
 
     Other similarity metrics used to compare partitions are the pairwise and
     cluster precision and recall metrics.
+    They were introduced first introduced in 2010 as an alternative quality
+    metric to be used for evaluating entity resolution results\cite{Men10}.
+
+    The pairwise metrics are similar to the Rand index in that they use pairs.
+    They are different from the Rand index because the pairs are unique and we
+    do not count pairs per cluster, but globally.
     
+    Pairwise precision is defined as the ratio between the number of pairs in
+    $Res$ that are also in $G$ and the number of pairs in $Res$.
+    In other words pairwise precision tells us how many pairs the entity
+    resolution task got right out of the pairs it returned.
+    \[
+        Pair~Precision = \frac{|Pairs(Res) \cap Pairs(G)|}{|Pairs(Res)|}
+    \]
+    Pairwise recall is defined as the ratio between the number of pairs in
+    $Res$ that are also in $G$ and the number of pairs in $G$.
+    In other words, pairwise recall tells us how many pairs the entity
+    resolution task got right from the ideal answer.
+    \[
+        Pair~Recall = \frac{|Pairs(Res) \cap Pairs(G)|}{|Pairs(G)|}
+    \]
+    The harmonic mean between pairwise precision and pairwise recall is called
+    the pairwise F1 score or the pairwise comparison measure\cite{Men10}.
+    \[
+        Pair~Comparison = \frac{
+            2 \cdot Pair Precision \cdot Pair Recall
+        }{Pair Precision + Pair Recall}
+    \]
+
+    The cluster metrics are similarly called cluster precision, recall and
+    comparison measure (or F1).
+    The cluster precision is the ratio between the number of identical clusters
+    between the entity resolution output and the ground truth and the number of
+    clusters in the entity resolution output.
+    In other words, we want to know how many clusters the entity resolution task
+    got right in relation to its own output.
+
+    \[
+        Cluster~Precision = \frac{|Clusters(Res) \cap Clusters(G)|}{
+            |Clusters(Res)|
+        }
+    \]
+
+    The cluster recall is the ratio between the number of clusters that are
+    common between the entity resolution task's result and the ground truth over
+    the number of clusters in the ground truth.
+    In other words, this measures how many clusters did the entity resolution
+    task get right in relation to the ground truth.
+
+    \[
+        Cluster~Recall = \frac{|Clusters(Res) \cap Clusters(G)|}{
+            |Clusters(G)|
+        }
+    \]
+
+    Finally, the cluster comparison metric is the harmonic mean between the
+    cluster precision and the cluster recall.
+
+    \[
+        Cluster~Comparison = \frac{
+            2 \cdot Cluster Precision \cdot Cluster Recall
+        }{Cluster Precision + Cluster Recall}
+    \]
+
+    There are subtle differences between these metrics and the statistical
+    metrics used for the Fellegi-Sunter model.
+    Firstly, because they are speaking to the shape of the result, these metrics
+    can be used to incrementally improve the performance of the entity
+    resolution task.
+    For example, one can conceive comparing two entity resolution outputs to
+    isolate improvements.
+    This approach was first suggested in the paper that introduced the Rand
+    index\cite{rand1971}, but in our opinion the approach is valid for all other
+    metrics described in this section.
+
+    Secondly, these quality metrics show similar results to the ones output by
+    the statistical metrics of the F-S model when the output is comprised of
+    pairs.
+    However, once the entity resolution output paritition contains clusters with
+    more than or fewer than two elements, these metrics will show deeper
+    insights into how the algorithm has performed.
+    Pairwise metrics should be closer to the statistical metrics, while cluster
+    metrics show us a better overview over the whole output.
+    We will come back to this idea in our experiment.
 
     \subsection[serf]{Stanford Entity Resolution Framework Model}\label{subsec:serf}
 
