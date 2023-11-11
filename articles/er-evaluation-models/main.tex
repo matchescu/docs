@@ -133,7 +133,6 @@
     applications\cite{magellan2020,jedai2017}.
     These systems are open-source and encourage social collaboration around
     entity resolution, too.
-
     
     There exist numerous syntheses on the theoretical models for entity
     resolution\cite{fs1969,Ben2009Swoosh,Tal11}.
@@ -298,9 +297,10 @@
     same real-world entity.
     
     \begin{defn}
-        We refer to the logical group of entity references that point to
-        the same real-world entity according to the entity resolution task's
-        parameters as the \textit{entity profile} of that real-world entity.
+        The logical group of entity references that point to the same real-world
+        entity according to the entity resolution task's parameters is known as
+        the \textit{entity profile} of that real-world entity within the entity
+        resolution task.
     \end{defn}
 
     It is important to understand that the entity profile and the real-world
@@ -315,7 +315,7 @@
 
     \section{Problem Definition}\label{sec:problem}
 
-    From a process perspective, entity resolution is usually comprised of four
+    In a broad sense, the entity resolution process is usually comprised of four
     different activities\cite{Pap19,Tal11}:
     \begin{itemize}
         \item \textit{entity reference extraction} --- the first phase of entity
@@ -333,10 +333,12 @@
         together in entity profiles.
     \end{itemize}
 
-    We are concerned with matching and clustering in this paper.
-    However, we cannot formalize that process without a quick overview of entity
-    reference extraction because it is within the extraction phase that the
-    input to the matching and clustering phases is formed.
+    In a stricter sense, by entity resolution we usually mean the latter two
+    stages of the entity resolution process.
+    Although our concern is with entity resolution evaluation and the comparison
+    of entity resolution processes, we can't overlook the extraction process
+    because this process defines the data structures that are used throughout
+    the entire entity resolution process.
 
     Given:
     \begin{itemize}
@@ -355,14 +357,15 @@
     We denote with $R$ the domain of all the $r_{{S_i}k}$ entity references that
     were extracted by $ER$.
     Similarly, we denote with $P$ the domain of all entity profiles.
-    The matching and clustering step of the $ER$ task is a function
-    $E: R \rightarrow P$ that converts individual references to entity profiles.
-    The exact definition of this function is specific for each mathematical
-    model that underpins entity resolution.
+    The matching and clustering steps of the $ER$ task can be combined in a
+    single function $E: R \rightarrow P$ that converts individual references to
+    entity profiles.
+    The exact definition of this function is specific to the mathematical model
+    that underpins the entity resolution process.
     The data representation of the entity profiles in $P$ also varies according
     to the mathematical model of choice.
-    On the other hand, the data representations of the concepts that are part of
-    building $R$ do not differ between mathematical models.
+    On the other hand, the abstract data types used for representing the
+    concepts that are part of building $R$ are invariant.
 
     The most basic building block in the context of entity resolution is the
     humble attribute.
@@ -482,6 +485,24 @@
 
     \subsection[cert]{Comparing Entity Resolution Tasks}\label{subsec:cert}
 
+    Entity resolution tasks can be compared in quantitative terms without any
+    issue.
+    Metrics for the amount of hardware resources they consume or the physical
+    time that elapses for a data set of a given size are invariant across the
+    many possible implementations of entity resolution solutions.
+
+    The problem of comparing entity resolution results from a qualitative
+    perspective is significantly less clearly delimited.
+    Each mathematical model is rooted in a different branch of mathematics and,
+    as such, works with different assumptions and different expressions of the
+    surrounding reality.
+    For example, all statistical models express the real world in terms of
+    probabilities.
+    On the other hand, a construct of set theory will invariably explain the
+    real world in terms of set operations, properties and it will use algebraic
+    constructs.
+    The comparison problem must take into account these limitations.
+
     \begin{defn}
         Given
         \begin{itemize}
@@ -511,24 +532,23 @@ C(V_i, V_j) = \left\{
 
     \end{defn}
 
+    Quality metrics are specific to a mathematical model.
+    
     \section[mm]{Mathematical Models}\label{sec:mm}
 
-    As we have mentioned, mathematical models play a big part in how entity
-    resolution functions represent output data.
-    That means that the ground truth used for evaluating the performance of an
-    entity resolution task is also represented in a specific way depending on 
-    the mathematical model used by the entity resolution task under evaluation.
+    The ground truth used for evaluating the performance of an entity resolution
+    task and the entity resolution result are represented similarly.
+    The representation depends on the mathematical model used by the entity
+    resolution task.
     
     The mathematical models available for entity resolution range from ones
     based on complex networks and graph theory\cite{Li2020} to ones based on
     probabilities\cite{fs1969} or algebra\cite{Tal11,Ben2009Swoosh}.
 
-    We have already pointed out that the output domain of the entity resolution
-    task when viewed as a function is shaped by the underlying mathematical
-    model.
-    In this paper we describe three of these models and how these models
-    influence the data structures used by the entity resolution tasks that
-    implement them.
+    John R. Talburt already provides a description of these mathematical models
+    in his book on entity resolution and information quality\cite{Tal11}.
+    This paper aims to take a deeper look at how two of the models described in
+    that book might be connected.
 
     \subsection[fsm]{Fellegi-Sunter Model}\label{subsec:fsm}
 
@@ -631,7 +651,7 @@ C(V_i, V_j) = \left\{
         $U$).
     \end{itemize}
 
-    \subsubsection[fms-term]{How Does It Relate}\label{fsm-term}
+    \subsubsection[fms-term]{Terminology Translation}\label{fsm-term}
 
     To link the Fellegi-Sunter model to our own terminology, let's start by
     talking about $a \in A$ and $b \in B$.
@@ -669,9 +689,9 @@ C(V_i, V_j) = \left\{
     We start constructing our $Ref$ domain by using traits to extract $n_1$
     entity references from $S_1$ and $n_2$ entity references from $S_2$.
     Then $Ref = \{r_{{S_i}{k_i}},~1 \leq k_i \leq n_i, i \in {1, 2} \}$.
-    \textcolor{green}{both $S$ and $k$ have the same index $i$? If there are two sources ($S_1$ nd $S_2$), then $i$ will be 1 or 2. The $k$ index is used for indexing the references, and I would denote by $1 \leq k \leq n_i$.}
-    \textcolor{orange}{let's say there's 5 elements in $S_1$ and 10 elements in
-    $S_2$. $k_1$ goes from 1 to 5 and $k_2$ goes from 1 to 10}
+    If, say there's 5 elements in $S_1$ and 10 elements in $S_2$ then $k_1$ goes
+    from 1 to 5 and $k_2$ goes from 1 to 10.
+
     \textcolor{green}{new proposal (two different index i and j):  $Ref = \{r_{{S_i}{k_j}},~1 \leq k_j \leq n_i, i \in {1, 2} \}$.}
     
     The result domain is expressed as $X = A \times B$ in this model.
@@ -726,7 +746,7 @@ C(V_i, V_j) = \left\{
     $r_2$ matches $r_3$, we can't infer that $r_1$ matches $r_3$ by using this
     model\cite{Tal11}.
 
-    \subsubsection[fms-measure]{Measurements}\label{fsm-measure}
+    \subsubsection[fms-measure]{Specific Metrics}\label{fsm-measure}
 
     The quality metrics that are specific to this mathematical model can be any
     of the very broadly used statistical metrics.
@@ -785,17 +805,17 @@ C(V_i, V_j) = \left\{
     for entity resolution was later refined to describe entity resolution
     itself\cite{Tal11}.
     Although entity resolution systems and tasks have not been implemented with
-    this specific model in mind, its elegance allows it to be applied to
+    this specific model in mind, its generality allows it to be applied to
     virtually any entity resolution task.
-    This model relaxes the constraint of the Fellegi-Sunter model\hyperref{subsec:fsm}
-    around item uniqueness within an information source.
-    It also addresses transitive matches.
+    While the Fellegi-Sunter model\hyperref{subsec:fsm} is a probabilistic model
+    that requires two information sources to be compared, this model removes
+    that constraint allowing as many information sources as necessary.
+    Another improvement is the support for transitive matching.
     
     \subsubsection[algdesc]{Description}\label{subsubsec:algdesc}
 
     The core tenet of this model is that entity resolution is an \textit{
-    equivalence relation} which is a concept defined in set theory.
-    Let's start by defining a few algebraic terms.
+    equivalence relation}, in the sense defined in set theory.
     
     \begin{defn} If $X$ is a set and $R$ is a rule that takes two elements from
     $X$, $x$ and $y$, and tells us whether $x$ is in relationship $y$ in the way
@@ -819,9 +839,10 @@ C(V_i, V_j) = \left\{
     transitive binary relation on $X$\cite{hoffman1971linear}.
     \end{defn}
 
-    Equivalence relations already seem to describe a lot of the matching process
-    that happens in entity resolution.
-    Let's observe that equivalence relations work on sets for now and move on.
+    Note that equivalence relations seem to describe almost perfectly the
+    matching step in entity resolution.
+    Let's also observe that equivalence relations work on sets for now and move
+    on.
 
     An equivalence relation over a set $X$ generates an equivalence class.
 
@@ -845,7 +866,7 @@ C(V_i, V_j) = \left\{
     algebraic model of entity resolution is the \textit{partition} of a set.
 
     \begin{defn}
-        A \textit{partition} of a set $X$ is a disjoint collection of non-empty
+        A \textit{partition} of a set $X$ is a collection of non-empty disjoint
         subsets of $X$ whose union is $X$\cite{halmos1960naive,Tal11}.
     \end{defn}
 
@@ -853,7 +874,7 @@ C(V_i, V_j) = \left\{
     belonging to one of the sets from a partition over $X$ is in a relation with
     itself and other elements from the same set.
     We say that this relation is \textit{induced} by the partition.
-    From the point of view of the above relation, we say that it
+    Conversely, from the point of view of the above relation, we say that it
     \textit{generated} the partition.
 
     When the partition in question is the set of equivalence classes over $X$,
@@ -862,24 +883,23 @@ C(V_i, V_j) = \left\{
     over $X$ comprised by the equivalence classes of $X$\cite{halmos1960naive,
     Tal11}.
 
-    In the algebraic model, entity resolution is stated to be an equivalence
-    relation over the set comprising all input entity references.
-    Let's denote this relation with $ER$ and state that if $xERy$ then $x$ and $y$
-    are linked\cite{Tal11}.
+    \begin{defn}
+        The equivalence relationship over a set of entity references that exists
+        when two references from that set refer to the same real-world entity is
+        called \textit{entity resolution}.
+    \end{defn}
 
-    It is important to note the difference between the equivalence relation and
-    pairwise matching.
-    Matching itself is still done pairwise, however it does not really matter
-    how.
-    On the other hand, the equivalence relation induces a partition over the
-    initial set of references by definition.
-    Also by definition, it is transitive.
-    If we denote by $P$ the partition generated by the entity resolution
-    relation and we have $xERy \land yERz \implies xERz$ and that means that 
-    at least $\{x, y, z\} \in P$.
-    We usually call the members of the partition $P$ \textit{clusters} and we
-    say that $x$, $y$ and $z$ belong to the same cluster or are clustered
-    together.
+    Let's denote this relation with $ER$ and state that if $xERy$ then x and y
+    are \textit{linked}\cite{Tal11}.
+    Taking our two earlier mental notes, we can now say that applying $ER$ to
+    individual elements of a set is akin to the \textit{matching} step in the
+    entity resolution process.
+    With each application, we now know that $ER$ creates a partition over the
+    initial set.
+    This side-effect of equivalence relationships is the \textit{clustering}
+    step or aspect of the entity resolution process.
+    In fact, if $ER$ were to generate the partition $P$, we would call the
+    equivalence classes \textit{clusters} in the context of entity resolution.
 
     A last point of notice is that entity resolution tasks do not necessarily
     generate a unique outcome\cite{Tal11}.
@@ -888,59 +908,79 @@ C(V_i, V_j) = \left\{
     The entity resolution tasks where the order in which entity references are
     processed is irrelevant are called \textit{sequence neutral}\cite{Tal11}.
 
-    \subsubsection[algrel]{How Does It Relate}\label{subsubsec:algrel}
+    \subsubsection[algrel]{Terminology Translation}\label{subsubsec:algrel}
 
-    The algebraic model is very similar to our own view over entity resolution.
-    For one, the notions of attribute and entity reference essentially mean the
-    same thing.
-    Then the idea that entity resolution is an equivalence relation over an
-    input set of entity references matches our view on the matter.
-    The difference lies only with the specific requirement that the input be
-    a set in the algebraic model.
-    This means that we won't be able to apply the algebraic model on input data
-    that is not a set.
+    In writing this paper, we used a lot of notions that are specific to the
+    algebraic model.
+    For example, attributes and entity references preserve their meaning.
+    In fact, it can be safely assumed that all common terms preserve their
+    meaning.
     
-    Having to use only distinct references in the input is a problem in practice
-    because most real data where we care about entity resolution is ambiguous.
-    We can overcome this limitation by introducing attributes that serve as
-    disambiguation clues in the matching process.
-
-    We should note that the algebraic model does not concern itself with how
-    entity references end up being part of the same set (i.e it does not relay
-    too much information about the extraction process).
-    Therefore the notions of information source and trait have a marginal impact
-    here.
-    In fact, the only place where we feel traits might be important is in the
-    discussion related to the order in which entity references are processed.
-    In our view, the order of processing is one of the traits of the entity
-    resolution task.
-
-    With respect to the output, it's plain that both the ground truth and the
-    result of the entity resolution task itself are partitions over the input
-    set of entity references.
-    The ground truth $G$ is the ideal partition over the input set of entity
-    references $Ref$ with regard to the relationship that is defined by entity
-    references that reference the same real-world entity.
-    Each cluster in the ground truth refers to exactly one real-world entity.
-    The result of the entity resolution task $Res$ is another partition over
-    $Ref$.
-
-    An interesting discussion here is around designing algorithms that construct
-    partitions generated by the entity resolution relation.
-    In the introduction of this paper we discussed \textit{clustering} as one of
-    the central tasks in entity resolution.
-    Constructing partitions is such a task.
-    For example, using a particular \textit{merge} function the
-    \textit{Swoosh}\cite{Ben2009Swoosh} family of algorithms (to which we will
-    come back in the next section) seems to be a good candidate for building
-    partitions.
+    This paper's terminology is divergent when it comes to our use of
+    information sources and our attempts to generalize data structures and the
+    entity resolution process itself past the limits of the algebraic model.
+    For example, information sources contain an inordinate amount of duplicate
+    data, incomplete data or noise.
+    The algebraic model can't function under those circumstances.
+    Therefore, whenever we refer to the input source for the algebraic model,
+    we are referring to a set of entity references containing clean data.
     
-    Another interesting aspect is that by abstracting away matching, we can
-    easily apply this model for any type of entity resolution algorithm that
-    implements either deterministic (i.e exact) matching or
-    \hyperref[subsec:fsm]{probabilistic matching}.
+    We also should note that the algebraic model does not concern itself with
+    how entity references end up being part of the same set, just that they do.
+    Therefore using different traits (in the sense of this paper) will lead to
+    different outcomes.
+    In fact, the only place where we feel traits might be important in relation
+    to the algebraic model is with regard to the sequence neutrality of an
+    entity resolution task.
+    In our view, an entity resolution task's sequence neutrality can be tested
+    by using separate sets of traits that change the order in which items are
+    fed to the entity resolution task.
 
-    \subsubsection[algeval]{Quality Metrics}\label{subsubsec:algeval}
+    The result of an entity resolution task is a partition over the input set of
+    entity references.
+    Given that the ground truth is the ideal result, it is also a partition over
+    the input set of entity references.
+    One could say that the ideal entity resolution relationship is the generator
+    of the ground truth, while the result of the entity resolution task induces
+    the entity resolution relationship at the core of the entity resolution
+    process.
+    
+    Each equivalence class in an entity resolution result is a cluster of entity
+    references.
+    That is, each cluster in the ground truth or in another entity resolution
+    result is an entity profile.
+
+    Intuition tells us that pairs of entity references from the input set will
+    be processed and either added to a cluster of entity references or not.
+    The interesting thing to note is that the mechanics are very similar to
+    the mechanics of the Fellegi-Sunter model.
+    The process itself, still compares items two at a time to determine whether
+    they refer to the same real-world entity or not.
+    This begs the question whether we can just move from one model to another
+    to interpret the results.
+
+    It turns out that by applying Kruskall's algorithm and using the union-find
+    data structure to do so, we can.
+    The input parameters in this variation of Kruskall's algorithm are the set
+    of entity references and a list of pairs of elements from that set.
+    The algorithm outputs disjoint sets of elements.
+
+    We recall that the Fellegi-Sunter model defines the output of the algorithm
+    as a list of pairs.
+    If we use the input set of entity references and a ground truth as it should
+    be defined for the Fellegi-Sunter model as input parameters, Kruskall's
+    algorithm will output a partition over the original set that contains the
+    entity profiles based on the associations defined in the ground truth of the
+    Fellegi-Sunter model.
+
+    Because this is a partition induced by the ground truth of the
+    \hyperref[subsec:fsm]{Fellegi-Sunter model}, this is the ground truth of the
+    algebraic model.
+    The proof of this statement relies on the properties of the union-find data
+    structure and those of Kruskall's algorithm: their stability and input order
+    neutrality with respect to the output disjoint sets.
+
+    \subsubsection[algeval]{Specific Metrics}\label{subsubsec:algeval}
 
     The quality metrics for entity resolution under the algebraic model have to
     do with computing the similarity of partitions.
@@ -955,13 +995,13 @@ C(V_i, V_j) = \left\{
     elements formed from the elements of the clusters of each partition.
     Supposing that:
     \begin{itemize}
-        \item $a$ is the number of pairs that are in the same cluster in $G$ and
-        also the same cluster in $Res$,
-        \item $b$ is the number of pairs that are in the same cluster in $G$ but
-        are not in the same cluster in $Res$,
-        \item $c$ is the number of pairs that are in the same cluster in $Res$
-        but are not in the same cluster in $G$,
-        \item $d$ is the number of pairs that are in different clusters.
+        \item $a$ is the number of pairs that are shared between clusters of $G$
+        and $Res$,
+        \item $b$ is the number of pairs that are only in clusters in $G$, but
+        not in clusters in $Res$,
+        \item $c$ is the number of pairs that are only in clusters in $Res$, but
+        not in clusters in $G$,
+        \item $d$ is the total number of pairs that are not shared.
     \end{itemize}
     then the Rand index is defined by the quantity
     $\frac{a+d}{a+b+c+d}$\cite{adjrand2001}.
@@ -1066,38 +1106,20 @@ C(V_i, V_j) = \left\{
         }{Cluster Precision + Cluster Recall}
     \]
 
-    There are subtle differences between these metrics and the statistical
-    metrics used for the Fellegi-Sunter model.
-    Firstly, because they are speaking to the shape of the result, these metrics
-    can be used to incrementally improve the performance of the entity
-    resolution task.
-    For example, one can conceive comparing two entity resolution outputs to
-    isolate improvements.
-    This approach was first suggested in the paper that introduced the Rand
-    index\cite{rand1971}, but in our opinion the approach is valid for all other
-    metrics described in this section.
-
+    The pairwise and cluster metrics provide more insight into how two entity
+    resolution results compare structurally.
+    The statistical metrics (precision, recall, f1 score) lack this ability to
+    introspect the structure of the compared items.
+    The idea of discerning how the structures of two results compare was first
+    suggested in Rand's paper that described his namesake index\cite{rand1971}.
+    
     Secondly, these quality metrics show similar results to the ones output by
-    the statistical metrics of the F-S model when the output is comprised of
-    pairs.
-    However, once the entity resolution output paritition contains clusters with
-    more than or fewer than two elements, these metrics will show deeper
-    insights into how the algorithm has performed.
-    Pairwise metrics should be closer to the statistical metrics, while cluster
-    metrics show us a better overview over the whole output.
+    the statistical metrics of the F-S model only in an ideal setting for the
+    statistical model.
+    When data is not ideally cleaned (errors, duplications, etc) these metrics
+    quickly start showing those misgivings, whereas the statistical metrics
+    might not.
     We will come back to this idea in our experiment.
-
-    \subsection[serf]{Stanford Entity Resolution Framework Model}\label{subsec:serf}
-
-    \textcolor{green}{Please mention the model's parents and add a reference!}
-    \begin{itemize}
-        \item views entity resolution as the result of applying a match function, a merge function and a domination relationship on top of a set
-        \item allows evaluating transitive matches
-        \item the match function can be anything as long as we can act with a yes/no action on its result
-        \item the merge function should be distributive (merge(a, merge(b, c)) = merge(merge(a, b), c))
-        \item provides a very flexible way of modeling entity resolution (the comparison and addition of integer numbers is a valid basis for an entity resolution task on the set of integer numbers)
-        \item the entity profile is either one of the original input items or an information that dominates all the information that was used to create it
-    \end{itemize}
 
     \section{Experiments}
 
@@ -1108,39 +1130,60 @@ C(V_i, V_j) = \left\{
 
     The data for the experiments presented in this paper is available on
     GitHub\cite{expdata2023}.
-    It is comprised of a subset of ten items from the `Buy' dataset which is a
-    part of the Abt-Buy dataset\cite{vldb2010}.
-    Most of these items were chosen to be near-duplicates.
+    We use two data sets to show that our findings do not vary with data.
+    The first data set is the Abt-Buy dataset\cite{vldb2010}.
+    The second data set is a subset of ten items from the `Buy' data set which
+    contains `interesting' elements.
+    The input data in this data set is clean, it just contains items with a high
+    potential of becoming duplicates of one another when applying very simple
+    transformations to the data.
     
-    We chose tabular data because of the support this type of data structure has
-    received in the programming community\cite{pandas2010,pandas2023}.
-    From now on it should be assumed that the information sources are tables.
-    The tables are stored on disk in CSV files.
+    We chose to use a tabular representation of the data simply for practical
+    considerations.
+    Tabular data processing is very easy because of the amount of support it
+    received from the international programmer
+    community\cite{pandas2010,pandas2023}.
+    The experiments could just as well be performed with data represented in any
+    format.
+    
+    The tabular data is stored on disk as CSV files.
     Each CSV file has a first row containing the column headings and subsequent
     rows containing records within which the fields are separated by comma.
     
-    Since we want full control over the entity resolution process, we choose to
-    generate the data sources from our initial dataset.
-    We split the Buy table into two tables having the following columns:
-    \begin{enumerate}[label=\textbullet~Table~\arabic*:,leftmargin=*]
-        \item `name',`manufacturer' and `price'
-        \item `description',`name'.
-    \end{enumerate}
-    These two tables will be the input information sources for our experiments.
+    For the Abt-Buy data set, there is an ideal mapping and the data is used as-
+    is.
 
-    Our entity reference extraction traits assume that all data is string data.
-    We chose strings because numbers or dates are very easy to disambiguate and
-    in real-world scenarios we very rarely deal with data that is not formatted
-    as strings.
+    For our own data set, we want to be in full control of the entity resolution
+    process.
+    As such, we have chosen to generate the input sources for the entity
+    resolution task starting from our data set.
+    
+    We split our data set into two tables having the following columns:
+
+    \begin{enumerate}[label=\textbullet~Table~\arabic*:,leftmargin=*]
+        \item `name',`manufacturer', `price', `id'
+        \item `description',`name', `id'.
+    \end{enumerate}
+    
+    These two tables will be the input information sources for our experiment.
+    Constructing the ground truth as a list of pairs is trivial because we have
+    employed this data generation strategy.
+    Assuming that each item in our `Buy' subset refers to the one and only one
+    real-world entity, the ground truth contains exactly one pair of elements
+    correspoding to the real-world item.
+
+    For both `Abt-Buy' and our generated data set, the extraction traits coerce
+    all data to be string data.
     The traits built into our extraction pipeline are mapped one-to-one to table
     columns.
     For each record, the each trait extracts a single attribute.
     The ordering of the data enforced by the traits is left-to-right,
     top-to-bottom reading order.
-    This setup results in all entity references from Table 1 being tuples with
-    three values, while entity references from Table 2 will have two values.
+    This configuration of entity resolution extraction traits ensures that
+    sequence neutrality is not an issue.
 
-    For example, let's use the following record from our initial `Buy' table:
+    For example, let's use the following record from our own `Buy' table:
+
     \begin{center}
         \begin{tabular}[b]{|l|l|l|l|l|}
             \hline
@@ -1158,9 +1201,9 @@ C(V_i, V_j) = \left\{
     \begin{center}
         \begin{tabular}[b]{|l|l|l|l|}
             \hline
-            name&manufacturer&price \\
+            name&manufacturer&price&id \\
             \hline
-            Seiko SXDA04& &\$138.00 \\
+            Seiko SXDA04& &\$138.00&205554724 \\
             \hline
         \end{tabular}
     \end{center}
@@ -1170,56 +1213,62 @@ C(V_i, V_j) = \left\{
     \begin{center}
         \begin{tabular}[b]{|l|l|l|}
             \hline
-            description&name \\
+            description&name&id \\
             \hline
-            &Seiko SXDA04 \\
+            &Seiko SXDA04&205554724 \\
             \hline
         \end{tabular}
     \end{center}
 
-    Then the traits we have built for this experiment will extract the followin
+    Then the traits we have built for this experiment will extract the following
     two entity references:
-    \begin{itemize}
-        \item \texttt{(`Seiko SXDA04', ` ',`\$138.00')},
-        \item \texttt{(` ',`Seiko SXDA04')}.
-    \end{itemize}
+    \begin{enumerate}
+        \item \texttt{(`Seiko SXDA04', ` ',`\$138.00', `205554724')},
+        \item \texttt{(` ',`Seiko SXDA04', `205554724')}.
+    \end{enumerate}
 
-    The entity resolution task receives its input as a list containing two lists
-    each of which contain 10 entity references.
-
-    Because we are in full control of the input sources for the entity
-    resolution task, we can be very precise about how the ground truth should
-    look like.
-    We posit that each record in our initial `Buy' table refers to a single
-    real-world entity.
-    We also say that there are no two records in the initial `Buy' table that
-    refer to the same real-world entity.
-    Consequently, the two records that we generate from each record in the
-    initial table refer to the same real-world entity.
-    This gives us a very easy way to generate the ground truth in whatever
-    format each mathematical model expects.
-
+    For running the experimental setup, we could use any entity resolution
+    algorithm out there as long as it is able to output pairs of matching
+    entity references.
     In our experiments we use the \texttt{ppjoin}\cite{ppjoin} matching
     algorithm because of its simplicity.
+
     PPJoin stands for Position Prefix Join and it is an algorithm designed to
     find similarities between records based on the Jaccard
     index\cite{jaccard1912,finley1996}.
     Intuitively, a lower threshold will match a larger number of items because
-    the prefix being used for matching shortens.
+    the prefix being used for matching shortens thus increasing the match
+    probability.
     A higher threshold should match fewer items, but with less chance for error.
+
     In our experiments the Jaccard threshold will be denoted with $t$.
     The mathematical model that fits this algorithm best is the Fellegi-Sunter
-    probabilistic model because it works using records and attributes.
-    The Jaccard threshold manipulates the probabilities whether the attributes
-    match or not.
-    Even so, we shall learn that we can use the other mathematical models to
-    better understand this algorithm's performance.
+    probabilistic model because the algorithm's core job is to manipulate the
+    probability that two records will or will not match by adjusting the Jaccard
+    threshold.
+    One of the main points of the experiments is to show how we could measure
+    the quality of the PPJoin algorithm's output by using metrics from the
+    algebraic model.
 
-    As to how we will use the algorithm: we will take 100 measurements of each
-    qualitative evaluator for each mathematical model for incremental values of
-    the Jaccard similarity threshold $t$ within the $[0\ldots0.99]$ closed
-    interval in discrete steps of $0.01$.
+    As for the experimental process:
+    \begin{itemize}
+        \item on our generated data we will take 100 measurements of each
+        quality metric for each of the two mathematical models for incremental
+        values of the Jaccard similarity threshold within the $[0\ldots1)$
+        interval in discrete steps of $0.01$, while
+        \item on the `Abt-Buy' data set, we will take 10 measurements of each
+        quality metric for incremental values of $t$ within the $[0\ldots1)$
+        interval in discrete steps of $0.1$.
+    \end{itemize}
 
+    For our own generated data we are able to generate the ground truth
+    paritition for the algebraic model based on the input data.
+    For the `Abt-Buy' data set we will use the provided ideal mapping to
+    generate the ground truth partition for the algebraic model.
+    
+    In the following section we describe the results we obtained on our own
+    generated data.
+    
     \subsection{Fellegi-Sunter Model Results}
     
     With the F-S model both the ground truth and the results of the entity
@@ -1239,7 +1288,7 @@ C(V_i, V_j) = \left\{
 
     \begin{figure}
         \centering
-        \includegraphics[width=\textwidth]{fsfig}
+        \includegraphics[width=\textwidth]{fellegi-sunter-generated-data}
         \caption{Fellegi-Sunter Results}\label{fsfig}
     \end{figure}
 
@@ -1247,53 +1296,111 @@ C(V_i, V_j) = \left\{
     with few matches, but those matches are true.
     As we lower the threshold ($0.27 \leq t < 0.66$), recall increases and
     precision does not drop.
-    However, when we lower the threshold too much ($t < 0.27$) we start losing
-    precision even though we get better and better recall.
-    
-    These results are exactly what we expect.
-    So what can we learn from here?
+    However, when we lower the threshold too much ($t < 0.3$) we start losing
+    precision and we get better and better recall.
+    These results are in line with our expectations.
+    So is there anything to learn?
 
-    We know that we reach high levels of recall only when we start losing
-    precision.
-    Though, we should notice that precision and recall are lost in steps, not
-    continually.
-    If we were tuning the algorithm for a specific use case one thing that would
-    definitely be troubling us would be big gap in precision around the $0.27$
-    mark.
-    We have no insight into why that happens and we lose more than half of our
-    precision.
-    One suspicion we could have is that we don't know \textit{how much} each
-    entity reference matches another and that might be the cause of the gap.
-    This shortcoming is inherent to this model of entity matching because the
-    model itself minimizes ambiguity.
+    In our data set we know there are items such as those with the IDs
+    208114672 and 208114673.
+    These items are near identical and would result in a surplus of matches
+    by lowering the Jaccard threshold.
+    Lowering the threshold would result in the item with ID 208114672 in Table1
+    to be matched with both the item with the same ID in Table2 as well as with
+    the item with ID 208114673 from Table2.
+    However, all the precision shows us is a resounding 1.
     
-    Another aspect has to do with duplicates.
-    We get worse and worse precision as we lower the Jaccard threshold.
-    Again, there's no transparent reason why this happens.
-    We can speculate that if we have two entity references from our original
-    dataset that are near-duplicates, a low Jaccard threshold might cause
-    cross-references of those entities to be predicted as matches.
-    For example, if we have two entity references that have different `id'
-    values while the other attributes are extremely similar, our data generation
-    algorithm will generate four records that are near identical.
-    Then \texttt{ppjoin} will flag matches between all four records, instead of
-    matching them pairwise.
-    On a small, controlled dataset like this it's easy to speculate however on a
-    bigger, real-world data set we would probably like better insight.
+    What's more curious is that recall over those same values of \textit{t} is
+    not maximal.
+    Makes one wonder what's missing.
+    While we are working with a simple tiny set of ten items in this experiment,
+    imagine working with a large data set.
 
-    Lastly, we undestand that intuitively by lengthening the Jaccard threshold
-    we are increasing precision and lessening recall, however there is again no
-    insight into why we lose so much of our recall around the $t=0.5$ mark.
-    Could we at least get an order of magnitude for our lack of sensitivity?
+    Also due to the possible mislabelling of duplicates as true positives we
+    seem to get a small rise in precision even as we lower the threshold below
+    $0.3$.
+
+    This situation shows us how truly unreliable statistical precision and
+    recall can be when judging the output of entity resolution.
+
+    The other thing to notice is the sudden drop in sensitivity around the
+    $t=0.3$ mark.
+    There is no direct explanation as to why that happens, but it can be assumed
+    that since we are also losing duplicated matches, the drop is more
+    pronounced than it needs to be.
 
     \subsection{Algebraic Model}
+    The algebraic model represents the ground truth and the entity resolution
+    results as partitions over a set containing all the entity references.
+    Note that the IDs of the entity references still differ.
+    In our catered setup, that means that the input set will contain 20 items.
 
-    \textit{TODO}
+    In our own setup, the ground truth will contain clusters of two items
+    each because of how the data is generated.
+    In the `Abt-Buy' setup, all items that are not in the ideal mapping will be
+    added as singleton clusters in the ground truth while the items in the ideal
+    mapping will be clustered via Kruskall's algorithm using a union-find data
+    structure.
 
-    \subsection{Stanford Entity Resolution Framework Model}
+    The results are dramatically different from those of the statistical model.
 
-    \textit{TODO}
+    \begin{figure}
+        \begin{minipage}{0.48\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{algebraic-prf-generated-data}
+            \caption{Precision, Recall and F1}
+        \end{minipage}    
+        \begin{minipage}{0.48\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{algebraic-index-generated-data}
+            \caption{Clustering Indexes}
+        \end{minipage}    
+        
+    \end{figure}\label{algebraic-prffig}
 
+    The first thing of notice is that there is no bump in precision when we
+    lower the $t$ below $0.3$.
+    The reason behind this is that the clusters containing near-duplicates will
+    not suddenly generate more pairwise combinations than the clusters that
+    don't.
+    That is, no matter how many times a pairing appears in the list of pairings
+    that generates a cluster, the cluster will still contain those two elements.
+    It will never include a third.
+
+    Another observation is that we see a very clear signal for $0.3 < t < 0.5$.
+    The pairwise precision mimicks what the statistical precision shows us.
+    However, the cluster precision tells us that the matching is off by at least
+    a half of the size of the input.
+    The only way to interpret this is by admitting that the entity resolution
+    task duplicates true positives at approximately a 2:1 ratio.
+    In our constructed data set, this observation is sustained by the fact that
+    8 IDs are very likely to generate what would be extra true positives in the
+    statistical approach.
+
+    Concerning recall, we see that cluster recall actually rises along with
+    cluster precision.
+    This again signals that the pairwise recall we see for $t<0.3$ is most
+    likely not worth considering because although a significant proportion of
+    the relevant data is returned, a significant proportion of the entity
+    profiles constructed are not correct.
+
+    These observations are supported by the additional quality metrics that are
+    available via the algebraic model.
+    The Rand index and the Adjusted Rand Index confirm the partition lack of
+    alignment for $t\notin[0.3,0.5]$, while the Talburt-Wang index confirms that
+    more correct pairs are returned as $t$ decreases.
+
+    However, the fundamental takeaway from using the algebraic model is that
+    PPJoin does not return near-perfect precision in any case except when taking
+    a very narrow view over the pairs of matches it returns.
+
+    
+    \subsection{Abt-Buy Results}
+
+    To replicate our results on our own generated data that aimed to exacerbate
+    certain data flaws, we run our experiment setup on the `Abt-Buy' data set
+    itself.
+    
     \section[conclusion]{Conclusions}\label{section:conclusions}
 
     The work speaks about how we can use mathematical models to evaluate entity resolution results. It also provides easy rules of thumb to identify the model that's best suited to interpret the results of an ER task.
