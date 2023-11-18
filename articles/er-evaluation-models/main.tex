@@ -27,11 +27,11 @@
     \section{Introduction}\label{sec:introduction}
     Entity resolution is the task of finding out whether two pieces of
     information refer to the same real-world item or not.
-    There's more restrictive definitions of entity resolution as the task of
+    More restrictive definitions place entity resolution as the task of
     identifying and linking representations of data from two or more
     sources\cite{Qia17}.
-    We share the opinion that identifying and linking data consitutes a more
-    specialized process\cite{Tal11}.
+    However, we share the opinion that identifying and linking data consitutes a
+    more specialized process\cite{Tal11}.
     The task of gathering information about a generic pound of potatoes across
     various markets is still an entity resolution task, in our view.
     
@@ -41,14 +41,15 @@
     matching\cite{Tal11,fever2009}.
 
     Entity resolution has many practical applications ranging from linking
-    medical records to doing background checks on persons of interest to 
-    identifying plagiarism.
+    medical records to diagnosing diseases or ailments, to doing background
+    checks for financial crime or to identifying plagiarism.
     As an aside, combining information from different media (sound, images,
-    motion, smell, etc) is also a form of entity resolution and opens up many
-    avenues into its future as an area of study.
+    motion, smell, etc) is also a form of entity resolution which would point at
+    the future of this field.
 
     The glue that binds all of the above examples has at least the following
     ingredients:
+
     \begin{itemize}
         \item\textit{a concern for a real-world entity}, for if the task were
         not about a something from our world, the resolution would not have a
@@ -95,30 +96,31 @@
 
     \section{Contributions}\label{sec:contributions}
 
-    This paper makes the following contributions:
+    This paper attempts to talk about the following things:
 
     \begin{itemize}
-        \item materializes the connection between mathematical model and entity
-        resolution task
-        \item provides a generic framework for measuring the qualitative
-        performance of entity resolution tasks
-        \item introduces a software system that uses this framework
+        \item the causal connection between mathematical model and entity
+        resolution task output data structure
+        \item how all entity resolution tasks can fit any entity resolution
+        mathematical model
+        \item experiments showing the difference in using one mathematical model
+        over another to understand the output of an entity resolution task
     \end{itemize}
 
     \section{Related Work}\label{sec:related}
     
-    Because of the generality of the topic, there is much existing work that
-    relates in some way or another to this paper.
-    However, three categories of papers share the most concerns with this one:
-    entity resolution system presentations, syntheses of theoretical models for
-    entity resolution and syntheses of evaluation metrics for entity resolution.
+    The topic addressed in this paper intersects with a significant body of
+    existing research.
+    Specifically, it aligns closely with three primary categories: presentations
+    of entity resolution systems, theoretical model syntheses for entity
+    resolution, and analyses of evaluation metrics in the field of entity
+    resolution.
 
-    The papers that introduce entity resolution systems relate to this one
-    through the shared goal of generalizing how entity resolution tasks are run
-    and, therefore, evaluated.
-    Most of the systems referenced here provide at least a few generic metrics
-    to evaluate entity resolution performance.
-    They 
+    Papers introducing entity resolution systems are relevant to this study due
+    to their common objective of standardizing entity resolution tasks and their
+    evaluation methods.
+    The majority of the referenced systems in this context offer several generic
+    metrics for assessing entity resolution performance.
 
     At the dawn of the 21st century, FEBRL\cite{febrl2002} emerged as one of the
     first extensible systems to tackle measuring entity resolution performance.
@@ -775,14 +777,14 @@ C(V_i, V_j) = \left\{
         be in $U$, but should be in $M$.
     \end{itemize}
 
-    Quality metrics for this model work by comparing a ground truth that
-    containing the set of ideal pairs of tuples to the entity resolution task's
-    output.
-    $M$ is effectively the ground truth in this context.
-    Because using $U$ is prohibitive in practice, we will rely only on concepts
-    that have to do with $M$: true and false positives, as well as false
-    negatives.
-
+    Quality metrics for this model compare a ground truth, consisting of ideal
+    tuple pairs, with the entity resolution task's output.
+    $M$ is the ground truth in this context.
+    Due to the impracticality of using $U$, our focus will be on concepts
+    related to $M$: true positives, false positives, and false negatives.
+    
+    Several metrics based on these concepts exist, though the effectiveness of
+    some has been questioned\cite{Goga2015}.
     With this in mind we finally define the three quality metrics that are
     widely used with this model:
 
@@ -792,7 +794,7 @@ C(V_i, V_j) = \left\{
     F_1 Score&=2 \cdot \frac{Precision \cdot Recall}{Precision+Recall}
     \end{align}
 
-    \textit{Precision} (or the positivive predictive value) is defined as the
+    \textit{Precision} (or the positive predictive value) is defined as the
     number of correct predictions that were made in relation to the total number
     of predictions that were made.
     \textit{Recall} (or sensitivity) is defined as the number of correct
@@ -1282,7 +1284,9 @@ C(V_i, V_j) = \left\{
     decreasing the probability that attributes in the original source match or
     don't.
 
-    \subsection{Fellegi-Sunter Model Results}
+    \subsection{Experimenting with Synthetic Data}
+
+    \subsubsection{Fellegi-Sunter Model Results}
     
     With the F-S model both the ground truth and the results of the entity
     resolution algorithm are represented as a list of pairs of entity
@@ -1305,61 +1309,70 @@ C(V_i, V_j) = \left\{
         \caption{Fellegi-Sunter Results}\label{fsfig}
     \end{figure}
 
-    When the Jaccard similarity threshold is set high ($t \geq 0.7$), we end up
-    with few matches, but those matches are true.
-    As we lower the threshold ($0.7 \leq t < 0.85$), recall increases and
-    precision does not drop.
-    However, when we lower the threshold too much ($t < 0.18$) we start losing
-    precision.
-    These results are in line with our expectations.
-    So is there anything to learn?
-
+    When the Jaccard similarity threshold is set high ($t \geq 0.78$), we end up
+    with fewer matches, but more accurate matches.
+    However when we lower $t$ ($0.36 \leq t \leq 0.6$), recall increases and
+    so does precision.
+    This is not expected.
+    At the extremes, when $t$ is nearing zero, the reported recall is perfect
+    and when it is nearing one the reported precision is perfect.
+    
     In our data set we know there are items such as those with the IDs
     208114672 and 208114673.
     These items are near identical and would result in a surplus of matches
     when lowering the Jaccard threshold.
-    Lowering the threshold would result in the item with ID 208114672 in Table1
-    to be matched with both the item with the same ID in Table2 as well as with
-    the item with ID 208114673 from Table2.
-    However, the precision metric shows us the maximum score.
-    The metric itself isn't wrong, it just does not capture the correct matches
-    that are in surplus.
+    The only way precision could increase while lowering the threshold is if
+    some of the extra matches happened to be true positives.
 
-    The more upsetting fact is that the duplicate true positives are the cause
-    of a rise in precision when we lower the Jaccard threshold.
-    That leads to a tainted F1 score which is the metric that most people judge
-    entity resolution by.
+    In a small dataset or even in a large dataset that's relatively clean, this
+    does not make a difference.
+    On real-world, unkempt data the idea that precision increases as a result of
+    some happy accident is not welcome.
+    
+    Then there are the extreme cases when we don't really care whether the
+    entity resolution task is balanced.
+    For instance, in a financial crime detection outfit one could make a case
+    that it doesn't matter how many financial criminals evade the system as long
+    as the ones the system catches are guaranteed to be at fault.
+    The same type of argument can be made in the favour of supreme sensitivity
+    regardless of the accuracy (for example, in life sciences or in financial
+    trading).
 
-    This shows us that while statistical metrics are comfortable to use and easy
-    to understand, they might not be completely transparent or perfectly show
-    the performance of the entity resolution algorithm.
-    In fact, the sharp drop in recall as the Jaccard threshold rises and the
-    precision maintains its value might be the only clue that points to the
-    existence of ``duplicate'' true positives.
-    We can make these inferences only because we have intimate knowledge of the
-    algorithm.
-    If we didn't we wouldn't be able to confidently assess its performance.
+    What we see when we don't really care about the balance between precision
+    and recall is that perfect recall is achieved with $t \leq 0.36$ and perfect
+    precision is achieved with $t \geq 0.78$.
 
-    \subsection{Algebraic Model}
-    The algebraic model represents the ground truth and the entity resolution
-    results as partitions over a set containing all the entity references.
-    Note that the IDs of the entity references still differ.
-    In our catered setup, that means that the input set will contain 20 items.
+    \subsubsection{Fellegi-Sunter Model Results}
+    
+    In the algebraic model of entity resolution, the ground truth and the result
+    of the process are represented as partitions over an input set of data.
+    Because we include the IDs in both DG1 and DG2, the input data set will
+    contain 20 items.
+    The ground truth contains 10 pairs of items.
 
-    In our own setup, the ground truth will contain clusters of two items
-    each because of how the data is generated.
-    In the `Abt-Buy' setup, the items in the ideal mapping will are paired up
-    into clusters in the ground truth.
-    The rest of the items in the input data are added as singleton clusters.
+    Let's start by noticing that for $0.15 \leq t \leq 0.36$ the metrics from
+    the algebraic model confirm the metrics from the statistical model.
+    Both models agree that the ideal values of $t$ for a good balance between
+    accuracy and sensitivity fall within that interval.
+    We also note that there are other points of agreement between the two
+    models: sensitivity is inversely proportional to $t$ and accuracy is higher
+    when we lower the interval.
 
-    The results for this model are better for two reasons.
-    Firstly, the diversity of metrics allows us to see different facets of the
-    same thing.
-    Clustering metrics and pair metrics show data that is more similar to what
-    we're used to when using the statistical model.
-    The three models give us better insight into what we might expect to be a
-    part of the match.
-    So the first point is that the model is more informative.
+    But there are also differences.
+    Firstly, we can notice how the Talburt-Wang index is monotonically
+    increasing, signaling that the contents of the entity resolution task's
+    results are not well aligned with the ground truth for lower values of $t$.
+    Then, if we look at the cluster precision, we see that increasing the
+    similarity threshold actually decreases cluster precision.
+    once we take longer prefixes into account.
+    The interpretation is that fewer cluster overlaps tend to happen as expected
+    On the other hand, the Talburt-Wang index also increases showing us that the
+    partition classes returned by the entity resolution task overlap more and
+    more with the ground truth partition classes.
+    So just by using these two metrics we're close to understanding that the
+    entity resolution algorithm actually introduces a few spurious correlations.
+    The first key takeaway is that the algebraic model allows us to think in
+    more than one way about the entity resolution algorithm's performance.
 
     \begin{figure}
         \begin{minipage}{0.49\textwidth}
@@ -1392,35 +1405,34 @@ C(V_i, V_j) = \left\{
 
     Secondly, the model provides a more accurate picture of what is actually
     happening.
-    Take for example the problem of extra true positives.
-    We can very quickly identify that problem by looking at any one of the three
-    provided indexes in coroboration with the pairwise metrics.
-    The only possible interpretation of a high pairwise similarity that happens
-    simultaneously with low cluster similarity is extra matching pairs.
-
-    Another observation is how the statistical metrics compare with the pairwise
-    metrics in that the shapes of the graphs are very similar.
-    The additional information in the algebraic model is that, in fact, when we
-    look at thresholds nearing zero pairwise recall also decreases.
-    The reason behind that is the overwhelming amount of duplicates that is
-    being returned by the algorithm.
-    That is, the ground truth becomes much smaller than the entity resolution
-    result and, therefore, the pairwise recall decreases because there are many
-    paris in the result that are not matched in the ground truth.
-    Were we to still use statistical recall, we'd be under the impression that
-    we're getting a perfect score as we're lowering the Jaccard threshold
-    towards zero.
+    Recall that in the previous section we were giving examples where either
+    accuracy or sensitivity are more important than having a balanced quality.
+    What we can see is that the Rand Index (both adjusted and not) shape mimics
+    the shape of the statistical F1 measure.
+    We can also see that the pairwise metrics (in particular pairwise recall)
+    even show us similar values with their corresponding statistical cousins.
+    What's interesting to note is that at least in the case of recall we see a
+    sharp drop for $t \leq 0.15$ for pairwise recall.
+    For statistical recall, there is no such drop.
+    This happens because as $t$ becomes smaller, the number of pairs returned by
+    the entity resolution task becomes larger.
+    Pairwise metrics will capture this discrepancy between the ground truth and
+    the result regardless of the direction of the comparison whereas the
+    statistical formula will not.
+    This can prove an invaluable tool for avoiding increased costs for handling
+    the entity resolution results.
     
-    Finally, the algebraic model exposes clustering metrics.
-    These metrics suggest that the entity resolution task did not perform
-    perfectly.
-    Moreover, they show a drop in quality as we increase the Jaccard threshold.
-    This is in line with our intuition, however it is not in line with the
-    pairwise metrics or the statistical metrics.
+    Finally, when $t$ is increased towards 1, we only see pairwise precision
+    being maximized.
+    To rephrase, at least 7 other metrics do not show an increase in accuracy.
+    This translates to a more optimistic interpretation of the entity resolution
+    task's qualitative performance when using statistical metrics.
 
     The fundamental takeaway from this experiment is that the algebraic model
-    provides a much more transparent and accurate picture over the performance
-    of an entity resolution algorithm.
+    provides a more transparent and accurate picture over the performance of an
+    entity resolution algorithm.
+    Both the statistical metrics and the metrics allowed by the algebraic model
+    will find a decent
     Without prior knowledge of the algorithm, we can infer at a glance what the
     best setting for that algorithm might be.
     
@@ -1429,18 +1441,18 @@ C(V_i, V_j) = \left\{
     between 0.15 and 0.35.
     Now let's see how that holds up in our second experiment.
        
-    \subsection{Abt-Buy Results}
+    \subsection{Experimenting with Real Data}
 
-    To replicate our findings on our very small dataset, we propose running the
-    same algorithm, in the same way on the `Abt-Buy' dataset.
-    The purpose here is to see which of the two models has steered us closest to
-    the optimal settings for our algorithm.
+    The small dataset shows us the potential advantages of using the algebraic
+    model over using the statistical model.
+    Now it's time to see whether those observations make a difference on a 
+    standard entity resolution benchmarking dataset.
 
     \begin{figure}
         \begin{minipage}{0.49\textwidth}
             \centering
             \includegraphics[width=\textwidth]{full-fs}
-            \caption{Fellegi-Sunter Metrics}
+            \caption{Statistical Metrics}
         \end{minipage}    
         \begin{minipage}{0.49\textwidth}
             \centering
@@ -1467,21 +1479,67 @@ C(V_i, V_j) = \left\{
             \includegraphics[width=\textwidth]{full-alg-adj-rand}
             \caption{Adjusted Rand Index}
         \end{minipage}    
-        
-    \end{figure}\label{algebraic-full}
-
-
+    \end{figure}\label{abt-buy-full}
     
+    Running the experiment on the data we can see that the observations we made
+    on the miniature data set still hold true.
+    The statistical model is more optimistic about recall and precision at the
+    extremes, the Talburt-Wang index is monotonically increasing and all of the
+    metrics agree on the value of $t$ that provides the best balance between
+    precision and accuracy. 
+    Perhaps surprinsingly, that value of $t$ is in the interval predicted on the
+    miniature dataset ($t=0.36$).
+
     \section[conclusion]{Conclusions}\label{section:conclusions}
 
-    The work speaks about how we can use mathematical models to evaluate entity resolution results. It also provides easy rules of thumb to identify the model that's best suited to interpret the results of an ER task.
-    
-    \section[future]{Future Work}\label{section:future}
-    \begin{itemize}
-        \item result translation between math models
-        \item ground truth and data generation for ER tasks
-    \end{itemize}
+    After examining two mathematical models for entity resolution, we have put
+    forth a couple of notions.
+    The first notion is that each mathematical model enforces a certain shape
+    on the output of the entity resolution task.
+    In the case of the statistical model, that shape is a list of pairs of
+    entity references.
+    In the case of the algebraic model, that shape is a list of lists of entity
+    references.
 
+    The second notion is that all entity resolution tasks are compatible with
+    all mathematical models for entity resolution.
+    In fact, a basic observation is that the union-find data structure and a
+    variation of Kruskall's algorithm can quickly convert a list of pairs to a
+    partition (list of lists) over an input set of entity references.
+    
+    The third and final notion is that while the statistical model does have
+    convenient metrics that do a good job at identifying the perfect balance
+    between accuracy and sensitivity, the algebraic model is better when we take
+    a stroll down another avenue of thought.
+    Firstly, it allows to judge an entity resolution task's quality in more ways
+    than one by providing metrics that open up different perspectives over the
+    task's results.
+    Secondly, pairwise and especially clustering metrics provide a more accurate
+    scoring of an entity resolution task's output.
+    
+    Given these notions, we feel that the algebraic model through the metrics it
+    supports and the various analysis perspectives it opens is the most reliable
+    choice for comparing the results of entity resolution tasks.
+
+    \section[future]{Future Work}\label{section:future}
+
+    The first expansion to this paper would be to consider other mathematical
+    models for entity resolution and how they compare with the algebraic model.
+    In this regard, the work done by the Stanford InfoLab stands out as well as
+    all efforts in standardizing entity resolution as a graph theory problem.
+
+    Another route is to consider more metrics and their insights.
+    For example, merge distance and variation of information were not covered in
+    this paper at all.
+
+    And finally, while this paper spent an inordinate amount of ink babbling
+    about entity resolution quality, it did not spend any resources on how much
+    measuring that quality costs in terms of CPU cycles and memory allocation.
+    One key observation is that computing the Rand index becomes expensive very
+    quickly and so does computing any pairwise metrics when the set of true
+    negatives (items that don't match and shouldn't match) becomes very large
+    (which incidentally covers every real-world case where any of these ideas
+    might be useful).
 
     \bibliographystyle{plain} % We choose the "plain" reference style
     \bibliography{er-general,er-related-work,er-additional-references,er-software}
