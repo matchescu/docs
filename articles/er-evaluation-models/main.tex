@@ -532,9 +532,14 @@ C(V_i, V_j) = \left\{
 
     \end{defn}
 
-    Quality metrics are specific to a mathematical model.
+    The difficulty with the above definition stems from the formulation around
+    quality metrics.
+    One cannot compare variation of information with statistical precision, for
+    example.
+    Therefore, the metrics that are used in the comparison must be of a kind.
+    And we know that each type of metric is determined by a mathematical model.
     
-    \section[mm]{Mathematical Models}\label{sec:mm}
+    \section[mm]{Mathematical Models for Entity Resolution}\label{sec:mm}
 
     The ground truth used for evaluating the performance of an entity resolution
     task and the entity resolution result are represented similarly.
@@ -1123,64 +1128,77 @@ C(V_i, V_j) = \left\{
 
     \section{Experiments}
 
-    We have designed an experiment to showcase the insights that are provided by
-    each of the mathematical models presented thus far.
+    We are proposing two experiments to understand the differences that arise
+    from using the two mathematical models in practice.
+    The first experiment focuses on a small, custom dataset that contains near-
+    duplicated items.
+    The second experiment uses one of the standard Entity Resolution datasets
+    to replicate the findings of the first experiment.
+    The code for running the experiments is available on GitHub\cite{matchescu}.
+    Running the experiments does not require any specific hardware.
+    We use the Python\cite{python} programming language and the
+    Pandas\cite{pandas2023} data manipulation library.
 
     \subsection{Data}
 
-    The data for the experiments presented in this paper is available on
-    GitHub\cite{expdata2023}.
-    We use two data sets to show that our findings do not vary with data.
-    The first data set is the Abt-Buy dataset\cite{vldb2010}.
-    The second data set is a subset of ten items from the `Buy' data set which
-    contains `interesting' elements.
-    The input data in this data set is clean, it just contains items with a high
-    potential of becoming duplicates of one another when applying very simple
-    transformations to the data.
+    We already mentioned using two datasets for our experiments.
+    For one of our experiments we will use the standard entity resolution
+    benchmarking called \textit{Abt-Buy}\cite{vldb2010}.
+    For the main experiment, we use a subset of ten items of interest from the
+    `Buy' subset of the `Abt-Buy' dataset.
+    Some of the ten items are near-duplicates of one another while others are
+    missing data.
+    This simulates real-world flaws.
+    All of the experiment data is available on GitHub\cite{expdata2023}.
     
     We chose to use a tabular representation of the data simply for practical
-    considerations.
-    Tabular data processing is very easy because of the amount of support it
-    received from the international programmer
-    community\cite{pandas2010,pandas2023}.
-    The experiments could just as well be performed with data represented in any
-    format.
+    considerations such as the support it has received from the open-source
+    programmer community\cite{pandas2010,pandas2023}.
+    The experiments could be run with data represented in any format.
     
     The tabular data is stored on disk as CSV files.
     Each CSV file has a first row containing the column headings and subsequent
     rows containing records within which the fields are separated by comma.
-    
-    For the Abt-Buy data set, there is an ideal mapping and the data is used as-
-    is.
 
-    For our own data set, we want to be in full control of the entity resolution
-    process.
-    As such, we have chosen to generate the input sources for the entity
-    resolution task starting from our data set.
-    
-    We split our data set into two tables having the following columns:
+    The Abt-Buy dataset itself is utilized in a form close to the original.
+    We are using the supplied ideal mapping to determine the ground truth.
+    However, we are rotating the data on the column axis so that the `id' column
+    is always last.
+    We do this to ensure that string prefix-based matching algorithms will find
+    matches when comparing `Abt' with `Buy'.
 
-    \begin{enumerate}[label=\textbullet~Table~\arabic*:,leftmargin=*]
-        \item `name',`manufacturer', `price', `id'
-        \item `description',`name', `id'.
+    Conversely, for our custom dataset, we exert complete control over the
+    entity resolution process.
+    This is achieved by creating custom input sources for the entity resolution
+    task.
+    These sources use the ten chosen items from the `Buy' subset of the
+    `Abt-Buy' dataset.
+
+    The data generation procedure divides the ten-item subset into two distinct
+    tables:
+
+    \begin{enumerate}[label=\textbullet,leftmargin=1cm]
+    \item DG1, with columns: \texttt{`name', `manufacturer', `price', `id'}
+    \item DG2, with columns: \texttt{`description', `name', `id'}
     \end{enumerate}
-    
-    These two tables will be the input information sources for our experiment.
-    Constructing the ground truth as a list of pairs is trivial because we have
-    employed this data generation strategy.
-    Assuming that each item in our `Buy' subset refers to the one and only one
-    real-world entity, the ground truth contains exactly one pair of elements
-    correspoding to the real-world item.
 
-    For both `Abt-Buy' and our generated data set, the extraction traits coerce
-    all data to be string data.
-    The traits built into our extraction pipeline are mapped one-to-one to table
-    columns.
-    For each record, the each trait extracts a single attribute.
-    The ordering of the data enforced by the traits is left-to-right,
-    top-to-bottom reading order.
-    This configuration of entity resolution extraction traits ensures that
-    sequence neutrality is not an issue.
+    These tables serve as the foundational input for our experimental analysis.
+    The construction of the ground truth, as a list of paired elements, is
+    straightforward due to this data generation approach.
+    We operate under the assumption that each item in our `Buy' subset
+    corresponds uniquely to a single real-world entity.
+    Consequently, the ground truth is comprised of pairs, each pair representing
+    a distinct real-world item.
+
+    In the extraction phase, data undergoes uniform conversion to string format,
+    emphasizing word extraction.
+    This approach is consistent with both the 'Abt-Buy' and our custom dataset.
+    The pipeline ensures a left-to-right, top-to-bottom arrangement of extracted
+    words, with column and row order preservation, generating entity references
+    with a singular text attribute.
+    This attribute amalgamates words from all attributes in the source into a
+    cohesive text unit. This methodology in entity resolution effectively
+    eliminates sequence biases, ensuring sequence neutrality.
 
     For example, let's use the following record from our own `Buy' table:
 
@@ -1194,9 +1212,7 @@ C(V_i, V_j) = \left\{
         \end{tabular}
     \end{center}
 
-    Our data generation strategy would split it into two records, each placed
-    in the corresponding table.
-    The first record would be:
+    The following record would be the corresponding DG1 record.
     
     \begin{center}
         \begin{tabular}[b]{|l|l|l|l|}
@@ -1208,7 +1224,7 @@ C(V_i, V_j) = \left\{
         \end{tabular}
     \end{center}
 
-    The second record would look like this:
+    The corresponding DG2 record would have the following constitution.
 
     \begin{center}
         \begin{tabular}[b]{|l|l|l|}
@@ -1220,19 +1236,20 @@ C(V_i, V_j) = \left\{
         \end{tabular}
     \end{center}
 
-    Then the traits we have built for this experiment will extract the following
-    two entity references:
+    The extraction traits described before would extract the following two
+    entity references:
     \begin{enumerate}
-        \item \texttt{(`Seiko SXDA04', ` ',`\$138.00', `205554724')},
-        \item \texttt{(` ',`Seiko SXDA04', `205554724')}.
+        \item \texttt{(`Seiko',`SXDA04',`\$138.00',`205554724')},
+        \item \texttt{(`Seiko',`SXDA04',`205554724')}.
     \end{enumerate}
 
-    For running the experimental setup, we could use any entity resolution
-    algorithm out there as long as it is able to output pairs of matching
-    entity references.
-    In our experiments we use the \texttt{ppjoin}\cite{ppjoin} matching
-    algorithm because of its simplicity.
-
+    The specific algorithm we are running is not relevant.
+    Any algorithm that is able to output a pair of matching items given two
+    data sources as input is fine.
+    
+    In our experiments we use an implementation of the
+    \texttt{ppjoin}\cite{ppjoin} entity matching algorithm because its behaviour
+    is easy to intuit.
     PPJoin stands for Position Prefix Join and it is an algorithm designed to
     find similarities between records based on the Jaccard
     index\cite{jaccard1912,finley1996}.
@@ -1240,35 +1257,31 @@ C(V_i, V_j) = \left\{
     the prefix being used for matching shortens thus increasing the match
     probability.
     A higher threshold should match fewer items, but with less chance for error.
-
     In our experiments the Jaccard threshold will be denoted with $t$.
-    The mathematical model that fits this algorithm best is the Fellegi-Sunter
-    probabilistic model because the algorithm's core job is to manipulate the
-    probability that two records will or will not match by adjusting the Jaccard
-    threshold.
-    One of the main points of the experiments is to show how we could measure
-    the quality of the PPJoin algorithm's output by using metrics from the
-    algebraic model.
 
-    As for the experimental process:
+    Each experiment is done by going through the following process:
+
     \begin{itemize}
-        \item on our generated data we will take 100 measurements of each
-        quality metric for each of the two mathematical models for incremental
-        values of the Jaccard similarity threshold within the $[0\ldots1)$
-        interval in discrete steps of $0.01$, while
-        \item on the `Abt-Buy' data set, we will take 10 measurements of each
-        quality metric for incremental values of $t$ within the $[0\ldots1)$
-        interval in discrete steps of $0.1$.
+        \item generate or load the data;
+        \item take 100 entity matching passes through the input data with
+              Jaccard thresholds ranging from 0 to 0.99 inclusive in steps of
+              0.01, storing the results for each step;
+        \item compute the statistical and algebraic similarity metrics for each
+              of the stored results.
     \end{itemize}
 
     For our own generated data we are able to generate the ground truth
-    paritition for the algebraic model based on the input data.
-    For the `Abt-Buy' data set we will use the provided ideal mapping to
-    generate the ground truth partition for the algebraic model.
+    partition for the algebraic model based on the input data.
+    For the `Abt-Buy' data set we use the provided ideal mapping to generate the
+    ground truth partition for the algebraic model.
     
-    In the following section we describe the results we obtained on our own
-    generated data.
-    
+    The mathematical model that best fits the PPJoin algorithm is the
+    Fellegi-Sunter probabilistic model.
+    The algorithm's main job is to manipulate the probability that two records
+    will or will not match by adjusting the Jaccard threshold thus increasing or
+    decreasing the probability that attributes in the original source match or
+    don't.
+
     \subsection{Fellegi-Sunter Model Results}
     
     With the F-S model both the ground truth and the results of the entity
@@ -1288,46 +1301,44 @@ C(V_i, V_j) = \left\{
 
     \begin{figure}
         \centering
-        \includegraphics[width=\textwidth]{fellegi-sunter-generated-data}
+        \includegraphics[width=\textwidth]{mini-fs}
         \caption{Fellegi-Sunter Results}\label{fsfig}
     \end{figure}
 
-    When the Jaccard similarity threshold is set high ($t \geq 0.66$), we end up
+    When the Jaccard similarity threshold is set high ($t \geq 0.7$), we end up
     with few matches, but those matches are true.
-    As we lower the threshold ($0.27 \leq t < 0.66$), recall increases and
+    As we lower the threshold ($0.7 \leq t < 0.85$), recall increases and
     precision does not drop.
-    However, when we lower the threshold too much ($t < 0.3$) we start losing
-    precision and we get better and better recall.
+    However, when we lower the threshold too much ($t < 0.18$) we start losing
+    precision.
     These results are in line with our expectations.
     So is there anything to learn?
 
     In our data set we know there are items such as those with the IDs
     208114672 and 208114673.
     These items are near identical and would result in a surplus of matches
-    by lowering the Jaccard threshold.
+    when lowering the Jaccard threshold.
     Lowering the threshold would result in the item with ID 208114672 in Table1
     to be matched with both the item with the same ID in Table2 as well as with
     the item with ID 208114673 from Table2.
-    However, all the precision shows us is a resounding 1.
-    
-    What's more curious is that recall over those same values of \textit{t} is
-    not maximal.
-    Makes one wonder what's missing.
-    While we are working with a simple tiny set of ten items in this experiment,
-    imagine working with a large data set.
+    However, the precision metric shows us the maximum score.
+    The metric itself isn't wrong, it just does not capture the correct matches
+    that are in surplus.
 
-    Also due to the possible mislabelling of duplicates as true positives we
-    seem to get a small rise in precision even as we lower the threshold below
-    $0.3$.
+    The more upsetting fact is that the duplicate true positives are the cause
+    of a rise in precision when we lower the Jaccard threshold.
+    That leads to a tainted F1 score which is the metric that most people judge
+    entity resolution by.
 
-    This situation shows us how truly unreliable statistical precision and
-    recall can be when judging the output of entity resolution.
-
-    The other thing to notice is the sudden drop in sensitivity around the
-    $t=0.3$ mark.
-    There is no direct explanation as to why that happens, but it can be assumed
-    that since we are also losing duplicated matches, the drop is more
-    pronounced than it needs to be.
+    This shows us that while statistical metrics are comfortable to use and easy
+    to understand, they might not be completely transparent or perfectly show
+    the performance of the entity resolution algorithm.
+    In fact, the sharp drop in recall as the Jaccard threshold rises and the
+    precision maintains its value might be the only clue that points to the
+    existence of ``duplicate'' true positives.
+    We can make these inferences only because we have intimate knowledge of the
+    algorithm.
+    If we didn't we wouldn't be able to confidently assess its performance.
 
     \subsection{Algebraic Model}
     The algebraic model represents the ground truth and the entity resolution
@@ -1337,69 +1348,129 @@ C(V_i, V_j) = \left\{
 
     In our own setup, the ground truth will contain clusters of two items
     each because of how the data is generated.
-    In the `Abt-Buy' setup, all items that are not in the ideal mapping will be
-    added as singleton clusters in the ground truth while the items in the ideal
-    mapping will be clustered via Kruskall's algorithm using a union-find data
-    structure.
+    In the `Abt-Buy' setup, the items in the ideal mapping will are paired up
+    into clusters in the ground truth.
+    The rest of the items in the input data are added as singleton clusters.
 
-    The results are dramatically different from those of the statistical model.
+    The results for this model are better for two reasons.
+    Firstly, the diversity of metrics allows us to see different facets of the
+    same thing.
+    Clustering metrics and pair metrics show data that is more similar to what
+    we're used to when using the statistical model.
+    The three models give us better insight into what we might expect to be a
+    part of the match.
+    So the first point is that the model is more informative.
 
     \begin{figure}
-        \begin{minipage}{0.48\textwidth}
+        \begin{minipage}{0.49\textwidth}
             \centering
-            \includegraphics[width=\textwidth]{algebraic-prf-generated-data}
-            \caption{Precision, Recall and F1}
+            \includegraphics[width=\textwidth]{mini-alg-twi}
+            \caption{Talburt-Wang Index}
         \end{minipage}    
-        \begin{minipage}{0.48\textwidth}
+        \begin{minipage}{0.49\textwidth}
             \centering
-            \includegraphics[width=\textwidth]{algebraic-index-generated-data}
-            \caption{Clustering Indexes}
+            \includegraphics[width=\textwidth]{mini-alg-rand}
+            \caption{Rand Index}
+        \end{minipage}    
+        \begin{minipage}{0.49\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{mini-alg-adj-rand}
+            \caption{Adjusted Rand Index}
+        \end{minipage}    
+        \begin{minipage}{0.49\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{mini-alg-pp}
+            \caption{Pairwise Metrics}
+        \end{minipage}    
+        \begin{minipage}{0.49\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{mini-alg-cp}
+            \caption{Cluster Metrics}
         \end{minipage}    
         
     \end{figure}\label{algebraic-prffig}
 
-    The first thing of notice is that there is no bump in precision when we
-    lower the $t$ below $0.3$.
-    The reason behind this is that the clusters containing near-duplicates will
-    not suddenly generate more pairwise combinations than the clusters that
-    don't.
-    That is, no matter how many times a pairing appears in the list of pairings
-    that generates a cluster, the cluster will still contain those two elements.
-    It will never include a third.
+    Secondly, the model provides a more accurate picture of what is actually
+    happening.
+    Take for example the problem of extra true positives.
+    We can very quickly identify that problem by looking at any one of the three
+    provided indexes in coroboration with the pairwise metrics.
+    The only possible interpretation of a high pairwise similarity that happens
+    simultaneously with low cluster similarity is extra matching pairs.
 
-    Another observation is that we see a very clear signal for $0.3 < t < 0.5$.
-    The pairwise precision mimicks what the statistical precision shows us.
-    However, the cluster precision tells us that the matching is off by at least
-    a half of the size of the input.
-    The only way to interpret this is by admitting that the entity resolution
-    task duplicates true positives at approximately a 2:1 ratio.
-    In our constructed data set, this observation is sustained by the fact that
-    8 IDs are very likely to generate what would be extra true positives in the
-    statistical approach.
-
-    Concerning recall, we see that cluster recall actually rises along with
-    cluster precision.
-    This again signals that the pairwise recall we see for $t<0.3$ is most
-    likely not worth considering because although a significant proportion of
-    the relevant data is returned, a significant proportion of the entity
-    profiles constructed are not correct.
-
-    These observations are supported by the additional quality metrics that are
-    available via the algebraic model.
-    The Rand index and the Adjusted Rand Index confirm the partition lack of
-    alignment for $t\notin[0.3,0.5]$, while the Talburt-Wang index confirms that
-    more correct pairs are returned as $t$ decreases.
-
-    However, the fundamental takeaway from using the algebraic model is that
-    PPJoin does not return near-perfect precision in any case except when taking
-    a very narrow view over the pairs of matches it returns.
-
+    Another observation is how the statistical metrics compare with the pairwise
+    metrics in that the shapes of the graphs are very similar.
+    The additional information in the algebraic model is that, in fact, when we
+    look at thresholds nearing zero pairwise recall also decreases.
+    The reason behind that is the overwhelming amount of duplicates that is
+    being returned by the algorithm.
+    That is, the ground truth becomes much smaller than the entity resolution
+    result and, therefore, the pairwise recall decreases because there are many
+    paris in the result that are not matched in the ground truth.
+    Were we to still use statistical recall, we'd be under the impression that
+    we're getting a perfect score as we're lowering the Jaccard threshold
+    towards zero.
     
+    Finally, the algebraic model exposes clustering metrics.
+    These metrics suggest that the entity resolution task did not perform
+    perfectly.
+    Moreover, they show a drop in quality as we increase the Jaccard threshold.
+    This is in line with our intuition, however it is not in line with the
+    pairwise metrics or the statistical metrics.
+
+    The fundamental takeaway from this experiment is that the algebraic model
+    provides a much more transparent and accurate picture over the performance
+    of an entity resolution algorithm.
+    Without prior knowledge of the algorithm, we can infer at a glance what the
+    best setting for that algorithm might be.
+    
+    According to the algebraic model, we should set the threshold at 0.4, while
+    according to the statistical model we could use a value of t anywhere
+    between 0.15 and 0.35.
+    Now let's see how that holds up in our second experiment.
+       
     \subsection{Abt-Buy Results}
 
-    To replicate our results on our own generated data that aimed to exacerbate
-    certain data flaws, we run our experiment setup on the `Abt-Buy' data set
-    itself.
+    To replicate our findings on our very small dataset, we propose running the
+    same algorithm, in the same way on the `Abt-Buy' dataset.
+    The purpose here is to see which of the two models has steered us closest to
+    the optimal settings for our algorithm.
+
+    \begin{figure}
+        \begin{minipage}{0.49\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{full-fs}
+            \caption{Fellegi-Sunter Metrics}
+        \end{minipage}    
+        \begin{minipage}{0.49\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{full-alg-pp}
+            \caption{Pairwise Metrics}
+        \end{minipage}    
+        \begin{minipage}{0.49\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{full-alg-cp}
+            \caption{Cluster Metrics}
+        \end{minipage}    
+        \begin{minipage}{0.49\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{full-alg-twi}
+            \caption{Talburt-Wang Index}
+        \end{minipage}    
+        \begin{minipage}{0.49\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{full-alg-rand}
+            \caption{Rand Index}
+        \end{minipage}    
+        \begin{minipage}{0.49\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{full-alg-adj-rand}
+            \caption{Adjusted Rand Index}
+        \end{minipage}    
+        
+    \end{figure}\label{algebraic-full}
+
+
     
     \section[conclusion]{Conclusions}\label{section:conclusions}
 
