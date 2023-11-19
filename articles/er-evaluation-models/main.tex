@@ -659,6 +659,7 @@ C(V_i, V_j) = \left\{
     \end{itemize}
 
     \subsubsection[fms-term]{Terminology Translation}\label{fsm-term}
+    \textcolor{green}{oare nu ar suna mai soft "Terminology mapping"?}
 
     To link the Fellegi-Sunter model to our own terminology, let's start by
     talking about $a \in A$ and $b \in B$.
@@ -814,7 +815,7 @@ C(V_i, V_j) = \left\{
     Although entity resolution systems and tasks have not been implemented with
     this specific model in mind, its generality allows it to be applied to
     virtually any entity resolution task.
-    While the Fellegi-Sunter model\hyperref{subsec:fsm} is a probabilistic model
+    While the Fellegi-Sunter model (described in Section \ref{subsec:fsm}) is a probabilistic model 
     that requires two information sources to be compared, this model removes
     that constraint allowing as many information sources as necessary.
     Another improvement is the support for transitive matching.
@@ -915,7 +916,13 @@ C(V_i, V_j) = \left\{
     The entity resolution tasks where the order in which entity references are
     processed is irrelevant are called \textit{sequence neutral}\cite{Tal11}.
 
+
+    Eu as adauga o prezentare formala a formei outputului.
+    De ex: $Res$ will be represented as a set partition: $Res = \{C_1, C_2, C_3, \ldots, C_k\}$, where $C_i \subseteq Ref$, every $C_i \neq \Phi$, $C_i \cap C_j \neq \Phi$ (for $i \neq j$), $\bigcup C_i = Res$. An entity reference will be part of a single such cluster. 
+
+
     \subsubsection[algrel]{Terminology Translation}\label{subsubsec:algrel}
+    \textcolor{green}{oare nu ar suna mai soft "Terminology mapping"?}
 
     In writing this paper, we used a lot of notions that are specific to the
     algebraic model.
@@ -1043,6 +1050,7 @@ C(V_i, V_j) = \left\{
         TWI = \frac{\sqrt{|G|\cdot|Ref|}}{|G \cap Ref|},
     \]
     where if $X$ is a set then $|X|$ represents the numer of elements in $X$.
+    \textcolor{green}{adica prin cardinal se obtine nr de clusters generat, respectiv nr de clusters din ground-truth? Iar la intersectie se identifica nr clusterilor identifici in rezultat si in ground truth?}
 
     The Talburt-Wang index takes values between 0 and 1 as well, with 1
     indicating a perfect match.
@@ -1063,6 +1071,8 @@ C(V_i, V_j) = \left\{
     \[
         Pair~Precision = \frac{|Pairs(Res) \cap Pairs(G)|}{|Pairs(Res)|}
     \]
+    \textcolor{green}{Oare este o legatura cu a, b, c, d?}
+
     Pairwise recall is defined as the ratio between the number of pairs in
     $Res$ that are also in $G$ and the number of pairs in $G$.
     In other words, pairwise recall tells us how many pairs the entity
@@ -1164,7 +1174,9 @@ C(V_i, V_j) = \left\{
 
     The Abt-Buy dataset itself is utilized in a form close to the original.
     We are using the supplied ideal mapping to determine the ground truth.
-    However, we are rotating the data on the column axis so that the `id' column
+    However, we are rotating 
+    \textcolor{green}{shifting (instead of rotating)} 
+    the data on the column axis so that the `id' column
     is always last.
     We do this to ensure that string prefix-based matching algorithms will find
     matches when comparing `Abt' with `Buy'.
@@ -1297,6 +1309,7 @@ C(V_i, V_j) = \left\{
 
     Intuition tells us that for values of the Jaccard similarity threshold ($t$)
     that are either too low or too high we should have lower precision.
+    \textcolor{green}{ar fi utila o nota de subsol care sa aminteasca roulul acestui prag in cadrul algoritmului} 
     For higher thresholds we should also have lower recall values, whereas for
     lower values the recall should be higher.
     This intuition is captured best in \hyperref[fsfig]{the figure} that
@@ -1343,6 +1356,7 @@ C(V_i, V_j) = \left\{
     precision is achieved with $t \geq 0.78$.
 
     \subsubsection{Fellegi-Sunter Model Results}
+    \textcolor{green}{Algebric Model Results}
     
     In the algebraic model of entity resolution, the ground truth and the result
     of the process are represented as partitions over an input set of data.
@@ -1360,15 +1374,17 @@ C(V_i, V_j) = \left\{
 
     But there are also differences.
     Firstly, we can notice how the Talburt-Wang index is monotonically
-    increasing, signaling that the contents of the entity resolution task's
+    increasing (see Figure \ref{fig:mini-alg-twi}), signaling that the contents of the entity resolution task's
     results are not well aligned with the ground truth for lower values of $t$.
-    Then, if we look at the cluster precision, we see that increasing the
-    similarity threshold actually decreases cluster precision.
-    once we take longer prefixes into account.
-    The interpretation is that fewer cluster overlaps tend to happen as expected
+    
+    Then, if we look at the cluster precision (see Figure \ref{fig:mini-alg-cp}), we see that increasing the
+    similarity threshold actually decreases cluster precision once we take longer prefixes into account.
+    The interpretation is that fewer cluster overlaps tend to happen as expected. 
+
     On the other hand, the Talburt-Wang index also increases showing us that the
     partition classes returned by the entity resolution task overlap more and
     more with the ground truth partition classes.
+    
     So just by using these two metrics we're close to understanding that the
     entity resolution algorithm actually introduces a few spurious correlations.
     The first key takeaway is that the algebraic model allows us to think in
@@ -1378,27 +1394,34 @@ C(V_i, V_j) = \left\{
         \begin{minipage}{0.49\textwidth}
             \centering
             \includegraphics[width=\textwidth]{mini-alg-twi}
-            \caption{Talburt-Wang Index}
+            \caption{Talburt-Wang Index
+            \textcolor{green}{nu e nevoie sa se repete legenda la fiecare grafic, mai ales ca intr-un grafic e o singura metrica prezentata; stiu ca e bold partea de metrici din grafic, dar mi se pare prea incarcata figura cu legenda repetata de atatea ori :()}
+            }
+            \label{fig:mini-alg-twi}
         \end{minipage}    
         \begin{minipage}{0.49\textwidth}
             \centering
             \includegraphics[width=\textwidth]{mini-alg-rand}
             \caption{Rand Index}
+            \label{fig:mini-alg-rand}
         \end{minipage}    
         \begin{minipage}{0.49\textwidth}
             \centering
             \includegraphics[width=\textwidth]{mini-alg-adj-rand}
             \caption{Adjusted Rand Index}
+            \label{fig:mini-alg-adj-rand}
         \end{minipage}    
         \begin{minipage}{0.49\textwidth}
             \centering
             \includegraphics[width=\textwidth]{mini-alg-pp}
             \caption{Pairwise Metrics}
+            \label{fig:mini-alg-pp}
         \end{minipage}    
         \begin{minipage}{0.49\textwidth}
             \centering
             \includegraphics[width=\textwidth]{mini-alg-cp}
             \caption{Cluster Metrics}
+            \label{fig:mini-alg-cp}
         \end{minipage}    
         
     \end{figure}\label{algebraic-prffig}
@@ -1409,7 +1432,7 @@ C(V_i, V_j) = \left\{
     accuracy or sensitivity are more important than having a balanced quality.
     What we can see is that the Rand Index (both adjusted and not) shape mimics
     the shape of the statistical F1 measure.
-    We can also see that the pairwise metrics (in particular pairwise recall)
+    We can also see that the pairwise metrics, in particular pairwise recall (see Figure \ref{fig:mini-alg-pp}) 
     even show us similar values with their corresponding statistical cousins.
     What's interesting to note is that at least in the case of recall we see a
     sharp drop for $t \leq 0.15$ for pairwise recall.
@@ -1432,7 +1455,8 @@ C(V_i, V_j) = \left\{
     provides a more transparent and accurate picture over the performance of an
     entity resolution algorithm.
     Both the statistical metrics and the metrics allowed by the algebraic model
-    will find a decent
+    will find a decent 
+    \textcolor{green}{cred ca lipseste ceva...} 
     Without prior knowledge of the algorithm, we can infer at a glance what the
     best setting for that algorithm might be.
     
@@ -1441,6 +1465,7 @@ C(V_i, V_j) = \left\{
     between 0.15 and 0.35.
     Now let's see how that holds up in our second experiment.
        
+
     \subsection{Experimenting with Real Data}
 
     The small dataset highlights the potential benefits of the algebraic model
@@ -1453,44 +1478,55 @@ C(V_i, V_j) = \left\{
             \centering
             \includegraphics[width=\textwidth]{full-fs}
             \caption{Statistical Metrics}
+            \label{fig:full-fs}
         \end{minipage}    
         \begin{minipage}{0.49\textwidth}
             \centering
             \includegraphics[width=\textwidth]{full-alg-pp}
             \caption{Pairwise Metrics}
+            \label{fig:full-alg-pp}
         \end{minipage}    
         \begin{minipage}{0.49\textwidth}
             \centering
             \includegraphics[width=\textwidth]{full-alg-cp}
             \caption{Cluster Metrics}
+            \label{fig:full-alg-cp}
         \end{minipage}    
         \begin{minipage}{0.49\textwidth}
             \centering
             \includegraphics[width=\textwidth]{full-alg-twi}
             \caption{Talburt-Wang Index}
+            \label{fig:full-alf-twi}
         \end{minipage}    
         \begin{minipage}{0.49\textwidth}
             \centering
             \includegraphics[width=\textwidth]{full-alg-rand}
             \caption{Rand Index}
+            \label{fig:full-alg-rand}
         \end{minipage}    
         \begin{minipage}{0.49\textwidth}
             \centering
             \includegraphics[width=\textwidth]{full-alg-adj-rand}
             \caption{Adjusted Rand Index}
+            \label{fig:full-alg-adj-rand}
         \end{minipage}    
     \end{figure}\label{abt-buy-full}
     
     Running the experiment on the data we can see that the observations we made
     on the miniature data set still hold true.
+
     The statistical model is more optimistic about recall and precision at the
-    extremes, the Talburt-Wang index is monotonically increasing and all of the
+    extremes (see Figure \ref{fig:full-fs}), the Talburt-Wang index is monotonically increasing (see Figure \ref{fig:full-alf-twi}) and all of the
     metrics agree on the value of $t$ that provides the best balance between
     precision and accuracy. 
     Perhaps surprinsingly, that value of $t$ is in the interval predicted on the
     miniature dataset ($t=0.36$).
 
-    \section[conclusion]{Conclusions}\label{section:conclusions}
+    \textcolor{green}{Aici trebuie spus ceva despre toate metricile si facuta trimitere spre toate figurile \ref{fig:full-alg-pp}, \ref{fig:full-alg-cp}, \ref{fig:full-alg-rand}, \ref{fig:full-alg-adj-rand}.}
+
+
+    \section[conclusion]{Conclusions}
+    \label{section:conclusions}
 
     After examining two mathematical models for entity resolution, we have put
     forth a couple of notions.
