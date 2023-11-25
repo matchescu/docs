@@ -427,12 +427,43 @@
     The option exists to use a data structure called a `frozen' set, but that
     contract seemed too restrictive to impose on the library's consumers.
 
-    \section{Future Work}\label{sec:conclusions}
+    \section{Future Work}\label{sec:future}
 
     \subsection{Missing Metrics}
 
-    The library of entity resolution metrics is far from complete.
+    There are numerous metrics that the library does not implement\cite{hitesh2012}.
+    To claim that the current models are supported well, the library would need
+    to implement at least:
+    \begin{itemize}
+        \item additional cluster comparisons, such as the Closest Cluster $F_1$, the
+        MUC $F_1$, $B^3 F_1$ and the $CEAF F_1$\cite{hitesh2012}
+        \item additional Rand-like indexes\cite{warrens2022understanding}
+    \end{itemize}
 
+    \subsection{Missing Models}
+
+    Entity resolution has been theorized to be a graph problem\cite{eager2021}
+    or an exercise in lattice theory with an ordering relation based on merge
+    dominance\cite{Ben2009Swoosh}.
+    These models may or may not make use of data structures that are compatible
+    with the current library.
+
+    Furthermore, new models might bring to light new interesting metrics to
+    measure the performance of entity resolution tasks.
+    Variation of information\cite{meila2007vi} and the generalized merge
+    distance\cite{Men10} are two very interesting examples of distance-based
+    metrics for entity resolution performance.
+
+    \section{Conclusions}\label{sec:conclusions}
+
+    In conclusion, this paper presents a library specifically designed for
+    assessing the quality of entity resolution.
+    Its distinguishing features include seamless integration capabilities and a
+    user-friendly application programming interface, deeply rooted in the
+    mathematical models fundamental to entity resolution.
+    These attributes render the library not only highly beneficial but also low
+    maintenance, making it an invaluable asset for all those passionate about
+    entity resolution.
 
     \bibliographystyle{plain} % We choose the "plain" reference style
     \bibliography{er-general,er-related-work,er-additional-references,er-software}
