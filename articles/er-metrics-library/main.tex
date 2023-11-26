@@ -541,7 +541,7 @@
     values of the metrics provided by the library for values of $t$ in the
     interval $\left[0, 1\right)$ at increments of $0.01$.
 
-    \begin{figure*}
+    \begin{figure*}[h!]
         \begin{minipage}{0.32\textwidth}
             \centering
             \includegraphics[width=\textwidth]{sample-usage/mini-fs-precision}
@@ -558,7 +558,7 @@
             \caption{F-S F1}
         \end{minipage}
     \end{figure*}
-    \begin{figure*}
+    \begin{figure*}[h!]
         \begin{minipage}{0.32\textwidth}
             \centering
             \includegraphics[width=\textwidth]{sample-usage/mini-alg-pp}
@@ -575,7 +575,7 @@
             \caption{Pairwise F Measure}
         \end{minipage}
     \end{figure*}
-    \begin{figure*}
+    \begin{figure*}[h!]
         \begin{minipage}{0.32\textwidth}
             \centering
             \includegraphics[width=\textwidth]{sample-usage/mini-alg-cp}
@@ -592,7 +592,7 @@
             \caption{Cluster F Measure}
         \end{minipage}
     \end{figure*}
-    \begin{figure*}
+    \begin{figure*}[h!]
         \begin{minipage}{0.32\textwidth}
             \centering
             \includegraphics[width=\textwidth]{sample-usage/mini-alg-twi}
@@ -612,7 +612,52 @@
 
     \subsection{Performance}
 
+    The performance of code is usually tied to how much time it consumes on the
+    CPU and how much memory.
+    Today's hardware landscape differs significantly from the landscape even two
+    years prior.
+    Regular users run software on various CPU architectures, each with benefits
+    and drawbacks.
     
+    In this section we will refrain from showing data specific to a given
+    architecture.
+    In doing so, we are confined to show the relative performance of the metrics
+    amongst themselves.
+    This methodology still provides useful information in our opinion because it
+    answers the question: which metric is the most expensive to compute amongst
+    the available ones.
+
+    \begin{figure}[h!]
+        \centering
+        \includegraphics[width=\textwidth]{performance/fs-flamegraph}
+        \caption{Fellegi-Sunter CPU Performance}\label{fig:fs-cpu-perf}
+    \end{figure}
+
+    The flame graph in Figure~\ref{fig:fs-cpu-perf}
+    shows that the Fellegi-Sunter metrics take up less CPU than the validation
+    of the input and output of data.
+    In fact computing these metrics proves to be the least onerous operation of
+    the entire process.
+
+    \begin{figure}[h!]
+        \includegraphics[width=\textwidth]{performance/algebraic-flamegraph}
+        \caption{Algebraic CPU Performance}\label{fig:alg-cpu-perf}
+    \end{figure}
+    
+    The same cannot be said about the metrics that work with partitions over an
+    input set.
+    The pairwise and cluster metrics still perform well as indicated in
+    Figure~\ref{fig:alg-cpu-perf}.
+    However, when we move on to consider the performance of the three supported
+    indices, we see that computing the Rand Index and the Adjusted Rand Index
+    prove to be the most onerous operations by far.
+
+    We also note that the \texttt{\char`_convert\char`_to\char`_algebraic}
+    function that checks whether the metrics are applied to two partitions over
+    the same set is also a large consumer of CPU time.
+    However, since that function is executed nine times (once for executing each
+    of the metrics) we declare ourselves content to file a note to improve the
+    performance of that function at a later time.
 
     \section{Future Work}\label{sec:future}
 
