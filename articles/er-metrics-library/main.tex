@@ -14,6 +14,7 @@
 \usepackage{cite}
 \usepackage{array}
 \usepackage{graphicx}
+\usepackage[font=scriptsize]{caption}
 \graphicspath{ {./img/} }
 
 % Document
@@ -55,7 +56,7 @@
     just how well entity resolution solutions fare.
     This paper attempts to address that issue by introducing a new library that
     provides implementations of some of the best known metrics for evaluating
-    entity resolution.
+    entity resolution\cite{matchescu-er-metrics2023}.
 
     In the book ``Introduction to Information Retrieval'' we are acquainted with
     a number of ways in which the performance of information retrieval systems
@@ -505,6 +506,113 @@
     efficient algorithm that needs to be implemented only once.
     For the time being, we favor interoperability over performance and easy
     maintenance.
+
+    \section{Using the Library}\label{sec:usage}
+
+    In this section we go over example usage of the library and some performance
+    metrics we compute over the metrics functions.
+
+    \subsection{Example Usage}
+
+    To provide a visual outlook over the metrics provided by our library we are
+    using a toy data set\cite{expdata2023} containing near duplicates and the
+    PPJoin\cite{ppjoin} entity matching algorithm to perform entity resolution.
+    The PPJoin algorithm matches items by using prefix lengths determined using
+    a Jaccard coefficient $t$.
+    
+    We split the data in the toy data set is split into two data sets by column.
+    The resulting data sets are:
+    
+    \begin{enumerate}[label={\bfseries DG\arabic*:},leftmargin=2cm]
+        \item with the \texttt{`name', `manufacturer', `price', `id'} columns,
+        and
+        \item with the \texttt{`description', `name', `id'} columns\@
+    \end{enumerate}
+
+    Because we have split the data column-wise, we know exactly what the ground
+    truth should be for each of the metrics, assuming that each row in the
+    original toy data set refers to a distinct real-world entity.
+    Because we are working with two data sets, the ground truth for the
+    statistical model is the same as the ground truth for the algebraic model:
+    a list of pairs of matching items obtained by iterating over DG1 and DG2
+    using the same cursor.
+
+    All that's left is to apply the PPJoin algorithm on DG1 and DG2 and plot the
+    values of the metrics provided by the library for values of $t$ in the
+    interval $\left[0, 1\right)$ at increments of $0.01$.
+
+    \begin{figure*}
+        \begin{minipage}{0.32\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{sample-usage/mini-fs-precision}
+            \caption{F-S Precision}
+        \end{minipage}    
+        \begin{minipage}{0.32\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{sample-usage/mini-fs-recall}
+            \caption{F-S Recall}
+        \end{minipage}    
+        \begin{minipage}{0.32\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{sample-usage/mini-fs-f1}
+            \caption{F-S F1}
+        \end{minipage}
+    \end{figure*}
+    \begin{figure*}
+        \begin{minipage}{0.32\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{sample-usage/mini-alg-pp}
+            \caption{Pairwise Precision}
+        \end{minipage}    
+        \begin{minipage}{0.32\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{sample-usage/mini-alg-pr}
+            \caption{Pairwise Recall}
+        \end{minipage}    
+        \begin{minipage}{0.32\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{sample-usage/mini-alg-pf}
+            \caption{Pairwise F Measure}
+        \end{minipage}
+    \end{figure*}
+    \begin{figure*}
+        \begin{minipage}{0.32\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{sample-usage/mini-alg-cp}
+            \caption{Cluster Precision}
+        \end{minipage}    
+        \begin{minipage}{0.32\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{sample-usage/mini-alg-cr}
+            \caption{Cluster Recall}
+        \end{minipage}    
+        \begin{minipage}{0.32\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{sample-usage/mini-alg-cf}
+            \caption{Cluster F Measure}
+        \end{minipage}
+    \end{figure*}
+    \begin{figure*}
+        \begin{minipage}{0.32\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{sample-usage/mini-alg-twi}
+            \caption{Talburt-Wang Index}
+        \end{minipage}    
+        \begin{minipage}{0.32\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{sample-usage/mini-alg-ri}
+            \caption{Rand Index}
+        \end{minipage}    
+        \begin{minipage}{0.32\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{sample-usage/mini-alg-ari}
+            \caption{Adjusted Rand Index}
+        \end{minipage}
+    \end{figure*}
+
+    \subsection{Performance}
+
+    
 
     \section{Future Work}\label{sec:future}
 
