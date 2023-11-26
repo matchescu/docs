@@ -21,7 +21,19 @@
     \theoremstyle{definition}
     \newtheorem{defn}{Definition}[section]
     
-    \section{Abstract}\label{sec:abstract}
+    \abstract\label{abstract}
+
+    Entity resolution, the process of discerning whether two datasets refer to
+    the same real-world entity, is crucial across various domains.
+    Its quality assessment is increasingly vital due to the extensive practical
+    applications in fields such as natural language processing, information
+    retrieval, and machine learning.
+    With Python emerging as the predominant programming language in these areas,
+    this paper introduces a novel library dedicated exclusively to evaluating
+    the qualitative performance of entity resolution tasks.
+    This library not only facilitates precise evaluation but also aligns with
+    contemporary research and application trends, making it a significant tool
+    for practitioners and researchers in the field.
 
 
     \section{Introduction}\label{sec:introduction}
@@ -41,6 +53,9 @@
     Being a problem whose solutions could have a deep impact on both individual
     well-being and human society, we are obviously interested in understanding
     just how well entity resolution solutions fare.
+    This paper attempts to address that issue by introducing a new library that
+    provides implementations of some of the best known metrics for evaluating
+    entity resolution.
 
     In the book ``Introduction to Information Retrieval'' we are acquainted with
     a number of ways in which the performance of information retrieval systems
@@ -54,18 +69,17 @@
     Entity resolution systems partly function as information retrieval systems,
     as they determine whether multiple data points refer to the same real-world
     entity.
-    This capability to discern data identity is the fundamental information need
-    of any entity resolution system.
+    This capability to discern data identity within a context is the fundamental
+    information need of any entity resolution system.
     Is it therefore fitting to use information retrieval metrics for entity
     resolution?
     This seems to be the consensus drawn in the scientific literature as we
     shall see in the next section.
 
-    The paper presents a library featuring implementations of various
+    The library we are introducing features implementations of various
     information retrieval metrics adapted for entity resolution.
-    These metrics are designed to evaluate entity resolution functions, yet it's
-    important to acknowledge the distinct mathematical models underlying entity
-    resolution compared to information retrieval.
+    It's also important to acknowledge the distinct mathematical models
+    underlying entity resolution compared to information retrieval.
     The library sets itself apart by organizing metrics based on their
     compatibility with entity resolution models, influenced partly by the
     underlying differences in data structures that are characteristic to each
@@ -75,8 +89,8 @@
 
     Measuring entity resolution quality was a subject of interest ever since the
     first paper on the subject surfaced\cite{newcombe1959}.
-    It speaks about accuracy and contamination similarly to how we describe true
-    and false positives today.
+    The paper speaks about accuracy and contamination similarly to how we
+    describe true and false positives today.
     The fundamental theory of record linkage\cite{fs1969} offers a probabilistic
     approach to evaluating the success of an entity resolution task.
     It suggests methods to affect the results by selecting suitable thresholds
@@ -405,35 +419,71 @@
     It makes use of the Numpy library\cite{harris2020numpy} to accelerate
     the expensive computations required by some of the implemented metrics.
 
-    The technology choice deserves special attention because of an uncommon
-    reason.
+    Python propagates standards throughout the community using protocols.
+    Python protocols\cite{pyproto2017} provide a clean and effortless way to
+    integrate new components, libraries and applications within the Python
+    ecosystem.
+    While other libraries\cite{nmeth2020scipy} promote their own API by
+    requiring users to use labels or adapt their own data to the strictures of
+    the API, our library takes full advantage of Python protocols by leveraging
+    protocols, such as the \texttt{Iterable} and \texttt{Hashable}.
+
+    All our library functions expect \texttt{Iterable} sequences as their input.
+    In fact, the ground truth and entity resolution result can be any
+    \texttt{Iterable} data structure that complies with the entity resolution
+    model of choice.
+    For the statistical model, the library accepts \texttt{Iterable[tuple]}
+    input arguments, where the inner tuple must contain only two items.
+    For the algebraic model, the library represents partitions as
+    \texttt{Iterable[set]} instances.
+    Since sets operate on \texttt{Hashable} items, virtually any instance that
+    implements the \texttt{Hashable} protocol can be passed as input to the
+    library.
+    
+    Adhering to the \texttt{Hashable} protocol has a few less obvious advantages
+    over using labels to compute metrics:
+    \begin{itemize}
+        \item it works out of the box with basic types such as numbers or
+        strings, but also with tuples or lists;
+        \item if custom objects are used to represent the data that describes
+        entities, the objects can be reused when computing metrics thus saving
+        the memory that would otherwise be allocated for labeling the data;
+        \item the only adaptation required to use this library is implementing
+        the well-known \texttt{Hashable} protocol, leading to a much lower
+        implementation effort\@
+    \end{itemize}
+
+    The technology choice deserves special attention because of a limitation it
+    imposes on the design, too.
     Normally, a partition $P$ over a set $X$ is defined as a set of
     non-overlapping subsets containing all the elements from $X$, that is:
     \[
-        P = \{ C_1, C_2, \ldots, C_n | \bigcap\limits^n_{i=1}C_i=\emptyset \land \bigcup\limits^n_{i=1}C_i=X \}
+        P(X) = \{ C_1, C_2, \ldots, C_n | \bigcap\limits^n_{i=1}C_i=\emptyset \land \bigcup\limits^n_{i=1}C_i=X \}
     \]
 
     The library implements metrics that compare partitions, but it requires the
-    partition to be specified as a \textit{list} of sets, instead of a set of
+    partition to be specified as an \texttt{Iterable[set]}, instead of a set of
     sets.
-    The reason behind this choice is purely technological and fundamentally lies
-    with the choices made by the Python core team:
-    \begin{enumerate}
-        \item allowing the set data structure to be changed in memory over time,
-        \item not providing a hashing function for the set data structure.
-    \end{enumerate}
+    The reason behind this choice is purely technological and lies with the
+    choice of the Python core team to not make \texttt{set} instances
+    \texttt{Hashable}.
+    This entails an obligation to verify that, when partitions over a set are
+    expected as the input arguments of a library function, that function will
+    verify that the input arguments are partitions over the same set.
 
-    The two choices essentially negate using sets within sets.
-    The option exists to use a data structure called a `frozen' set, but that
-    contract seemed too restrictive to impose on the library's consumers.
+    Using the \texttt{frozenset} data type (which is \texttt{Hashable}) instead
+    of the \texttt{Iterable} protocol would decrease the interoperability of the
+    library without substantial gain.
 
     \section{Future Work}\label{sec:future}
 
     \subsection{Missing Metrics}
 
-    There are numerous metrics that the library does not implement\cite{hitesh2012}.
-    To claim that the current models are supported well, the library would need
-    to implement at least:
+    The entity resolution models we have touched upon so far support many more
+    metrics that the library does not currently implement.
+    Hitesh et al provide an insightful overview\cite{hitesh2012}.
+    For well-rounded support of the models mentioned so far, the library would
+    need to implement at least:
     \begin{itemize}
         \item additional cluster comparisons, such as the Closest Cluster $F_1$, the
         MUC $F_1$, $B^3 F_1$ and the $CEAF F_1$\cite{hitesh2012}
@@ -442,17 +492,21 @@
 
     \subsection{Missing Models}
 
-    Entity resolution has been theorized to be a graph problem\cite{eager2021}
-    or an exercise in lattice theory with an ordering relation based on merge
-    dominance\cite{Ben2009Swoosh}.
-    These models may or may not make use of data structures that are compatible
-    with the current library.
+    Besides the models we have covered herein, entity resolution has been
+    theorized to be a graph problem\cite{eager2021} or an exercise in lattice
+    theory with an ordering relation based on
+    ``merge dominance''\cite{Ben2009Swoosh}.
+    The mathematical model foundational to entity resolution significantly
+    influences the data structures employed in implementing metrics that
+    evaluate the quality of an entity resolution task within that model.
+    More work is required to distil the data structures and the metrics we can
+    use to evaluate entity resolution tasks using those models.
 
-    Furthermore, new models might bring to light new interesting metrics to
+    New models might also bring to light new interesting metrics to
     measure the performance of entity resolution tasks.
     Variation of information\cite{meila2007vi} and the generalized merge
-    distance\cite{Men10} are two very interesting examples of distance-based
-    metrics for entity resolution performance.
+    distance\cite{Men10} are two examples of distance-based metrics for entity
+    that we would like to implement.
 
     \section{Conclusions}\label{sec:conclusions}
 
