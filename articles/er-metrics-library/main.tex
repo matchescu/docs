@@ -21,7 +21,8 @@
     \theoremstyle{definition}
     \newtheorem{defn}{Definition}[section]
     
-    \textcolor{green}{e nevoie de titlu!}
+    \textcolor{green}{e nevoie de titlu! de ex 
+    Metrics for evaluating ER: analysis, selection, and library}
     
     \abstract\label{abstract}
 
@@ -29,7 +30,8 @@
     the same real-world entity, is crucial across various domains.
     Its quality assessment is increasingly vital due to the extensive practical
     applications in fields such as natural language processing, information
-    retrieval, and machine learning.
+    retrieval, and machine learning. 
+    \textcolor{green}{as zice ca nu exista o biblioteca consistenta dedicata si tocmai de aceea vine aceasta propunere} 
     With Python emerging as the predominant programming language in these areas,
     this paper introduces a novel library dedicated exclusively to evaluating
     the qualitative performance of entity resolution tasks.
@@ -87,6 +89,31 @@
     differences in data structures that are characteristic to each model.
     Special attention is given to interoperability and the seamless integration
     of the library into the Python programming language ecosystem.
+
+
+    \textcolor{green}{as reliefa contributiile, cu bullets:\\ 
+    1. overview al metricilor,\\
+    2. implementare eficienta (pt volume mari de date) si oarecum agnostica de algoritmul de rezolvare a ER;\\
+    3. implementare open-source a metricilor
+    }
+
+    \textcolor{green}{eu as incepe cu o sectiune Background care sa prezinte "abc-ul conceptelor":\\
+    - problema de ER, \\
+    - cele 2 modele, mentionand ca ele sunt SOTA --- ceea ce e acum in Section \ref{sec:models}\\
+    - metricile existente --- ceea ce e acum in Section \ref{sec:metrics}\\ }
+
+    \textcolor{green}{apoi ar veni informatii despre:\\
+    - cum vad altii perspectiva evaluarii (ceea ce e in Related work \ref{sec:related}) si \\
+    - cum o vezi tu: de ce e nevoie de o abordare noua (ceea ce e acum in Section \ref{sec:discussion}) si cum e implmentata aceasta propunere (ceea ce e in Section \ref{sec:tech})}
+
+    \textcolor{green}{urmatoarea sectiune ar putea prezenta:\\
+    - cateva rezultate obtinute prin folosirea bibliotecii, insistand pe aspecte legate de eficienta bibliotecii\\
+    - un scurt ghid pentru alegerea metricilor atunci cand e nevoie de evaluarea unui algo de ER}
+
+    \textcolor{green}{apoi ar veni concluziile si directiile viitoare (adica ceea ce e in section \ref{sec:conclusions} si \ref{sec:future})}
+
+
+
 
     \section{Related Work}\label{sec:related}
 
@@ -435,10 +462,18 @@
         Cluster Recall(X, Y) &= \frac{|{X}\cap{Y}|}{|Y|}\\
         Cluster F &= \frac{2\cdot{Cluster Precision}\cdot{Cluster Recall}}{Cluster Precision + Cluster Recall}
     \end{align*}
+    \textcolor{green}{mai devreme, cand era vorba de partitii, ai folosit $A$ si $B$, iar $X$ si $Y$ erau folosite pt multimi. Ar fi bine sa fie consistetne/uniforme notatiile}
 
     \section{Technology}\label{sec:tech}
 
-    The library is implemented using the Python programming language\cite{python}.
+    \textcolor{green}{aici as zice\\
+    - mai intai ceva generalitati (overview-ul bibliotecii), \\
+    - apoi de compatibilitati, \\
+    - programming environment (detaliile despre Python)\\
+    - elementele de optimizare / eficienta}
+
+
+    The proposed library is implemented using the Python programming language\cite{python}.
     It makes use of the Numpy library\cite{harris2020numpy} to accelerate
     the expensive computations required by some of the implemented metrics.
 
