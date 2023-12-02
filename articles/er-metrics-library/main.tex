@@ -22,20 +22,19 @@
     \theoremstyle{definition}
     \newtheorem{defn}{Definition}[section]
     
-    \textcolor{green}{e nevoie de titlu! de ex 
-    Metrics for evaluating ER: analysis, selection, and library}
-    
+    \title{A Novel Library for Evaluating Entity Resolution Results}
+
     \abstract\label{abstract}
 
     Entity resolution, the process of discerning whether two datasets refer to
     the same real-world entity, is crucial across various domains.
     Its quality assessment is increasingly vital due to the extensive practical
     applications in fields such as natural language processing, information
-    retrieval, and machine learning. 
-    \textcolor{green}{as zice ca nu exista o biblioteca consistenta dedicata si tocmai de aceea vine aceasta propunere} 
+    retrieval, and machine learning.
     With Python emerging as the predominant programming language in these areas,
-    this paper introduces a novel library dedicated exclusively to evaluating
-    the qualitative performance of entity resolution tasks.
+    this paper attempts to fill in a gap when evaluating the qualitative
+    performance of entity resolution tasks by proposing a novel consistent
+    library dedicated exclusively for this purpose.
     This library not only facilitates precise evaluation but also aligns with
     contemporary research and application trends, making it a significant tool
     for practitioners and researchers in the field.
@@ -91,30 +90,73 @@
     Special attention is given to interoperability and the seamless integration
     of the library into the Python programming language ecosystem.
 
+    This article presents an overview of two existing mathematical models for
+    entity resolution which, in spite of their age, are still widely used and
+    still represent the state of the art.
+    Following the work that relates to this article, we discuss our opinion on
+    the reasons for implementing a new library that facilitates measuring the
+    quality of entity resolution tasks.
+    Then we present this library, along its key features:
+    \begin{enumerate}
+        \item embracing an OpenSource licensing model,
+        \item efficient implementations using state of the art libraries under
+        a very popular platform, and
+        \item a design that is agnostic to the entity resolution implementation
+        design.
+    \end{enumerate} 
+    Naturally, we provide sample usage and relative performance metrics that
+    should help potential users of the library to glean its strengths and
+    weaknesses.
 
-    \textcolor{green}{as reliefa contributiile, cu bullets:\\ 
-    1. overview al metricilor,\\
-    2. implementare eficienta (pt volume mari de date) si oarecum agnostica de algoritmul de rezolvare a ER;\\
-    3. implementare open-source a metricilor
-    }
+    \section{Entity Resolution Models}\label{sec:models}
+    \subsection{Fellegi-Sunter Model}
+    In the late 1960s Ivan Fellegi and Alan Sunter wrote the seminal
+    paper\cite{fs1969} for what they called record linkage and what would later
+    become known as entity resolution.
+    To this day, their mathematical model based on probability theory is the
+    most popular way of formalizing the entity resolution problem.
+    In this mathematical model, entity resolution is a function that aids in 
+    probabilistic decision making.
+    
+    In this model of entity resolution, the process primarily involves comparing
+    data from two sources.
+    The essential step is matching two items --- one from each source, after
+    which a decision is made to categorize the match as a `link', `non-link', or
+    `possible link'.
+    Consequently, any matching algorithm under this model typically returns
+    pairs of items from the original data sources, each tagged as one of these
+    categories.
+    However, in practical applications today, this process is often simplified
+    to just returning a list of pairs labeled as `links'.
 
-    \textcolor{green}{eu as incepe cu o sectiune Background care sa prezinte "abc-ul conceptelor":\\
-    - problema de ER, \\
-    - cele 2 modele, mentionand ca ele sunt SOTA --- ceea ce e acum in Section \ref{sec:models}\\
-    - metricile existente --- ceea ce e acum in Section \ref{sec:metrics}\\ }
+    This intuitive explanation gives us the structure of the input we can expect
+    when we use the Fellegi-Sunter entity resolution model: an iterable sequence
+    of pairs.
 
-    \textcolor{green}{apoi ar veni informatii despre:\\
-    - cum vad altii perspectiva evaluarii (ceea ce e in Related work \ref{sec:related}) si \\
-    - cum o vezi tu: de ce e nevoie de o abordare noua (ceea ce e acum in Section \ref{sec:discussion}) si cum e implmentata aceasta propunere (ceea ce e in Section \ref{sec:tech})}
+    The metrics that are implemented with the Fellegi-Sunter model of entity
+    resolution in mind will accept iterable sequences of pairs as input where
+    the ground truth and the result of the entity resolution task are concerned.
 
-    \textcolor{green}{urmatoarea sectiune ar putea prezenta:\\
-    - cateva rezultate obtinute prin folosirea bibliotecii, insistand pe aspecte legate de eficienta bibliotecii\\
-    - un scurt ghid pentru alegerea metricilor atunci cand e nevoie de evaluarea unui algo de ER}
+    \subsection{Algebraic Model}
+    The algebraic model for entity resolution, initially conceived for assessing
+    information quality in large datasets\cite{tal2007algebraic}, was later
+    refined to describe the entity resolution process itself\cite{Tal11}.
+    This model treats entity resolution as an algebraic equivalence relation
+    over a given input set, which can include data from as many original sources
+    as necessary.
+    
+    The unique aspect of this model lies in the characteristics of equivalence
+    relations\cite{halmos1960naive}.
+    These relations create partitions over the input set, with each partition
+    component equivalent to an equivalence class of the relation\cite{Tal11}.
+    Conversely, a partition over a set can also induce an equivalence relation.
 
-    \textcolor{green}{apoi ar veni concluziile si directiile viitoare (adica ceea ce e in section \ref{sec:conclusions} si \ref{sec:future})}
-
-
-
+    With this in mind, evaluating the outcome of an entity resolution task
+    becomes as easy as comparing two partitions: the partition that induces the
+    ideal equivalence relation (the gold standard or ground truth) to the
+    partition that is produced by the entity resolution task.
+    The library supports a few metrics for comparing partitions, all of which
+    expect that a partition is represented as a list of sets.
 
     \section{Related Work}\label{sec:related}
 
@@ -250,56 +292,6 @@
     always measured against a ground truth\cite{manning2008}.
     The other assumption is that the ground truth and the entity resolution
     result are both structured under the same mathematical model.
-
-    \section{Entity Resolution Models}\label{sec:models}
-    \subsection{Fellegi-Sunter Model}
-    In the late 1960s Ivan Fellegi and Alan Sunter wrote the seminal
-    paper\cite{fs1969} for what they called record linkage and what would later
-    become known as entity resolution.
-    To this day, their mathematical model based on probability theory is the
-    most popular way of formalizing the entity resolution problem.
-    In this mathematical model, entity resolution is a function that aids in 
-    probabilistic decision making.
-    
-    In this model of entity resolution, the process primarily involves comparing
-    data from two sources.
-    The essential step is matching two items --- one from each source, after
-    which a decision is made to categorize the match as a `link', `non-link', or
-    `possible link'.
-    Consequently, any matching algorithm under this model typically returns
-    pairs of items from the original data sources, each tagged as one of these
-    categories.
-    However, in practical applications today, this process is often simplified
-    to just returning a list of pairs labeled as `links'.
-
-    This intuitive explanation gives us the structure of the input we can expect
-    when we use the Fellegi-Sunter entity resolution model: an iterable sequence
-    of pairs.
-
-    The metrics that are implemented with the Fellegi-Sunter model of entity
-    resolution in mind will accept iterable sequences of pairs as input where
-    the ground truth and the result of the entity resolution task are concerned.
-
-    \subsection{Algebraic Model}
-    The algebraic model for entity resolution, initially conceived for assessing
-    information quality in large datasets\cite{tal2007algebraic}, was later
-    refined to describe the entity resolution process itself\cite{Tal11}.
-    This model treats entity resolution as an algebraic equivalence relation
-    over a given input set, which can include data from as many original sources
-    as necessary.
-    
-    The unique aspect of this model lies in the characteristics of equivalence
-    relations\cite{halmos1960naive}.
-    These relations create partitions over the input set, with each partition
-    component equivalent to an equivalence class of the relation\cite{Tal11}.
-    Conversely, a partition over a set can also induce an equivalence relation.
-
-    With this in mind, evaluating the outcome of an entity resolution task
-    becomes as easy as comparing two partitions: the partition that induces the
-    ideal equivalence relation (the gold standard or ground truth) to the
-    partition that is produced by the entity resolution task.
-    The library supports a few metrics for comparing partitions, all of which
-    expect that a partition is represented as a list of sets.
 
     \section{Supported Metrics}\label{sec:metrics}
     
@@ -455,28 +447,26 @@
     In this paragraph `clusters' refer to the equivalence classes of the entity
     resolution relation as it is formalized in the algebraic model.
     
-    Given two partitions $X$ and $Y$, the cluster measures are given by the
+    Given two partitions $A$ and $B$, the cluster measures are given by the
     following formulae:
 
     \begin{align*}
-        Cluster Precision(X, Y) &= \frac{|{X}\cap{Y}|}{|X|}\\
-        Cluster Recall(X, Y) &= \frac{|{X}\cap{Y}|}{|Y|}\\
+        Cluster Precision(A, Y) &= \frac{|{A}\cap{B}|}{|A|}\\
+        Cluster Recall(A, Y) &= \frac{|{A}\cap{B}|}{|B|}\\
         Cluster F &= \frac{2\cdot{Cluster Precision}\cdot{Cluster Recall}}{Cluster Precision + Cluster Recall}
     \end{align*}
-    \textcolor{green}{mai devreme, cand era vorba de partitii, ai folosit $A$ si $B$, iar $X$ si $Y$ erau folosite pt multimi. Ar fi bine sa fie consistetne/uniforme notatiile}
 
     \section{Technology}\label{sec:tech}
 
-    \textcolor{green}{aici as zice\\
-    - mai intai ceva generalitati (overview-ul bibliotecii), \\
-    - apoi de compatibilitati, \\
-    - programming environment (detaliile despre Python)\\
-    - elementele de optimizare / eficienta}
-
-
-    The proposed library is implemented using the Python programming language\cite{python}.
+    The proposed library is implemented using the Python programming
+    language (version 3.11)\cite{python}.
     It makes use of the Numpy library\cite{harris2020numpy} to accelerate
     the expensive computations required by some of the implemented metrics.
+    The library does not pose any additional hardware or software portability
+    issues over the ones that are specific to Python and Numpy.
+    In fact, the library design values portability and a high level of
+    interoperability above other desirable traits such as performance and does
+    so first and foremost by abiding to existing standards.
 
     Python propagates standards throughout the community using protocols.
     Python protocols\cite{pyproto2017} provide a clean and effortless way to
@@ -541,8 +531,15 @@
     maintainability of the library would be marginal because checking that two
     iterable sequences of sets are partitions over the same set is a trivial and
     efficient algorithm that needs to be implemented only once.
-    For the time being, we favor interoperability over performance and easy
-    maintenance.
+
+    While the library does focus on interoperability and portability, it does
+    not disregard performance.
+    The most notable design choice that increases the computational and memory
+    efficiency of the library has to do with adopting Numpy as a primary
+    dependency.
+    Numpy helps by externalizing resource intensive calculations (especially
+    those that are required for clustering metrics) to subroutines that are
+    compiled to native machine code.
 
     \section{Using the Library}\label{sec:usage}
 
@@ -649,20 +646,44 @@
 
     \subsection{Performance}
 
-    The performance of code is usually tied to how much time it consumes on the
-    CPU and how much memory.
-    Today's hardware landscape differs significantly from the landscape even two
-    years prior.
-    Regular users run software on various CPU architectures, each with benefits
-    and drawbacks.
+    Typically, we evaluate CPU performance in terms of throughput (for example
+    millions of operations per second or MIPS).
+    However ``comparing the MIPS of two different CPU architectures, such as
+    Reduced Instruction Set Computers (RISCs) and Complex Instruction Set
+    Computers (CISCs), is meaningless since the instructions on the two
+    computers are unequal''\cite{jain1991profiling}.
+    Since the introduction of a new generation of laptops by Apple, this concern
+    is more present than ever.
+
+    A concern that's similar to the one raised for CPU profiling can be raised
+    about memory profiling in relation to the underlying operating system.
+    Due to the variability of the outcomes during experimentation and the fact
+    that all memory consumption is very dependent on the operating system and
+    standard C library used for compiling and linking the Python interpreter,
+    we found memory profiling not to provide great insights.
+
+    Under these circumstances we have chosen to elaborate a method of profiling
+    the CPU usage of the library which is agnostic to the underlying hardware.
+    CPU profiling is useful in the context of judging the metrics provided by
+    the library relatively to one another.
+    Our goal is to provide enough information so that by corroborating this
+    information with our previous sample we gain a good idea about which metric
+    supported by the library to use under which circumstances.
     
-    In this section we will refrain from showing data specific to a given
-    architecture.
-    In doing so, we are confined to show the relative performance of the metrics
-    amongst themselves.
-    This methodology still provides useful information in our opinion because it
-    answers the question: which metric is the most expensive to compute amongst
-    the available ones.
+    For our CPU profiling session, we run the PPJoin algorithm over the same
+    dataset as in the previous experiment and store the results in a file
+    along with the ground truth.
+    In our sample application for this experiment, we load the results and 
+    ground truth from the file and run all of the Fellegi-Sunter and algebraic
+    metrics while profiling the CPU usage.
+    We have broken down the experiment into two steps to prevent running the
+    entity resolution task from interefering with collecting the CPU profiling
+    data.
+
+    We use flamegraphs\cite{flamegraphs2013} to represent the CPU usage
+    patterns in the library and the \texttt{cProfile} package from the Python
+    standard library to trace the execution of the functions that compute
+    metrics.
 
     \begin{figure}[h!]
         \centering
@@ -673,8 +694,27 @@
     The flame graph in Figure~\ref{fig:fs-cpu-perf}
     shows that the Fellegi-Sunter metrics take up less CPU than the validation
     of the input and output of data.
-    In fact computing these metrics proves to be the least onerous operation of
-    the entire process.
+    The main consumers are shown in Table~\ref{table:fs-cpu-perf}
+    
+    \begin{table}[h!]
+        \centering
+        \begin{tabular}{||c c c c||}
+            \hline
+            Metric & Cumulative Time & Number of Calls & Time per Call \\ [0.5ex]
+            \hline\hline
+            \texttt{recall} & 7.208e-06 & 2 & 3.604e-06 \\
+            \hline
+            \texttt{f1} & 5.291e-06 & 1 & 5.291e-06 \\
+            \hline
+            \texttt{precision} & 4.75e-06 & 2 & 2.375e-06 \\
+            \hline
+        \end{tabular}
+        \caption{Fellegi-Sunter Metrics}
+        \label{table:fs-cpu-perf}
+    \end{table}
+
+    The best lesson we can learn here is that computing the statistical metrics
+    is not resource-intensive at all.
 
     \begin{figure}[h!]
         \includegraphics[width=\textwidth]{performance/algebraic-flamegraph}
@@ -683,18 +723,58 @@
     
     The same cannot be said about the metrics that work with partitions over an
     input set.
+    Table~\ref{table:alg-cpu-perf} presents how the algebraic metrics perform.
+
+    \begin{table}[h!]
+        \centering
+        \begin{tabular}{||c c c c||}
+            \hline
+            Metric & Cumulative Time & Number of Calls & Time per Call \\ [0.5ex]
+            \hline\hline
+            \texttt{rand\char`_index} & 0.0004027 & 1 & 0.0004027 \\
+            \hline
+            \texttt{adjusted\char`_rand\char`_index} & 0.0001944 & 1 & 0.0001944 \\
+            \hline
+            \texttt{twi} & 9.146e-05 & 1 & 9.146e-05 \\
+            \hline
+            \texttt{cluster\char`_comparison\char`_measure} & 5.35e-05 & 1 & 5.35e-05 \\
+            \hline
+            \texttt{cluster\char`_recall} & 5.154e-05 & 2 & 2.577e-05 \\
+            \hline
+            \texttt{cluster\char`_precision} & 4.271e-05 & 2 & 2.135e-05 \\
+            \hline
+            \texttt{pair\char`_precision} & 2.971e-05 & 2 & 1.485e-05 \\
+            \hline
+            \texttt{pair\char`_recall} & 2.613e-05 & 2 & 1.306e-05 \\
+            \hline
+            \texttt{pair\char`_comparison\char`_measure} & 2.596e-05 & 1 & 2.596e-05 \\
+            \hline
+        \end{tabular}
+        \caption{Algebraic Metrics}
+        \label{table:alg-cpu-perf}
+    \end{table}
+
     The pairwise and cluster metrics still perform well as indicated in
     Figure~\ref{fig:alg-cpu-perf}.
     However, when we move on to consider the performance of the three supported
     indices, we see that computing the Rand Index and the Adjusted Rand Index
     prove to be the most onerous operations by far.
 
-    We also note that the \texttt{\char`_convert\char`_to\char`_algebraic}
+    We take note that the \texttt{\char`_convert\char`_to\char`_algebraic}
     function that checks whether the metrics are applied to two partitions over
     the same set is also a large consumer of CPU time.
-    However, since that function is executed nine times (once for executing each
-    of the metrics) we declare ourselves content to file a note to improve the
+    However, since that function is executed nine times (once for computing each
+    metric) we declare ourselves content to file a note to improve the
     performance of that function at a later time.
+
+    Perhaps the most important lesson to learn here is that algebraic metrics
+    are an order of magnitude more expensive to compute than statistical
+    metrics with this library.
+    Moreover, not all algebraic metrics were created equal: the rand indexes
+    are an order of magnitude more expensive to compute than the other metrics.
+    Therefore, because the Talburt-Wang index seems to approximate the Rand
+    index well enough, it might be a preferable choice to measure how well an
+    entity resolution algorithm performs clustering.
 
     \section{Future Work}\label{sec:future}
 
