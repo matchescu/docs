@@ -1,10 +1,5 @@
-%! Author = andrei.olar@ubbcluj.ro
-%! Date = 24.11.2023
-
-% Preamble
 \documentclass[a4paper,twoside]{article}
 
-% Packages
 \usepackage{epsfig}
 \usepackage{subcaption}
 \usepackage{calc}
@@ -33,15 +28,15 @@
 
 % Document
 \begin{document}
-    \theoremstyle{definition}
-    \newtheorem{defn}{Definition}[section]
-    
-    \title{A Novel Library for Evaluating Entity Resolution Results}
+    \title{PyResolveMetrics: A Standards-Compliant, Theory-Consistent, and Efficient Approach to Entity Resolution Metrics}
+    \author{\authorname{Andrei Olar\sup{1}\orcidAuthor{0000-0000-0000-0000}}
+    \affiliation{\sup{1}Faculty of Computer Science, Babes-Bolyai University}
+    \email{\{andrei.olar\}@ubbcluj.ro}
+    }
+    \keywords{Entity resolution,Metrics,Library,Open Source,Standards-Compliant,Theoretical Model,Efficient}
 
-    \abstract\label{abstract}
-
-    Entity resolution, the process of discerning whether two datasets refer to
-    the same real-world entity, is crucial across various domains.
+    \abstract{Entity resolution, the process of discerning whether multiple data
+    refer to the same real-world entity, is crucial across various domains.
     Its quality assessment is increasingly vital due to the extensive practical
     applications in fields such as natural language processing, information
     retrieval, and machine learning.
@@ -51,8 +46,7 @@
     library dedicated exclusively for this purpose.
     This library not only facilitates precise evaluation but also aligns with
     contemporary research and application trends, making it a significant tool
-    for practitioners and researchers in the field.
-
+    for practitioners and researchers in the field.}
 
     \section{Introduction}\label{sec:introduction}
     Entity resolution involves determining whether two pieces of information
@@ -104,23 +98,27 @@
     Special attention is given to interoperability and the seamless integration
     of the library into the Python programming language ecosystem.
 
-    This article presents an overview of two existing mathematical models for
-    entity resolution which, in spite of their age, are still widely used and
-    still represent the state of the art.
-    Following the work that relates to this article, we discuss our opinion on
-    the reasons for implementing a new library that facilitates measuring the
-    quality of entity resolution tasks.
-    Then we present this library, along its key features:
+    In short, we present a library that has the following key features:
+
     \begin{enumerate}
         \item embracing an OpenSource licensing model,
-        \item efficient implementations using state of the art libraries under
+        \item efficient implementation using state of the art libraries under
         a very popular platform, and
-        \item a design that is agnostic to the entity resolution implementation
-        design.
+        \item a design that is agnostic to the entity resolution implementation.
     \end{enumerate} 
-    Naturally, we provide sample usage and relative performance metrics that
-    should help potential users of the library to glean its strengths and
-    weaknesses.
+
+    The outline of this article is as follows.
+    After this introduction, we overview two existing mathematical models for
+    entity resolution which, in spite of their age, are still widely used and
+    still represent the state of the art.
+    Then we go through other work that relates to this paper.
+    Subsequently, we present the new library and pay special attention to the
+    reasons for implementing it.
+    We go over the metrics that are implemented, the technological and design
+    choices that were made, an example of using the library and a performance
+    evaluation of the functions implemented by the library.
+    In the end we offer some conclusions and present aspects that require more
+    work.
 
     \section{Entity Resolution Models}\label{sec:models}
     \subsection{Fellegi-Sunter Model}
@@ -231,7 +229,7 @@
     There are also other Python packages that implement some or all of the
     metrics provided by our library\cite{nmeth2020scipy,ereval}.
 
-    \section{<Insert Library Name Here>}\label{sec:library}
+    \section{PyResolveMetrics}\label{sec:library}
 
     In this context, the necessity for yet another specialized library dedicated
     to evaluating entity resolution metrics might seem redundant.
@@ -436,17 +434,17 @@
     ratio of pairs that are in both sets to the total amount of pairs of the
     reference set.
 
-    \[ Pair Precision(X, Y) = \frac{|{Pairs(X)}\cap{Pairs(Y)}|}{|Pairs(X)|} \]
+    \[ PP(X, Y) = \frac{|{Pairs(X)}\cap{Pairs(Y)}|}{|Pairs(X)|} \]
     
     The pairwise recall is given by the ratio of pairs that are in both sets
     to the number of pairs in the comparison set\cite{hitesh2012}.
 
-    \[ Pair Recall(X, Y) = \frac{|{Pairs(X)}\cap{Pairs(Y)}|}{|Pairs(Y)|} \]
+    \[ PR(X, Y) = \frac{|{Pairs(X)}\cap{Pairs(Y)}|}{|Pairs(Y)|} \]
 
     The pairwise F-measure is given by the harmonic mean of the pairwise
     precision and pairwise recall.
 
-    \[ Pair F = \frac{2 \cdot Pair Precision \cdot Pair Recall}{Pair Precision + Pair Recall} \]
+    \[ PF = \frac{2 \cdot PP \cdot PR}{PP + PR} \]
 
     The library computes these metrics on partitions by iterating through the
     equivalence classes of each partition generated by the entity resolution
@@ -465,9 +463,9 @@
     following formulae:
 
     \begin{align*}
-        Cluster Precision(A, Y) &= \frac{|{A}\cap{B}|}{|A|}\\
-        Cluster Recall(A, Y) &= \frac{|{A}\cap{B}|}{|B|}\\
-        Cluster F &= \frac{2\cdot{Cluster Precision}\cdot{Cluster Recall}}{Cluster Precision + Cluster Recall}
+        CP(A, Y) &= \frac{|{A}\cap{B}|}{|A|}\\
+        CR(A, Y) &= \frac{|{A}\cap{B}|}{|B|}\\
+        CF &= \frac{2\cdot{CP}\cdot{CR}}{CP + CR}
     \end{align*}
 
     \subsection{Technology}\label{sec:tech}
@@ -554,11 +552,6 @@
     Numpy helps by externalizing resource intensive calculations (especially
     those that are required for clustering metrics) to subroutines that are
     compiled to native machine code.
-
-    \subsection{Using the Library}\label{sec:usage}
-
-    In this section we go over example usage of the library and some performance
-    metrics we compute over the metrics functions.
 
     \subsection{Example Usage}
 
@@ -795,13 +788,19 @@
     \subsection{Conclusions}
 
     We have introduced a library for evaluating entity resolution results that
-    is based on standards and Python protocols making it highly interoperable.
+    is based on standards and Python protocols, making it highly interoperable.
     The application programming interface exposed by this library is deeply
     rooted in the mathematical models fundamental to entity resolution.
-    Working with pairs or groups of entity references instead of having to label
+    By doing so the library ensures that data is represented in a way that is
+    specific to entity resolution and not specific to another scientific problem
+    or to a particular entity resolution system or task.
+    Working with pairs or groups of entity references instead of labeling
     data should provide a much more user-friendly experience.
-    The performance of the library is sound and the accuracy of the implemented
-    metrics is verified automatically.
+
+    The performance of the library is sound because it externalizes
+    computationally expensive tasks to native code.
+    The accuracy of the implemented metrics is verified automatically through
+    unit tests.
 
     These attributes render the library not only highly beneficial but also low
     maintenance, making it an invaluable asset for all those passionate about
