@@ -2,19 +2,33 @@
 %! Date = 24.11.2023
 
 % Preamble
-\documentclass[11pt]{article}
+\documentclass[a4paper,twoside]{article}
 
 % Packages
+\usepackage{epsfig}
+\usepackage{subcaption}
+\usepackage{calc}
 \usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{amstext}
 \usepackage{amsmath}
 \usepackage{amsthm}
-\usepackage{enumitem}
-\usepackage{hyperref}
-\usepackage{xcolor}
-\usepackage{cite}
 \usepackage{array}
+\usepackage{cite}
+\usepackage{enumitem}
 \usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{multicol}
+\usepackage{pslatex}
+\usepackage{algorithm2e}
+\usepackage{xcolor}
+
 \usepackage[font=scriptsize]{caption}
+\usepackage[bottom]{footmisc}
+
+\usepackage{SCITEPRESS}     % Please add other packages that you may need BEFORE the SCITEPRESS.sty package.
+
+
 \graphicspath{ {./img/} }
 
 % Document
@@ -575,7 +589,7 @@
     values of the metrics provided by the library for values of $t$ in the
     interval $\left[0, 1\right)$ at increments of $0.01$.
 
-    \begin{figure*}[h!]
+    \begin{figure*}
         \begin{minipage}{0.32\textwidth}
             \centering
             \includegraphics[width=\textwidth]{sample-usage/mini-fs-precision}
@@ -592,7 +606,7 @@
             \caption{F-S F1}
         \end{minipage}
     \end{figure*}
-    \begin{figure*}[h!]
+    \begin{figure*}
         \begin{minipage}{0.32\textwidth}
             \centering
             \includegraphics[width=\textwidth]{sample-usage/mini-alg-pp}
@@ -609,7 +623,7 @@
             \caption{Pairwise F Measure}
         \end{minipage}
     \end{figure*}
-    \begin{figure*}[h!]
+    \begin{figure*}
         \begin{minipage}{0.32\textwidth}
             \centering
             \includegraphics[width=\textwidth]{sample-usage/mini-alg-cp}
@@ -685,18 +699,18 @@
     standard library to trace the execution of the functions that compute
     metrics.
 
-    \begin{figure}[h!]
+    \begin{figure*}[h!]
         \centering
         \includegraphics[width=\textwidth]{performance/fs-flamegraph}
         \caption{Fellegi-Sunter CPU Performance}\label{fig:fs-cpu-perf}
-    \end{figure}
+    \end{figure*}
 
     The flame graph in Figure~\ref{fig:fs-cpu-perf}
     shows that the Fellegi-Sunter metrics take up less CPU than the validation
     of the input and output of data.
     The main consumers are shown in Table~\ref{table:fs-cpu-perf}
     
-    \begin{table}[h!]
+    \begin{table*}[ht!]
         \centering
         \begin{tabular}{||c c c c||}
             \hline
@@ -711,21 +725,21 @@
         \end{tabular}
         \caption{Fellegi-Sunter Metrics}
         \label{table:fs-cpu-perf}
-    \end{table}
+    \end{table*}
 
     The best lesson we can learn here is that computing the statistical metrics
     is not resource-intensive at all.
 
-    \begin{figure}[h!]
+    \begin{figure*}[h!]
         \includegraphics[width=\textwidth]{performance/algebraic-flamegraph}
         \caption{Algebraic CPU Performance}\label{fig:alg-cpu-perf}
-    \end{figure}
+    \end{figure*}
     
     The same cannot be said about the metrics that work with partitions over an
     input set.
     Table~\ref{table:alg-cpu-perf} presents how the algebraic metrics perform.
 
-    \begin{table}[h!]
+    \begin{table*}[ht!]
         \centering
         \begin{tabular}{||c c c c||}
             \hline
@@ -752,7 +766,7 @@
         \end{tabular}
         \caption{Algebraic Metrics}
         \label{table:alg-cpu-perf}
-    \end{table}
+    \end{table*}
 
     The pairwise and cluster metrics still perform well as indicated in
     Figure~\ref{fig:alg-cpu-perf}.
@@ -824,7 +838,8 @@
     distance\cite{Men10} are two examples of distance-based metrics for entity
     that we would like to implement.
 
-    
-\bibliographystyle{plain} % We choose the "plain" reference style
+    \bibliographystyle{apalike}
+    {\small
     \bibliography{er-general,er-related-work,er-additional-references,er-software}
+    }
 \end{document}
