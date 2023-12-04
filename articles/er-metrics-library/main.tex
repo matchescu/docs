@@ -217,7 +217,7 @@
     There are also other Python packages that implement some or all of the
     metrics provided by our library\cite{nmeth2020scipy,ereval}.
 
-    \section{Discussion}\label{sec:discussion}
+    \section{<Insert Library Name Here>}\label{sec:library}
 
     In this context, the necessity for yet another specialized library dedicated
     to evaluating entity resolution metrics might seem redundant.
@@ -293,9 +293,9 @@
     The other assumption is that the ground truth and the entity resolution
     result are both structured under the same mathematical model.
 
-    \section{Supported Metrics}\label{sec:metrics}
+    \subsection{Supported Metrics}\label{sec:metrics}
     
-    \subsection{Statistical Metrics}
+    \subsubsection{Statistical Metrics}
     Statistical quality metrics, extensively detailed in the
     literature\cite{manning2008,hitesh2012}, are the most common method for
     measuring entity resolution performance as evidentiated by their almost
@@ -345,7 +345,7 @@
     recall and it is used to capture the tradeoff between precision and
     recall\cite{hitesh2012}.
 
-    \subsection{Algebraic Metrics}
+    \subsubsection{Algebraic Metrics}
     While commonly known as `cluster metrics'\cite{rand1971,hitesh2012} or
     `pairwise metrics'\cite{hitesh2012,Men10}, we find that both these types of
     metrics are much better described as `algebraic' because the principle of
@@ -456,7 +456,7 @@
         Cluster F &= \frac{2\cdot{Cluster Precision}\cdot{Cluster Recall}}{Cluster Precision + Cluster Recall}
     \end{align*}
 
-    \section{Technology}\label{sec:tech}
+    \subsection{Technology}\label{sec:tech}
 
     The proposed library is implemented using the Python programming
     language (version 3.11)\cite{python}.
@@ -541,7 +541,7 @@
     those that are required for clustering metrics) to subroutines that are
     compiled to native machine code.
 
-    \section{Using the Library}\label{sec:usage}
+    \subsection{Using the Library}\label{sec:usage}
 
     In this section we go over example usage of the library and some performance
     metrics we compute over the metrics functions.
@@ -776,7 +776,22 @@
     index well enough, it might be a preferable choice to measure how well an
     entity resolution algorithm performs clustering.
 
-    \section{Future Work}\label{sec:future}
+    \section{Conclusions and Future Work}\label{sec:conclusions_and_future}
+
+    \subsection{Conclusions}
+
+    We have introduced a library for evaluating entity resolution results that
+    is based on standards and Python protocols making it highly interoperable.
+    The application programming interface exposed by this library is deeply
+    rooted in the mathematical models fundamental to entity resolution.
+    Working with pairs or groups of entity references instead of having to label
+    data should provide a much more user-friendly experience.
+    The performance of the library is sound and the accuracy of the implemented
+    metrics is verified automatically.
+
+    These attributes render the library not only highly beneficial but also low
+    maintenance, making it an invaluable asset for all those passionate about
+    entity resolution.
 
     \subsection{Missing Metrics}
 
@@ -809,21 +824,7 @@
     distance\cite{Men10} are two examples of distance-based metrics for entity
     that we would like to implement.
 
-    \section{Conclusions}\label{sec:conclusions}
-
-    We have introduced a library for evaluating entity resolution results that
-    is based on standards and Python protocols making it highly interoperable.
-    The application programming interface exposed by this library is deeply
-    rooted in the mathematical models fundamental to entity resolution.
-    Working with pairs or groups of entity references instead of having to label
-    data should provide a much more user-friendly experience.
-    The performance of the library is sound and the accuracy of the implemented
-    metrics is verified automatically.
-
-    These attributes render the library not only highly beneficial but also low
-    maintenance, making it an invaluable asset for all those passionate about
-    entity resolution.
-
-    \bibliographystyle{plain} % We choose the "plain" reference style
+    
+\bibliographystyle{plain} % We choose the "plain" reference style
     \bibliography{er-general,er-related-work,er-additional-references,er-software}
 \end{document}
