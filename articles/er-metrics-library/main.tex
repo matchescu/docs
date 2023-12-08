@@ -9,6 +9,7 @@
 \usepackage{amsmath}
 \usepackage{amsthm}
 \usepackage{array}
+\usepackage{booktabs}
 \usepackage{cite}
 \usepackage{enumitem}
 \usepackage{graphicx}
@@ -29,7 +30,7 @@
 % Document
 \begin{document}
     \title{PyResolveMetrics: A Standards-Compliant and Efficient Approach to Entity Resolution Metrics}
-    \author{\authorname{Andrei Olar\sup{1}\orcidAuthor{0009-0006-7913-9276}}
+    \author{\authorname{Andrei Olar\sup{1}\orcidAuthor{0009`-0006`-7913`-9276}}
     \affiliation{\sup{1}Faculty of Computer Science, Babes-Bolyai University}
     \email{\{andrei.olar\}@ubbcluj.ro}
     }
@@ -47,33 +48,57 @@
     This library not only facilitates precise evaluation but also aligns with
     contemporary research and application trends, making it a significant tool
     for practitioners and researchers in the field.}
-
     \onecolumn \maketitle \normalsize \setcounter{footnote}{0} \vfill
-
     \section{Introduction}\label{sec:introduction}
-    Entity resolution involves determining whether two pieces of information
-    represent the same real-world item.
+    The field of entity resolution, integral to natural language processing and
+    emerging technologies in education, is pivotal in understanding and linking
+    data across multiple sources.
     Some definitions view it as identifying and linking data from multiple
     sources\cite{Qia17}.
     However, it's argued that this identification and linking is a more
     specialized process\cite{Tal11}.
-    Entity resolution, a broad issue, is known by various names including record
-    linkage, data deduplication, merge-purge, named entity recognition, entity
-    alignment, and entity matching.
 
-    Entity resolution has many practical applications ranging from linking
-    medical records to diagnosing diseases or ailments, to doing background
-    checks to detect financial crime or to identifying plagiarism.
-    Being a problem whose solutions could have a deep impact on both individual
-    well-being and human society, we are obviously interested in understanding
-    just how well entity resolution solutions fare.
-    This paper attempts to address that issue by introducing a new library that
-    provides implementations of some of the best known metrics for evaluating
-    entity resolution\cite{matchescu-er-metrics2023}.
+    Entity resolution, also known as record linkage, data deduplication,
+    merge-purge, named entity recognition, entity alignment, and entity
+    matching, plays a significant role in educational communication and
+    collaboration tools, facilitating the information exchange between parents,
+    teachers and students.
+    It can also be useful to track the progression of alumni, by linking various
+    data sources to provide meaningful insights on the career trajectories of
+    graduates.
+    
+    It is a key component in AI literacy, particularly in those machine learning
+    tasks that involve identifying how disparate pieces of information correlate
+    to the same real-world entity.
+    Entity resolution itself has numerous implementations that rely on machine
+    learning and is important for AI literacy for that reason,
+    too\cite{deepm2020}.
+    
+    Lastly, the applications of entity resolution for a sustainable development
+    of education cannot be stressed enough.
+    Enhancing research integrity through plagiarism detection or enabling
+    personalized learning by tracking a student's preferences across learning
+    domains might qualify as fields of study in their own right.
 
-    In the book ``Introduction to Information Retrieval'' we are acquainted with
-    a number of ways in which the performance of information retrieval systems
-    can be evaluated\cite{manning2008}.
+    Recognizing the importance of accurate and efficient entity resolution in
+    both individual learning outcomes and broader societal impacts, it is
+    crucial to assess the effectiveness of these methods.
+    
+    In this context, the paper introduces a new Open Source library that is
+    hosted in a \href{https://github.com/matchescu/py-resolve-metrics}{Git
+    repository on GitHub}\cite{matchescu-er-metrics2023}.
+    The library offers implementations of well known metrics for evaluating
+    entity resolution, contributing significantly to metrics and evaluation in
+    educational technologies.
+    Thus, this library could have a role in advancing tools and methodologies in
+    the realm of education and technology by allowing a more informed process
+    for developing tools that make use of entity resolution.
+
+    The book ``Introduction to Information Retrieval'' studies various methods
+    for evaluating the performance of information retrieval
+    systems\cite{manning2008}.
+    These methods help in assessing how effectively these systems can search,
+    identify, and retrieve relevant information from large datasets.
     The metrics presented in this book revolve around the notion of relevant and
     irrelevant information that is retrieved by the system.
     The book also clarifies that the judgement around what is relevant or not is
@@ -276,7 +301,7 @@
 
     In short, here are the reasons we chose to implement such a library:
     \begin{itemize}
-    \item Architecturally, adhering to the principle of 'do one thing and do
+    \item Architecturally, adhering to the principle of `do one thing and do
     it well' is beneficial.
     This approach avoids the biases and dependencies of general-purpose
     libraries like SciPy, which can complicate integration into our
@@ -384,14 +409,14 @@
     between two different data clusterings.
     It quantifies the agreement or disagreement between these clusterings by
     considering pairs of elements.
-        \[Rand Index = \frac{(a + b)}{{n \choose 2}}\]
+        \[ Rand Index = \frac{(a + b)}{{\binom{n}{2}}} \]
     The main components of the Rand index are as follows:
     \begin{itemize}
     \item a: Represents the number of times a pair of elements belongs to the
         same cluster across both clustering methods.
     \item b: Represents the number of times a pair of elements belongs to
         different clusters across both clustering methods.
-    \item $n \choose 2$: Denotes the number of unordered pairs in a set of n
+    \item $\binom{n}{2}$: Denotes the number of unordered pairs in a set of n
         elements.
     \end{itemize}
     
@@ -635,7 +660,7 @@
             \caption{Cluster F Measure}
         \end{minipage}
     \end{figure*}
-    \begin{figure*}[h!]
+    \begin{figure*}[!ht]
         \begin{minipage}{0.32\textwidth}
             \centering
             \includegraphics[width=\textwidth]{sample-usage/mini-alg-twi}
@@ -694,7 +719,7 @@
     standard library to trace the execution of the functions that compute
     metrics.
 
-    \begin{figure*}[h!]
+    \begin{figure*}[!ht]
         \centering
         \includegraphics[width=\textwidth]{performance/fs-flamegraph}
         \caption{Fellegi-Sunter CPU Performance}\label{fig:fs-cpu-perf}
@@ -707,25 +732,24 @@
     
     \begin{table*}[ht!]
         \centering
-        \begin{tabular}{||c c c c||}
-            \hline
+        \begin{tabular}{c c c c}
+            \toprule
             Metric & Cumulative Time & Number of Calls & Time per Call \\ [0.5ex]
-            \hline\hline
+            \toprule
             \texttt{recall} & 7.208e-06 & 2 & 3.604e-06 \\
-            \hline
+            \midrule
             \texttt{f1} & 5.291e-06 & 1 & 5.291e-06 \\
-            \hline
+            \midrule
             \texttt{precision} & 4.75e-06 & 2 & 2.375e-06 \\
-            \hline
+            \bottomrule
         \end{tabular}
-        \caption{Fellegi-Sunter Metrics}
-        \label{table:fs-cpu-perf}
+        \caption{Fellegi-Sunter Metrics}\label{table:fs-cpu-perf}
     \end{table*}
 
     The best lesson we can learn here is that computing the statistical metrics
     is not resource-intensive at all.
 
-    \begin{figure*}[h!]
+    \begin{figure*}[!ht]
         \includegraphics[width=\textwidth]{performance/algebraic-flamegraph}
         \caption{Algebraic CPU Performance}\label{fig:alg-cpu-perf}
     \end{figure*}
@@ -736,31 +760,30 @@
 
     \begin{table*}[ht!]
         \centering
-        \begin{tabular}{||c c c c||}
-            \hline
+        \begin{tabular}{c c c c}
+            \toprule
             Metric & Cumulative Time & Number of Calls & Time per Call \\ [0.5ex]
-            \hline\hline
+            \toprule
             \texttt{rand\char`_index} & 0.0004027 & 1 & 0.0004027 \\
-            \hline
+            \midrule
             \texttt{adjusted\char`_rand\char`_index} & 0.0001944 & 1 & 0.0001944 \\
-            \hline
+            \midrule
             \texttt{twi} & 9.146e-05 & 1 & 9.146e-05 \\
-            \hline
+            \midrule
             \texttt{cluster\char`_comparison\char`_measure} & 5.35e-05 & 1 & 5.35e-05 \\
-            \hline
+            \midrule
             \texttt{cluster\char`_recall} & 5.154e-05 & 2 & 2.577e-05 \\
-            \hline
+            \midrule
             \texttt{cluster\char`_precision} & 4.271e-05 & 2 & 2.135e-05 \\
-            \hline
+            \midrule
             \texttt{pair\char`_precision} & 2.971e-05 & 2 & 1.485e-05 \\
-            \hline
+            \midrule
             \texttt{pair\char`_recall} & 2.613e-05 & 2 & 1.306e-05 \\
-            \hline
+            \midrule
             \texttt{pair\char`_comparison\char`_measure} & 2.596e-05 & 1 & 2.596e-05 \\
-            \hline
+            \bottomrule
         \end{tabular}
-        \caption{Algebraic Metrics}
-        \label{table:alg-cpu-perf}
+        \caption{Algebraic Metrics}\label{table:alg-cpu-perf}
     \end{table*}
 
     The pairwise and cluster metrics still perform well as indicated in
