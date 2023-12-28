@@ -1,29 +1,35 @@
-%! Author = andrei.olar@ubbcluj.ro
-%! Date = 03.09.2023
-
-% Preamble
-\documentclass[11pt]{article}
+\documentclass[lettersize,journal]{IEEEtran}
 
 % Packages
-\usepackage{amsfonts}
-\usepackage{amsmath}
-\usepackage{amsthm}
+\usepackage{amsmath,amsfonts,amsthm}
+\usepackage{algorithmic}
+\usepackage{array}
 \usepackage{enumitem}
 \usepackage{hyperref}
 \usepackage{xcolor}
 \usepackage{cite}
 \usepackage{array}
+\usepackage[caption=false,font=normalsize,labelfont=sf,textfont=sf]{subfig}
 \usepackage{graphicx}
+\hyphenation{op-tical net-works semi-conduc-tor IEEE-Xplore}
 \graphicspath{ {./img/} }
+\def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
+    T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
+\usepackage{balance}
 
 % Document
 \begin{document}
+    \title{An empirical comparison of two theoretical models for entity resolution}
+    \author{Andrei Olar,~\IEEEmembership{Babeș-Bolyai University, Cluj-Napoca}}
+
+    \maketitle
+
     \theoremstyle{definition}
     \newtheorem{defn}{Definition}[section]
     
-    \section{Abstract}\label{sec:abstract}
-
-
+    \maketitle
+    \begin{abstract}
+    \end{abstract}
     \section{Introduction}\label{sec:introduction}
     Entity resolution is the task of finding out whether two pieces of
     information refer to the same real-world item or not.
