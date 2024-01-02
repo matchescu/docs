@@ -1,0 +1,55 @@
+\section[cert]{Formalizing Entity Resolution Comparison}\label{subsec:cert}
+
+Entity resolution tasks can be compared in quantitative terms without any
+issue.
+Metrics for the amount of hardware resources they consume or the physical
+time that elapses for a data set of a given size are invariant across the
+many possible implementations of entity resolution solutions.
+
+The problem of comparing entity resolution results from a qualitative
+perspective is significantly less clearly delimited.
+Each mathematical model is rooted in a different branch of mathematics and,
+as such, works with different assumptions and different expressions of the
+surrounding reality.
+For example, all statistical models express the real world in terms of
+probabilities.
+On the other hand, a construct of set theory will invariably explain the
+real world in terms of set operations, properties and it will use algebraic
+constructs.
+The comparison problem must take into account these limitations.
+
+\begin{defn}
+    Given
+    \begin{itemize}
+        \item the set of entity references $Ref$,
+        \item a set of quality metrics $Q$ that are common to all
+        entity resolution tasks $e_i : Ref -> Res$, $i \in \mathbb{N}$
+        \item the ground truth $G$ for the input domain $Ref$,
+        \item the quality metric results
+        $V_i=\{q_{i} \mid q_{i} = q(G, e_i), q \in Q\}, i \in \mathbb{N}$,
+    \end{itemize}   
+    we define the comparison of the entity resolution tasks above as
+    $C : (
+        \{V_i \mid i \in \mathbb{N}\}
+        \times
+        \{V_j \mid j \in \mathbb{N}\},
+        i \neq j
+    ) \rightarrow \{-1, 0, 1\}$ such that:
+    \[ 
+C(V_i, V_j) = \left\{
+\begin{array}{ll}
+  -1,~\textrm{if $e_i$ is less fit for purpose than $e_j$}\\
+  0,~\textrm{if $e_i$ is as fit for purpose as $e_j$}\\
+  1,~\textrm{if $e_i$ is better fit for purpose than $e_j$}\\
+\end{array} 
+\right. 
+\]
+
+\end{defn}
+
+The difficulty with the above definition stems from the formulation around
+quality metrics.
+One cannot compare variation of information with statistical precision, for
+example.
+Therefore, the metrics that are used in the comparison must be of a kind.
+And we know that each type of metric is determined by a mathematical model.

@@ -1,10 +1,9 @@
-\documentclass[lettersize,journal]{IEEEtran}
+\documentclass[journal]{IEEEtran}
 
 % Packages
 \usepackage{amsmath,amsfonts,amsthm}
 \usepackage{algorithmic}
 \usepackage[caption=false,font=normalsize,labelfont=sf,textfont=sf]{subfig}
-\usepackage[justification=centering]{caption}
 \usepackage{enumitem}
 \usepackage{hyperref}
 \usepackage{xcolor}
@@ -13,8 +12,8 @@
 \usepackage{graphicx}
 \hyphenation{op-tical net-works semi-conduc-tor IEEE-Xplore}
 \graphicspath{ {./img/} }
-\newcommand{\BibTeX}{\textrm{B \kern -.05em \textsc{i \kern -.025em b} \kern -.08em
-T \kern -.1667em \lower .7ex \hbox{E} \kern -.125emX}}
+\newcommand{\BibTeX}{\textrm{B \kern-.05em \textsc{i \kern-.025em b} \kern-.08em
+T \kern-.1667em \lower.7ex \hbox{E} \kern-.125emX}}
 \usepackage{balance}
 
 % Document
@@ -46,33 +45,37 @@ T \kern -.1667em \lower .7ex \hbox{E} \kern -.125emX}}
     \end{IEEEkeywords}
 
     \section{Introduction}\label{sec:introduction}
-    Entity resolution is the task of finding out whether two information refer
+    Entity resolution is the task of determining whether two information refer
     to the same real-world item or not.
     More restrictive definitions place entity resolution as the task of
     identifying and linking representations of data from two or more
     sources~\cite{Qia17}.
     However, we share the opinion that identifying and linking data constitutes
     a more specialized process~\cite{Tal11}.
+    We also leave aside any classification based on number of sources.
     The task of gathering information about a generic pound of potatoes across
     various marketplaces is still an entity resolution task, in our view.
+    Whether the information about marketplaces and the potatoes that find
+    themselves passing through there is available in one or more places strikes
+    us as non-consequential, too.
     
-    Probably because of its generic nature, entity resolution also goes by many
-    names such as: record linkage, data de-duplication, merge-purge,
-    named entity recognition, entity alignment or entity
-    matching~\cite{Tal11,fever2009}.
-
-    Entity resolution has many practical applications ranging from linking
-    medical records to diagnosing diseases or ailments, to doing background
-    checks for financial crime or to identifying plagiarism.
+    Because of its fundamental nature, the entity resolution problem goes by
+    many names such as: record linkage, data de-duplication, merge-purge,
+    named entity recognition and disambiguation, entity alignment or entity
+    matching~\cite{Tal11,fever2009,alhelbawy2014}.
+    Entity resolution also has many practical applications ranging from linking
+    medical records to diagnosing diseases or ailments, to translation, to doing
+    background checks for financial crime or to identifying plagiarism.
     Combining information from different media (sound, images, motion, smell,
-    etc.) is also largely a form of entity resolution.
-    With such a wide array of past, present and future applications, evaluating
-    the results of entity resolution tasks is of paramount importance.
-
+    etc.) can also be regarded as a form of entity resolution when the purpose
+    is to gather more information about the same real-world object.
+    When there is such a wide array of past, present and future applications,
+    evaluating entity resolution quality seems important.
+    
     We begin by exploring a few preliminaries focused on entity resolution
     itself and then describe the problem we are analyzing.
     After briefly summarizing the work that relates to our paper, we introduce
-    the terminology that we will use throughout the rest of the paper.
+    terminology and a mental model that we use throughout the rest of the paper.
     Following that we briefly introduce the theoretical models for entity
     resolution that we chose for our analysis.
     The experimental setup is next on our list as we present our findings using
@@ -83,7 +86,7 @@ T \kern -.1667em \lower .7ex \hbox{E} \kern -.125emX}}
 
     \section{Preliminaries}\label{sec:preliminaries}
 
-    Out of all the characteristics of entity resolution tasks a few stand out:
+    The following characterstics of entity resolution tasks stand out:
 
     \begin{itemize}
         \item\textit{A concern for a real-world entity}, for if the task were
@@ -96,69 +99,84 @@ T \kern -.1667em \lower .7ex \hbox{E} \kern -.125emX}}
         means of computer science.
     \end{itemize}
 
-    At its most generic and abstract, entity resolution's link with computer
-    science is the simple requirement to deal with information about real-world
-    objects presented in a computer-friendly way , instead of dealing with the
-    objects themselves directly~\cite{Tal11}.
-    The limitation that arises from this condition is that entity resolution
-    tasks don't know about the real-world objects or entities they are meant to
-    resolve~\cite{Chen09}.
+    The first two statements suggest that entity resolution can be performed
+    using any informational support.
+    Simply imagine collecting notes about the same real-world object.
+    Entity resolution's link with computer science exists only when posited.
+    Dealing with information about real-world objects instead of dealing with
+    the objects themselves directly~\cite{Tal11} doesn't transform entity
+    resolution into a computer science problem.
+    The self-imposed \textit{limitation} of dealing with information that is
+    interpretable by a computer does.
+    This entails that entity resolution tasks running on computers are not privy
+    to the entities they are meant to resolve~\cite{Chen09}.
 
-    Naturally, this limitation entails that entity resolution tasks will not
-    perform perfectly from a qualitative standpoint.
-    Our interests lie in finding common ground for measuring entity resolution
-    quality and determining the quality metrics that provide us with a good
-    approximation of reality as it is experienced by the user of an entity
-    resolution system.
+    Whenever we talk about measuring the performance of an entity resolution
+    task, we must note that we are confined to the information that is available
+    to the computer running the task.
+    Our interests lie in bridging this gap between reality and approximation
+    when it comes to the quality of entity resolution.
 
     It is said that beauty lies in the eye of the beholder.
-    We are also nearing a century since the date it has become apparent that
-    observation is a key phenomenon in our physical universe~\cite{schodinger1926}.
-    Consequently we ask ourselves if changing our perspective over how entity
-    resolution results are perceived influences how the task actually performs.
+    We are nearing a century since the date it has become apparent that the
+    observer is key in our physical universe~\cite{schrodinger1926}.
+    Perhaps we can use Schrodinger's insight as inspiration for bridging our own
+    gaps in understanding entity resolution quality.
+    For instance, we may what are the perspectives available to us when we want
+    to determine which information relates to the same real object.
     In other words, does it matter in practice how we model an entity resolution
     task theoretically?
+    Is the observation of an entity resolution system made using a theoretical
+    model the same or different than the one made using a different theoretical
+    model and how?
 
-    Historically, entity resolution performance was measured in many ways, some
-    of which have been contested for certain use cases~\cite{Goga2015}.
-    This indicates that the answer to the previous question is `yes' when we set
-    the scope to individual metrics.
-    In this paper we extend the discussion about entity resolution quality
-    assessment to entire theoretical models.
-    For a start, we'd like to see how a specific entity resolution task performs
-    when viewed through two different lenses.
-
+    Historically, entity resolution measurements owe much to the field of
+    information retrieval and to statistics.
+    Some of the measurements used to evaluate entity resolution quality seemed
+    to faulter when put under scrutiny~\cite{Goga2015}.
+    This lead to using better measures that describe the outcomes more wholly
+    and more objectively.
+    This indicates both that there is more than one lens to view entity
+    resolution through and that the principles we should look for in such a lens
+    should at least cover completeness and objectivity.
+    
     \section{Question}\label{sec:contributions}
 
     Throughout the experience of working with entity resolution systems a few
     caveats become apparent.
-    Firstly, entity resolution is an incredibly expensive task in terms of the
-    consumed hardware resources, but also in terms of the manpower required to
-    set up good data sets that the entity resolution tasks can work on.
-    It is because of this context that the second lesson is all the more
-    important: the optimal configuration parameters of an entity resolution task
-    as determined on a `realistic' test dataset often show much worse outcomes
-    when the task is performed on real-world data.
+    Firstly, adopting an entity resolution system is an arduous task at best.
+    It is expensive in terms of consumed hardware resources, but also in terms
+    of the manpower required to set up good data sets, data cleaning rules and
+    entire data engineering processing pipelines.
+    Because of this, finding optimal configuration parameters for entity
+    resolution tasks quickly and cheaply is very desirable.
+    Unfortunately, naively using `realistic' test datasets does not work often.
+    Stellar outcomes on the test dataset often turn out much worse when the task
+    is performed on production data.
 
-    One of the questions that arises under such circumstances is how much does
-    the theoretical model influence the practical solution?
-    That is, what can we expect to see at a practical level when we choose to
-    view an entity resolution task through the lens of one theoretical model
-    over another?
-    For example, if entity resolution is viewed as a clustering task then we
-    would probably see clusters of items as its output.
-    Conversely, if entity resolution were to be viewed as a matching task it
-    would probably output pairs of matching items.
+    In this paper we would like to see what kind of perspectives over the task
+    output we are granted by two theoretical models of entity resolution.
+    Are there invariants we can glean on small scale data that we can transfer
+    to larger, more chaotic data sets?
+    More interestingly, are there invariants based in theory that we can
+    transfer from one entity resolution algorithm to another?
 
-    Another, more difficult question is whether the theoretical model influences
-    the task's performance?
+    Breaking these larger questions down, we ask how much might a theoretical
+    model influence the actual task's quality readout?
+    That is, what is there to see past the numbers that we are shown when we
+    measure the quality of an entity resolution task?
+    Even more concretely, is the clustering performance of entity resolution
+    correlated to the matching performance of entity resolution?
+    Does the theoretical model we use determine how information should be
+    represented at runtime?
 
-    \begin{itemize}
-        \item the causal connection between mathematical model and entity
-        resolution task output data structure
-        \item experiments showing the difference in using one mathematical model
-        over another to understand the output of an entity resolution task
-    \end{itemize}
+    Zooming out again, we ask another question: is it possible to switch from
+    one perspective to another?
+    Entity resolution theoretical models encompass all entity resolution
+    solutions: past, present and future.
+    The abstract question above becomes whether we can interpret an entity
+    resolution task's quality from a perspective that wasn't available at the
+    time it was implemented or not?
 
     \section{Related Work}\label{sec:related}
     
@@ -184,44 +202,58 @@ T \kern -.1667em \lower .7ex \hbox{E} \kern -.125emX}}
     Later on, systems like `Papers with Code'~\cite{papwithcode2019} brought in
     a social dimension to how we compare the qualitative performance of entity
     resolution tasks.
-    Newer systems resemble frameworks more than they resemble
+    The systems that came after, resemble frameworks more than they resemble
     applications~\cite{magellan2020,jedai2017}.
-    These systems are open-source and encourage social collaboration around
+    Almost all systems are open-source and encourage social collaboration around
     entity resolution, too.
     
-    There exist numerous syntheses on the theoretical models for entity
-    resolution~\cite{fs1969,Ben2009Swoosh,Tal11}.
-    Some available models have been compared and explained~\cite{Tal11,tal2013}.
+    Next, the syntheses on the theoretical models for entity
+    resolution~\cite{fs1969,Ben2009Swoosh,Tal11} are invaluable resources.
+    The models we present in this paper have been heavily documented before much
+    better than we aspire to do here~\cite{Tal11,tal2013}.
+    
+    Taking a different tack on describing entity resolution in a generic,
+    abstract way, we have studies that show a process perspective over entity
+    resolution tasks~\cite{Pap19,Chen09}.
+    These studies showcase the stages of the entity resolution process and the
+    significance, challenges and benefits of each.
+    With the help of such papers we find that matching and clustering are both
+    sides of the same process as well as stages in it.
 
-    Ways in which entity resolution tasks are similar even though they seem
-    to have nothing in common have been discussed in papers that deal with
-    certain steps of the entity resolution process~\cite{Pap19,Chen09}.
+    Lastly, we use the information provided by syntheses~\cite{hitesh2012} on
+    entity resolution quality metrics to find the metrics that associate well
+    with a given theoretical perspective.
+    For example, clustering or distance metrics do not describe well a
+    probabilistic system.
 
     \section{Terminology}\label{sec:terminology}
 
-    Given that we have just reserved the term ``entity'' for real-world items,
-    we have to come up with new terms for the concepts used in the context of
-    entity resolution.
-    We start by saying that entity resolution operates on information sources.
+    Throughout this paper the term ``entity'' is reserved for real-world items.
+    We need new terms for the computer-friendly representations of entities.
+    We start by saying that entity resolution operates on data sources.
 
     \begin{defn}
-        An \textit{information source} represents a sequence of decoded messages
-        that originate somewhere and can be processed by the entity resolution
-        task which reads them over a communication channel.
+        An \textit{data source} represents a sequence of decoded messages
+        that originate somewhere and can be processed by a computer program that
+        reads them over a communication channel.
     \end{defn}
 
     The terms `decoded', `message' and `communication channel' refer to concepts
-    from the field of information theory~\cite{ash2012it}.
+    defined in information theory~\cite{ash2012it}.
     
-    An entity resolution task can operate on one or multiple information
+    An entity resolution task needs at least one data source to operate on.
+    When the relevant information is split across multiple data sources, these
+    can be merged into a single source.
+    In the same way, a single data source can be split into multiple data
     sources.
-    Information sources may be bounded (such as files or databases) or unbounded
-    (such as streams).
+    Data sources may be bounded (files or databases) or unbounded(streams).
+    For the purposes of this paper, these attributes of data sources as well as
+    their number are inconsequential.
     
-    In the context of the above definition, the entity resolution task is the
-    computer program doing the processing.
-    What sets entity resolution programs apart is the notions they use to
-    process information from a particular source.
+    In the context of the definition of a data source, entity resolution is the
+    computer program processing the data source.
+    What sets entity resolution tasks apart from other computer programs are the
+    notions they use to process information from the data source.
 
     \begin{defn}
         An \textit{attribute} is information about an entity that has a certain
@@ -234,69 +266,60 @@ T \kern -.1667em \lower .7ex \hbox{E} \kern -.125emX}}
     colors.
     If we're looking for fruit, `red' is only one of several attributes that
     help describe fruit.
-    For example, we might be interested in `sour' or `sweet' as well as in
-    `small', `medium' or `large'.
+    We might be interested whether the fruit is `sour' or `sweet' as well as
+    whether it is `small', `medium' or `large'.
 
     \begin{defn}
         An \textit{entity reference} is a collection of attributes that refer
         to a real-world entity which can be formed by following an organizing
-        principle (or order) of the information source where the attributes are
-        all located.
+        principle (or order) of the data source where the attributes are all
+        located.
     \end{defn}
 
-    The organizing principle of an information source is simply an order that
-    facilitates processing that information source.
-    For example, in a CSV file it would be the rule that up until the first
-    comma on each line we should find a color value.
-    For operations on databases such as joins, the organizing principles is
-    built around data records.
-    For named entity recognition, the organizing principle is built around
+    The organizing principle of a data source is simply an order that
+    facilitates processing information in that data source.
+    A CSV file has the organizing principle that attributes are separated by
+    commas.
+    Relational databases organize data in tables, columns and rows.
+    Other storage organizes data in structured, semistructured or even
+    unstructured ways (such as text).
+    As an example of unstructured organization, named entity disambiguation uses
+    the same organizing principle as named entity recognition built around
     mentions.
+    When an entity resolution task processes a data source, it loads
+    \textit{references}\cite{Ben2009Swoosh} to entities by taking advantage of
+    the way that data source is organized.
 
-    A good generalization of the notions in the above examples put in the
-    context of entity resolution might be that of a
-    \textit{reference}\cite{Ben2009Swoosh}.
-    For in this context the rules for processing records, mentions or lines in
-    CSV files are used simply to find references to real-world entities.
+    We shouldn't confuse the organizing principle of a data source with its
+    structure, though.
+    A table record in a database might store multiple attributes of the same
+    entity in the same column.
+    The entity reference will be constructed by extracting all attributes, not
+    by dumbly considering each column to be an attribute.
+    Entity reference extraction is also selective by nature.
+    For entity resolution tasks that value geolocation above other things, the
+    extracted references might skip over data that is not about geography.
+    Similarly, in tasks that identify people, entity references will be
+    comprised from attributes that are useful in identifying a person or a
+    company.
+    All this speaks to how the organizing principle of a data source is
+    extrinsic to the data source and linked to the entity resolution's purpose.
 
-    The organizing principle of an information source shouldn't be confused with
-    the structure of the information in that source.
-    A single table record in a database might have a few attribute that
-    reference one entity (for example a company or a person) and a few other
-    attributes that reference another entity (a building).
-    For entity resolution tasks that value geolocation above other things, the 
-    fields that reference the building will constitute the entity reference.
-    For tasks that identify people, the entity reference will be comprised from
-    the attributes that reference a person or a company.
-    The organizing principle of the information source by which attributes are
-    collected as entity references by the entity resolution task is extrinsic to
-    the information source and is somehow linked to the entity resolution task
-    itself.
-    We say `linked' because the organizing principle may or may not be an
-    integral part of the entity resolution task.
-    For instance, entity alignment tasks rely on external knowledge bases and
-    entity matchers based on deep learning rely on machine learning for
-    determining the organizing principle of every data source they consume.
+    A final note on entity references is that attributes that each reference is
+    bound to a data source.
+    The definition above states this by mandating that all attributes comprising
+    an entity reference are read from the same data source.
 
-    The other important distinction is that the attributes that make up an
-    entity reference are collected from the same information source.
-    This creates a clear belonging relationship between entity reference and
-    information source.
+    So far we have dealt with structure, now it is time to deal with meaning and
+    purpose.    
+    Let's suppose that we are gathering information about colors.
+    A data source represents colors as `red', `green' or `blue'.
+    Another one represents them as \texttt{0xCC0000}, \texttt{00CC00} or
+    \texttt{0x0000CC}.
+    The organizing principle instructs the entity resolution task to construct
+    entity references with a single attribute.
+    It does not provide any semantic interpretation rules for the data.
     
-    Let's suppose that we are looking to identify colors across multiple
-    information sources.
-    In one information source the colors are represented as `red', `green' or 
-    `blue'.
-    In another information source they are represented as `CC0000', `00CC00' or
-    `0000CC'.
-    Because we are looking for colors we decide that our organizing principle
-    should dictate that references contain only one attribute.
-    However, up until now we haven't articulated a way to tell the entity
-    resolution task that.
-    Namely: how do we tell the entity resolution task that it's looking for
-    something that is a \textit{color}.
-    Or, formulated as a question: what is \textit{color}?
-
     \begin{defn}
         A \textit{trait} is a semantic rule that guides the entity resolution
         task in recognizing the organizing principle of each information source
@@ -305,51 +328,58 @@ T \kern -.1667em \lower .7ex \hbox{E} \kern -.125emX}}
 
     Each entity resolution task is defined by specific objectives it aims to
     achieve.
-    These tasks vary widely, ranging from integrating news articles to
-    organizing content across social networks, or even de-duplicating data
-    within database tables.
     For every distinct task, there are key rules that guide the interpretation
     of the available data, emphasizing certain aspects over others.
-    In our specific scenario, the task is streamlined to focus exclusively on
-    colors and their potential variations as influenced by different
-    information sources.
+    In our example, entity resolution focuses exclusively on identifying colors
+    in different data sources.
+    To achieve this goal, the traits of the entity resolution task instance
+    might be specified, trained or inferred from a knowledge base to recognize
+    various representations of colours.
+    While we might think of traits as being a part of a generic data extraction
+    process such as scraping, traits in the sense described here are actually
+    integral to the entity resolution process itself.
     
-    The notion that's the most similar to that of a trait is the `feature':
+    The notion that's the most similar to that of a trait is the pattern
+    recognition notion of a `feature':
     \textit{an individual measurable property or characteristic of a
     phenomenon}\cite{bishop2006pattern}.
     The mechanics of how traits and features function is near identical.
     The difference between a trait as defined here and a feature is a matter of
     perspective.
-    Features are part of a more objective perspective on information.
-    Traits as they are defined here are concerned with the contextual meaning of
-    things.
-    In the broadest sense, they are nothing more than algorithms that extract
-    information according to the subjective goal of the entity resolution task.
-    A trait can help the entity resolution task extract one or more attributes
-    for a given entity reference that can't be inferred from the underlying
-    information alone.
-    For example, a trait called `profitable' is different from a physical
-    representation in the form of a table column or a JSON property.
-    Imagine an entity resolution task that is meant to find companies across
-    databases.
-    One of the traits this entity resolution task is looking for is the company
-    profitability.
-    In a database table, it looks at values stored in a column called `profit'.
-    In a no-SQL collection, it looks at the values stored under the
-    `isProfitable' property.
-    Yet, the entity resolution task simply looks for the `profitable' trait in
-    both these information sources to help shape the entity references it finds.
+    Features are part of constructing a broader, objective perspective on
+    information.
+    Traits as they are defined here are concerned with the contextual meaning.
+    
+    Pragmatically, traits can be viewed as algorithms that extract information
+    according to the subjective goal of the entity resolution task.
+    In their simplest form, traits might be configuration parameters for an
+    entity resolution system.
+    But they can also be algorithms that are part of the a system's code.
 
-    To sum up, an attribute of an entity reference always exists in an
-    information source, whereas a trait of the entity resolution task does not.
+    For example, a trait called `profitable' that is supposed to specify whether
+    a company earns more than it spends is different from the typical physical
+    representation of profit and loss as two separate decimal values present
+    in information organized in some way or another.
+    The way we would handle this discrepancy while extracting entity references
+    is by having an algorithm that outputs a truth value when gains exceed
+    spending.
+
+    Another example of a trait, is a configuration value that specifies the
+    attributes that should be used when comparing two entity references.
+    This trait might optimize certain attributes of the entity references for
+    comparison.
+    
+    To avoid confusing traits and attributes, it's easy to think about traits
+    as not being a part of the data source, but rather as a part of the entity
+    resolution task implementation.
     Entity resolution tasks extract attributes that they assign to entity
     references based on the traits specific to each task.
-    This point of view is supported by the need to design entity resolution
-    systems that are extensible based on their sources of
-    information\cite{fever2009,magellan2020,oyster2012}.
 
-    So far we have not discussed what happens if entity references point to the
-    same real-world entity.
+    Traits are a necessary abstraction if we want the same entity resolution
+    task to be able to process more than one data representation.
+    They are useful for constructing individual entity references.
+    However, we have not defined any notion that links entity references to an
+    entity.
     
     \begin{defn}
         The logical group of entity references that point to the same real-world
@@ -360,15 +390,15 @@ T \kern -.1667em \lower .7ex \hbox{E} \kern -.125emX}}
 
     It is important to understand that the entity profile and the real-world
     entity are not the same.
-    The entity profiles are simply manifestations of the input parameters of the
-    entity resolution task (namely the information sources and the traits) and
-    they represent the output of the entity resolution task.
+    Entity profiles are simply digital collections of entity references that are
+    formed because of how an entity resolution task was programmed and
+    configured.
     
     By using the terms \textit{information source}, \textit{attribute},
     \textit{trait}, \textit{entity reference} and \textit{entity profile} we can
-    finally define the entity resolution problem.
+    finally move on to define entity resolution formally.
 
-    \section{Problem Definition}\label{sec:problem}
+    \section{Formalizing Entity Resolution}\label{sec:entity-resolution}
 
     In a broad sense, the entity resolution process is usually comprised of four
     different activities\cite{Pap19,Tal11}:
@@ -382,24 +412,27 @@ T \kern -.1667em \lower .7ex \hbox{E} \kern -.125emX}}
         possibly match are filtered \textit{out}; the intent here is to allow
         entity resolution tasks to work with large amounts of data~\cite{Pap19};
         \item \textit{matching} --- one of the defining activities of the entity
-        resolution process and compares entity references to one another;
-        \item \textit{clustering} --- the other defining activity within the
-        entity resolution process whereby matching references are collected
-        together in entity profiles.
+        resolution process, it consists of comparing entity references to one
+        another;
+        \item \textit{clustering} --- the other defining entity resolution
+        activity which collects matching references in entity profiles.
     \end{itemize}
 
-    In a stricter sense, by entity resolution we usually mean the latter two
-    stages of the entity resolution process.
-    Although our concern is with entity resolution evaluation and the comparison
-    of entity resolution processes, we can't overlook the extraction process
-    because this process defines the data structures that are used throughout
-    the entire entity resolution process.
+    In this paper, we concern ourselves with the last two stages of the entity
+    resolution process.
+    From now on, when we use the term \textit{entity resolution} we only refer
+    to matching and clustering.
 
+    However, because extraction plays a big part in how data is structured
+    within any entity resolution process, we start formalizing entity resolution
+    by formalizing the data extraction using the notions from
+    Section~\ref{sec:terminology}.
+    
     Given:
     \begin{itemize}
         \item $n \in N^*$ pairs (($S_i$, $n_i$), $1 \leq i \leq n$, $n_i \in N$), 
-        where $S_i$ is an information source and $n_i$ is the number of messages
-        in $S_i$,
+        where $S_i$ is a data source and $n_i$ is the number of messages in
+        $S_i$,
         \item $m_i \in N^*$ traits, ($t_{ij}$, $1 \leq j \leq m_i$) for each
         information source $S_i$ so that
         \item each trait $t_{ij}$ can generate at most $a_{ij} \in N^*$
@@ -409,110 +442,121 @@ T \kern -.1667em \lower .7ex \hbox{E} \kern -.125emX}}
     $S_i$, ($1 \leq i \leq n$, $1 \leq j \leq m_i$), in order to extract
     $r_{{S_i}k}$ entity references where
     ($0 \leq k \leq n_i \cdot \sum^{m_i}_{j=1}a_{ij}$).
-    We denote with $R$ the domain of all the $r_{{S_i}k}$ entity references that
-    were extracted by $ER$.
-    Similarly, we denote with $P$ the domain of all entity profiles.
-    The matching and clustering steps of the $ER$ task can be combined in a
-    single function $E: R \rightarrow P$ that converts individual references to
-    entity profiles.
-    The exact definition of this function is specific to the mathematical model
-    that underpins the entity resolution process.
-    The data representation of the entity profiles in $P$ also varies according
-    to the mathematical model of choice.
-    On the other hand, the abstract data types used for representing the
-    concepts that are part of building $R$ are invariant.
-
-    The most basic building block in the context of entity resolution is the
-    humble attribute.
-    We denote with $A$ the domain of all possible attributes that can be used by
-    the task $ER$ described above.
+    
+    Next, we denote with $A$ the domain of all possible attributes that can be
+    used by $ER$.
 
     In this context, let $r_{{S_i}{k_j}}$ denote the $k_j$th ($1 \leq j \leq k$)
     entity reference extracted from the source $S_i$.
-    Then $r_{{S_i}{k_j}}$ is always represented as a tuple
-    ($a_r$, $r \in N^*$, $a_r \in A$), $r_{{S_i}{k_j}} \in A^r$.
-    Note that $r$ varies for each $k_j$.
-    The concept of an order external to the information source and the manner in
-    which we defined traits serves as the reason why tuples express entity
-    references sufficiently well.
+    Then $r_{{S_i}{k_j}}$ is a tuple
+    \[
+        (a_r, r \in N^*, a_r \in A), r_{{S_i}{k_j}} \in A^r
+    \]
+    where $r$ varies for each $k_j$.
 
+    Defining traits and the organizing principle as external to the data source
+    is what allows us to formalize entity references so simply.
     A trait is then a function that helps construct entity references.
-    The definition domain of this function materializes only when the $ER$ task
-    extracts a given entity reference $r_{{S_i}{k_j}}$.
-    The domain of this function is then the domain of all of the attributes in
-    the source $S_i$ that could be meaningful in the context of constructing the
-    entity reference $r_{{S_i}{k_j}}$ from a certain subjective perspective.
+    The definition of traits materializes only upon extracting entity references
+    $r_{{S_i}{k_j}}$ with $ER$.
+    The domain of this function is the domain of all attributes in the source
+    $S_i$.
     We denote this domain with $A_{{S_i}{k_j}}$.
-    Then the trait is defined as a function $t: S_i \rightarrow A^x$, where
-    $x \in N^*$ and $x$ varies with $k_j$ as defined above for entity
-    references.
-    This formal definition of the trait satisfies the needs of any extraction
-    process specific to entity resolution.
+    
+    A trait can be declared as a function:
 
-    During the extraction process, the entity resolution task applies multiple
-    traits with the end result of building the domain of entity references:
+    \[
+        t: S_i \rightarrow A_{{S_i}{k_j}}^x\textrm{, where }x \in N^*
+    \]
+    and $x$ varies with $k_j$.
+
+    During the extraction process, \textit{ER}'s traits lead to the construction
+    of the domain of entity references:
 
     \[
         Ref = \bigcup_{i \in N^*,1 \leq j \leq k} r_{{S_i}{k_j}}
         \textrm{, with r, S and k specified above}
     \]
 
-    The $Ref$ domain is constructed through entity reference extraction and
-    after the entities have been extracted, we are no longer concerned with the
+    The $Ref$ domain is constructed through entity reference extraction.
+    After the entities have been extracted, we are no longer concerned with the
     input information sources.
-    Another observation is that every type of entity resolution task can be made
-    to work on such an input domain~\cite{Pap19}.
-    A task that uses two or more input sources can be reduced by concatenating
-    entity references extracted from those sources.
-    So, every entity resolution task can be viewed at its core as either a
-    data de-duplication or a clustering task.
+    Every type of entity resolution task can be made to work on such an input
+    domain~\cite{Pap19}.
+    De-duplication tasks that use a single data source work out of the box.
+    Record linking tasks that use two or more data sources can embed the an
+    attribute that identifies the data source of each entity reference.
     Regardless of the optics, the input domain contains only entity references.
-    In our view, the entity resolution task is agnostic of the provenance of the
-    entity references it processes.
-    
-    That allows us to formalize the entity resolution task as a function:
+    The relevance of the original data source of an entity reference rests with
+    the entity resolution task and its matching and clustering algorithms.
+
+    The output of entity resolution is always a collection of entity profiles.
+    While the data representation of an entity profile is definable only per
+    theoretical model, we can define the output domain of entity resolution
+
     \[
-        e : Ref \rightarrow \{P_x \mid x \in \mathbb{N}, P_x \in P \},
+        Res=\{P_x \mid x \in \mathbb{N^*}, P_x \in P\}
+    \]
+
+    as the domain of collections of entity profiles.
+
+    This finally allows us to formalize entity resolution itself as a function:
+
+    \[
+        e(r_1, r_2, \ldots, r_n): Ref^n \rightarrow Res\text{, where }n\in\mathbb{N^*}
     \]
     
-    where $P$ is the domain of entity profiles and $x$ is the number of
-    resulting entity profiles.
-    We denote with $Res=\{P_x \mid x \in \mathbb{N}, P_x \in P\}$ as the domain
-    of all entity resolution task results.
-    Note that $Res$ \textit{is a set} because the nature of the entity
-    resolution task is to cluster or deduplicate, both operations being widely
-    understood as operations that result in creating unique items (be they
-    clusters or unique entity references).
+    which takes in a sequence of entity references and outputs a sequence of
+    entity profiles.
 
-    It stands to reason that the domain $Res$ contains a result which is the
-    closest to our understanding of the real world from a given perspective in
-    a given context.
+    Note that $Res$ is always going to be a collection containing unique entity
+    profiles in any theoretical model of entity resolution because of the nature
+    of the entity resolution problem.
+    Entity resolution disambiguates information, making it impossible for
+    identical items to be a part of its output.
+    This should not be taken to mean that the output of entity resolution tasks
+    will always be a set of profiles.
+
+    If $Res$ is the domain of all collections of entity profiles, one of
+    these sequences must be the ideal one.
+    The ideal collection of entity profiles contains the approximation which is
+    closest to our understanding of the real world items represented by the
+    entity profiles.
 
     \begin{defn}
-        We define the \textit{ground truth} $G$ of an input entity reference
-        domain $Ref$ the entity resolution result comprised of entity profiles
-        such that
-        $\{P_g \mid g \in N\, P_g \textrm{describes a real-world entity completely}\}$.
+        We define the \textit{ground truth} \textbf{G} over the entity reference
+        domain \textit{Ref} as the entity resolution result comprised of entity
+        profiles:
+        \[
+            \{P_g \mid g \in \mathbb{N^*}\}\textrm{, such that:}
+        \]
+        \begin{itemize}
+            \item each $P_g$ describes an entity completely using the available
+            entity references from $Ref$, and
+            \item there are no entity references in \textit{Ref} which are not a
+            part of a $P_g \in G$.
+        \end{itemize}
     \end{defn}
 
     In other words the ground truth is the ideal entity resolution result for 
-    given input data, but in a given context, from a given perspective.
-    This result contains only those profiles that describe real-world entities.
-
-    Now that we know what the ideal result of an entity resolution task looks
-    like, we can at least formulate a measure of the task's relative qualitative
-    performance with respect to the ground truth of the task's input.
+    the given input data, in a context, from a perspective.
+    Knowing this, we can formalize entity resolution quality generically with
+    respect to the ground truth.
     
     \begin{defn}
-    Given an entity resolution task $e: Ref \rightarrow Res$ and the ground
-    truth $G$ for the input entity reference domain $Ref$, a \textit{quality
-    metric} is an idempotent function $q: Res \rightarrow \mathbb{R}$ that
-    measures the similarity between the input of the function and $G$.
+    Given an entity resolution \textit{e} and the ground truth \textit{G} for
+    the entity reference domain $Ref$, a \textit{quality metric} is an
+    idempotent function:
+    \[
+        q(G, Res_e): Res^2 \rightarrow \mathbb{R}\textrm{, where
+        }Res_e\textrm{ is the result of }e
+    \]
+    scores how similar the result of \textit{e} is to \textit{G}.
     \end{defn}
 
     In practice, we should strive to implement quality metric as \textit{pure}
-    functions in the sense that running them on a computer will not entail any
-    side-effects.
+    functions, guarding their execution from any side-effects specific to
+    running a program on a computer.
 
     As stated before, the shape and structure of the items in $Res$, including
     $G$, depends on the mathematical model underpining a specific entity
@@ -523,99 +567,40 @@ T \kern -.1667em \lower .7ex \hbox{E} \kern -.125emX}}
     \mathbb{N}\}$ is dependent on the mathematical model used for implementing
     that task.
 
-    \subsection[ere]{Entity Resolution Evaluation}\label{subsec:ere}
+    One possible answer to the question of whether it is possible to evaluate
+    an entity resolution using a theoretical model which wasn't available at the
+    time when the entity resolution was designed has to do with the
+    applicability of quality metrics.
 
-    In the strictest sense, comparing two entity resolution tasks is possible as
-    long as they can be evaluated using the same set $Q$ of qualitative
-    evaluators.
-    Note that if the entity resolution $e_1$ can be evaluated using a set of
+    A simple logical inference tells us that if two theoretical models represent
+    entity profiles in the same way, they also share quality metrics.
+    Essentially, if the entity resolution $e_1$ can be evaluated using a set of
     quality metrics $Q_1$ and $e_2$ can be evaluated using a set of quality
     metrics $Q_2$ such that $Q_1 \cap Q_2 \neq \emptyset$, we have a set of
     quality metrics $Q_\cap = Q_1 \cap Q_2$ that allows us to compare $e_1$ and
     $e_2$ based on $Q_\cap$.
-    Future developments will seek to further loosen this constraint to allow
-    comparing entity resolution tasks that do not share a set of qualitative
-    evaluators.
-
-    \subsection[cert]{Comparing Entity Resolution Tasks}\label{subsec:cert}
-
-    Entity resolution tasks can be compared in quantitative terms without any
-    issue.
-    Metrics for the amount of hardware resources they consume or the physical
-    time that elapses for a data set of a given size are invariant across the
-    many possible implementations of entity resolution solutions.
-
-    The problem of comparing entity resolution results from a qualitative
-    perspective is significantly less clearly delimited.
-    Each mathematical model is rooted in a different branch of mathematics and,
-    as such, works with different assumptions and different expressions of the
-    surrounding reality.
-    For example, all statistical models express the real world in terms of
-    probabilities.
-    On the other hand, a construct of set theory will invariably explain the
-    real world in terms of set operations, properties and it will use algebraic
-    constructs.
-    The comparison problem must take into account these limitations.
-
-    \begin{defn}
-        Given
-        \begin{itemize}
-            \item the set of entity references $Ref$,
-            \item a set of quality metrics $Q$ that are common to all
-            entity resolution tasks $e_i : Ref -> Res$, $i \in \mathbb{N}$
-            \item the ground truth $G$ for the input domain $Ref$,
-            \item the quality metric results
-            $V_i=\{q_{i} \mid q_{i} = q(G, e_i), q \in Q\}, i \in \mathbb{N}$,
-        \end{itemize}   
-        we define the comparison of the entity resolution tasks above as
-        $C : (
-            \{V_i \mid i \in \mathbb{N}\}
-            \times
-            \{V_j \mid j \in \mathbb{N}\},
-            i \neq j
-        ) \rightarrow \{-1, 0, 1\}$ such that:
-        \[ 
-C(V_i, V_j) = \left\{
-\begin{array}{ll}
-      -1,~\textrm{if $e_i$ is less fit for purpose than $e_j$}\\
-      0,~\textrm{if $e_i$ is as fit for purpose as $e_j$}\\
-      1,~\textrm{if $e_i$ is better fit for purpose than $e_j$}\\
-\end{array} 
-\right. 
-\]
-
-    \end{defn}
-
-    The difficulty with the above definition stems from the formulation around
-    quality metrics.
-    One cannot compare variation of information with statistical precision, for
-    example.
-    Therefore, the metrics that are used in the comparison must be of a kind.
-    And we know that each type of metric is determined by a mathematical model.
     
     \section[mm]{Mathematical Models for Entity Resolution}\label{sec:mm}
 
-    The ground truth used for evaluating the performance of an entity resolution
-    task and the entity resolution result are represented similarly.
-    The representation depends on the mathematical model used by the entity
-    resolution task.
-    
-    The mathematical models available for entity resolution range from ones
-    based on complex networks and graph theory\cite{Li2020} to ones based on
-    probabilities\cite{fs1969} or algebra\cite{Tal11,Ben2009Swoosh}.
+    The representation of entity resolution results depends upon the theoretical
+    model we use.
+    There are multiple theoretical models available for entity resolution and
+    they range from ones based on complex networks and graph theory\cite{Li2020}
+    to ones based on probabilities\cite{fs1969} or
+    algebra\cite{Tal11,Ben2009Swoosh}.
 
-    John R. Talburt already provides a description of these mathematical models
-    in his book on entity resolution and information quality\cite{Tal11}.
-    This paper aims to take a deeper look at how two of the models described in
-    that book might be connected.
+    John R. Talburt provides an overview of these models in his book ``Entity
+    Resolution and Information Quality''\cite{Tal11}.
+    This paper aims to take a deeper look at how two of the models described
+    therein might be connected.
 
     \subsection[fsm]{Fellegi-Sunter Model}\label{subsec:fsm}
 
     In the late 1960s Ivan Fellegi and Alan Sunter wrote the seminal
-    paper\cite{fs1969} for what they called record linkage and what would later
-    become known as entity resolution.
-    To this day, their mathematical model based on probability theory is the
-    most popular way of formalizing the entity resolution problem.
+    paper\cite{fs1969} for what was called record linkage and would later become
+    known as entity resolution.
+    To this day, the probabilistic model for entity resolution is this problem's
+    most popular formalization.
     In this mathematical model, entity resolution is a function that aids in 
     probabilistic decision making.
     
@@ -626,12 +611,15 @@ C(V_i, V_j) = \left\{
     The result of the operation is a set containing pairs of items
     $X = \{(a, b), a \in A, b \in B\}$ or $X = A \times B$.
     
-    The model then deconstructs $X$ to two disjoint subsets $X = M \cup U$: $M$ for pairs that
-    contain matching items and $U$ for pairs that contain non-matching items.
-
+    The model then deconstructs $X$ to two disjoint subsets $X = M \cup U$:
+    \begin{itemize}
+        \item $M$ for pairs that contain matching items, and
+        \item $U$ for pairs that contain non-matching items,
+    \end{itemize}
+    or more formally:
     \begin{align}
-        M &= \{(a, b) | a == b, a \in A, b \in B\}~\textrm{and} \\
-        U &= \{(a, b) | a \neq b, a \in A, b \in B\}
+        M &= \{(a, b) | a == b, a \in A, b \in B\}~\textrm{and}\nonumber \\
+        U &= \{(a, b) | a \neq b, a \in A, b \in B\}\nonumber
     \end{align}
 
     The model proposes that if $a \in A$ and $b \in B$ are two vectors, their
@@ -656,13 +644,16 @@ C(V_i, V_j) = \left\{
     $D=\{d(\gamma)\}$, where
     
     \begin{align}
-        &d(\gamma) = \{P(A_1|\gamma),P(A_2|\gamma),P(A_3|\gamma)\};
-        &\textrm{so that}~\sum_{i=1}^{3}P(A_i|\gamma) = 1\nonumber.
-        \gamma \in \varGamma\nonumber
+        d(\gamma) = &\{P(A_1|\gamma),P(A_2|\gamma),P(A_3|\gamma)\}\textrm{, so
+        that:}\nonumber\\
+        &\sum_{i=1}^{3}P(A_i|\gamma) = 1\nonumber, \gamma \in \varGamma\nonumber
     \end{align}
 
-    In other words, for a $\gamma \in \varGamma$, $L(\gamma) = \{P(A_1|\gamma),
-    P(A_2|\gamma), P(A_3|\gamma)\}$ so that the probabilities sum up to $1$.
+    In other words, given a $\gamma \in \varGamma$, we have the linkage rule
+    \[
+        L(\gamma) = \{P(A_1|\gamma), P(A_2|\gamma), P(A_3|\gamma)\}
+    \]
+    so that the probabilities sum up to $1$.
 
     When using this model the purpose of entity resolution is to find the
     optimal linkage rule.
@@ -670,11 +661,11 @@ C(V_i, V_j) = \left\{
     $P(A_2|\gamma)$.
     In other words, the optimal linkage rule according to the F-S model is the
     linkage rule without uncertainties.
-    This optimization inclination of the model makes it very well suited for
+    This inclination of this model towards optimization makes it well suited for
     both rule-based\cite{oyster2012} and machine learning\cite{deepm2020}
     implementations.
     
-    In this universe, two conditional probabilities become interesting:
+    In the probabilistic model, two conditional probabilities are interesting:
 
     \begin{align}
         m(\gamma)&=P(\gamma(a, b) | (a, b) \in M)~\textrm{and}\nonumber\\
@@ -714,36 +705,26 @@ C(V_i, V_j) = \left\{
 
     To link the Fellegi-Sunter model to our own terminology, let's start by
     talking about $a \in A$ and $b \in B$.
-    The original F-S model calls $A$ and $B$ ``populations'' and $a$ and $b$,
+    The F-S model calls $A$ and $B$ ``populations'' and $a$ and $b$,
     ``population elements''.
     A distinction is made between records, denoted with $\alpha(a)$ and
     $\beta(b)$, and population elements.
     Most of the original paper refers to records.
 
-    It is safe for the reader to assume that in our terminology the population
-    elements correspond to real-world entities and the records correspond to
-    entity references.
-    However, our view on $\alpha(a)$ and $\beta(b)$ is more broad in that we
-    think of them not merely as records, but as functions that associate a
-    representation as records(entity references) to the population elements
-    (information about real-world entities).
-    We used the notion of traits or extraction traits to express this concept.
+    Population elements correspond to entities and records correspond to entity
+    references in our terminology.
+    When it comes to $\alpha(a)$ and $\beta(b)$, we think of them as special
+    cases of traits.
         
-    The $A$ and $B$ populations equate roughly to our notion of information
-    sources.
-    The ``population'' concept is a particularization of our information source
-    concept because it is defined as a set in the original paper whereas our
-    definition includes other possible data representations.
-    The concept is also more general than our own concept because we defined
-    information sources under the assumption of machines being able to process
-    the information within them, whereas a population is a more general concept
-    to which this restriction need not apply.
-
+    The $A$ and $B$ populations equate to data sources.
+    A ``population'' is a particular type of data source because it is defined
+    as a set.
+    The set is a specialization with respect to our definition of data sources.
+    
     The Fellegi-Sunter model works under the assumption that there are two
     populations $A$ and $B$ and defines the linkage rule as a function that uses
     conditional probabilities that involve both populations.
-    On the other hand, our $Ref$ domain for entity references is clearly
-    solitary.
+    On the other hand, our $Ref$ domain is solitary.
     Using our terminology we would denote $A$ with $S_1$ and $B$ with $S_2$.
     We start constructing our $Ref$ domain by using traits to extract $n_1$
     entity references from $S_1$ and $n_2$ entity references from $S_2$.
@@ -754,66 +735,59 @@ C(V_i, V_j) = \left\{
     The result domain is expressed as $X = A \times B$ in this model.
     It is subsequently split into $M$ and $U$ the sets of matching and
     non-matching pairs in $X$, respectively.
+
     The $X$ in the original model is equivalent to $Res$ in our terminology.
     $Res$ can be defined as:
     \begin{align}
-        &Res = \{(r_{{S_i}{k}}, r_{{S_j}{l}}),~1 \leq k \leq |S_i|,~1
-        \leq l \leq |S_j|, i \neq j, i,j \in \{1, 2\}\}\textrm{,}\nonumber
+        Res = &\{(r_{{S_i}{k}}, r_{{S_j}{l}})\mid~1 \leq k \leq |S_i|,
+        1 \leq l \leq |S_j|\}\textrm{, so that}\nonumber\\
+        &i \neq j, i,j \in \{1, 2\}\textrm{,}\nonumber
     \end{align}
     where $|S_i|$ denotes the number of entity references extracted from the
     source $S_i$.
-    Our concept of an entity profile translates to a pair of entity references,
-    with $M$ being the set containing the entity profiles that refer to the same
-    real-world entity and $U$ being the set of entity profiles that don't refer
-    to the same real-world entity.
 
-    Recall that the shape of the ground truth and that of the output of the
-    entity resolution tasks that this model use is determined by the definition
-    of the output domain of the entity resolution function.
-    Concretely, we expect entity resolution tasks that implement this model to
-    output a set of pairs of tuples.
+    Each entity profile is represented as a pair of entity references.
     For example, if $r_{11}=(1, 2, 3)$ and $r_{21}=(4, 5, 6)$ are two entity
     references that refer to the same real-world entity, this model would return
-    the pair $((1, 2, 3), (4, 5, 6))$.
+    an entity profile as the following pair: $((1, 2, 3), (4, 5, 6))$.
+
+    $M$ becomes the set containing the entity profiles that refer to entities.
+    $U$ becomes the set of entity profiles that don't refer entities.
+    Consequently, this model proposes that the result of entity resolution is a
+    set of distinct pairs of entity references.
 
     A natural question is whether, instead of a single set of pairs of tuples we
     should expect two sets of pairs of tuples that would correspond to the two
     subsets $M$ and $U$ from the original paper.
-    For $M$ this doesn't seem to be a problem because in practice $M$ will grow
-    proportionally to the maximum number of entity references extracted from a
-    single information source.
-    On the other hand, constructing $U$ seems to be prohibitively expensive.
-    Let's imagine that we're grouping the extracted entity references in vectors
-    by their information source of provenance.
-    Then $U$ will grow proportionally to the length of the vector product of
-    these vectors.
-    So, for practical reasons, we are of the opinion that the output of the
-    entity resolution function as well as the ground truth should contain only
-    the items that should be in $M$.
+    $M$ will grow proportionally to the maximum number of entity references
+    extracted from a single data source.
+    On the other hand, the size of $U$ is proportional to the product of the
+    sizes of the populations $A$ and $B$.
+    For practical reasons concerning resource usage, we think constructing $M$
+    and inferring $U$ based on $M$ is the best choice.
 
-    With the above definition for $Res$ we also observe that this model always
-    compares two entity references and can not explain linking more than two
-    entities\cite{Tal11}.
-    While there is work that extended the model to compare more than two 
-    entity references\cite{Kon19}, we will not touch upon that in this paper.
-    
-    As a consequence, we can't represent transitive links between entity
-    references with this model.
-    This means that if the entity reference $r_1$ matches $r_2$ and
-    $r_2$ matches $r_3$, we can't infer that $r_1$ matches $r_3$ by using this
+    With the above definition for $Res$ we observe that this model explain
+    matching very well, but clusters entities only two at a time.
+    Linking more than two entity references, and especially implementing
+    transitive entity reference linking does not seem possible with this
     model\cite{Tal11}.
+    By transitive linking we mean that if the entity reference $r_1$ matches
+    $r_2$ and $r_2$ matches $r_3$, we could infer that $r_1$ matches $r_3$.
+    While there is work that extends the model to compare more than two entity
+    references\cite{Kon19} at once, transitivity is still an issue so we will
+    not dive deeper into topics concerning matching multiple entity references.
+    
+    \subsubsection[fsm-metrics]{Specific Metrics}\label{subsubsec:fsm-metrics}
 
-    \subsubsection[fms-measure]{Specific Metrics}\label{subsubsec:fsm-measure}
-
-    The quality metrics that are specific to this mathematical model can be any
-    of the very broadly used statistical metrics.
     Because we have a clear definition of the Type I and Type II errors, we can
     give a clear context for the notions of true and false positive and true and
     false negative.
-    In defining them we make use of the sets $M$ and $U$ as they are defined in
-    the original paper describing the F-S model.
-
-    Depending on where a pair(output by the entity resolution function) is
+    This allows us to use any of the familiar statistical metrics that rely on
+    these concepts.
+    
+    In defining true/false positives/negatives we use the sets $M$ and $U$ as
+    they are defined in the original paper describing the F-S model.
+    Depending on where a pair (output by the entity resolution function) is
     expected to be found, we define:
 
     \begin{itemize}
@@ -835,22 +809,24 @@ C(V_i, V_j) = \left\{
     
     Several metrics based on these concepts exist, though the effectiveness of
     some has been questioned\cite{Goga2015}.
-    With this in mind we finally define the three quality metrics that are
-    widely used with this model:
+    With this in mind we choose three quality metrics that are widely used with
+    this model:
 
     \begin{align}
-    Precision&=\frac{TP}{TP+FP} \\
-    Recall&=\frac{TP}{TP+FN} \\
-    F_1 Score&=2 \cdot \frac{Precision \cdot Recall}{Precision+Recall}
+    Precision &= \frac{TP}{TP+FP}\nonumber \\
+    Recall &= \frac{TP}{TP+FN}\nonumber \\
+    F_1 &=2 \cdot \frac{Precision \cdot Recall}{Precision+Recall}\nonumber
     \end{align}
 
     \textit{Precision} (or the positive predictive value) is defined as the
     number of correct predictions that were made in relation to the total number
     of predictions that were made.
+
     \textit{Recall} (or sensitivity) is defined as the number of correct
     predictions that were made in relation to the total number of positive
     predictions that could have been made (which corresponds to the number of
     items in the ground truth).
+
     The \textit{$F_1$} score is the harmonic mean of the precision and the
     recall and it is used to capture the tradeoff between precision and
     recall\cite{hitesh2012}.
@@ -861,12 +837,9 @@ C(V_i, V_j) = \left\{
     resolution over large datasets\cite{tal2007algebraic}, the algebraic model
     for entity resolution was later refined to describe entity resolution
     itself\cite{Tal11}.
-    Although entity resolution systems and tasks have not been implemented with
-    this specific model in mind, its generality allows it to be applied to
-    virtually any entity resolution task.
-    While the Fellegi-Sunter model (described in Section~\ref{subsec:fsm}) is a probabilistic model
-    that requires two information sources to be compared, this model removes
-    that constraint allowing as many information sources as necessary.
+    While the Fellegi-Sunter model described in Subsection~\ref{subsec:fsm}is a
+    probabilistic model that partitions input in two data sources to compare,
+    this model allows as many information sources as necessary.
     Another improvement is the support for transitive matching.
     
     \subsubsection[algdesc]{Description}\label{subsubsec:algdesc}
@@ -957,21 +930,17 @@ C(V_i, V_j) = \left\{
     initial set.
     This side-effect of equivalence relationships is the \textit{clustering}
     step or aspect of the entity resolution process.
-    In fact, if $ER$ were to generate the partition $P$, we would call the
-    equivalence classes \textit{clusters} in the context of entity resolution.
+    The equivalence classes from the partition generated by $ER$ are also known
+    as \textit{clusters} in the context of entity resolution.
 
     A last point of notice is that entity resolution tasks do not necessarily
     generate a unique outcome\cite{Tal11}.
-    Depending on the order in which entity references are processed, entity
-    resolution tasks might generate different partitions.
+    Depending on the order in which entity references are processed, runing the
+    same entity resolution task might generate different partitions.
     The entity resolution tasks where the order in which entity references are
     processed is irrelevant are called \textit{sequence neutral}\cite{Tal11}.
-
-
-    Eu as adauga o prezentare formala a formei outputului.
-    De ex: $Res$ will be represented as a set partition: $Res = \{C_1, C_2, C_3, \ldots, C_k\}$, where $C_i \subseteq Ref$, every $C_i \neq \Phi$, $C_i \cap C_j \neq \Phi$ (for $i \neq j$), $\bigcup C_i = Res$.
-    An entity reference will be part of a single such cluster.
-
+    In this paper we are only interested in sequence neutral entity resolution
+    tasks.
 
     \subsubsection[algrel]{Terminology Mapping}\label{subsubsec:algrel}
 
@@ -1003,47 +972,22 @@ C(V_i, V_j) = \left\{
 
     The result of an entity resolution task is a partition over the input set of
     entity references.
-    Given that the ground truth is the ideal result, it is also a partition over
-    the input set of entity references.
-    One could say that the ideal entity resolution relationship is the generator
-    of the ground truth, while the result of the entity resolution task induces
-    the entity resolution relationship at the core of the entity resolution
-    process.
-    
+    This defines the output domain of our entity resolution function as:
+
+    \begin{align}
+        Res &= \{C_1,~C_2,~C_3,~\ldots,~C_n\mid~C_i\in~P\}\textrm{, so that}\nonumber\\
+        C_i&\neq\emptyset,\forall~1\leq~i\leq~n\textrm{,~and}\nonumber\\
+        C_i\cap~C_j&\neq\emptyset,\forall~1\leq~i\neq~j\leq~n\textrm{,~and}\nonumber\\
+        \bigcup_{i=1}^{n}C_i&=Res\nonumber
+    \end{align}
+
+    Another way to read the above definition is that ground truth and all other
+    entity resolution results are partitions over $Ref$.
+    The definition also implies that any entity reference in $Ref$ will be a
+    part of only one cluster.
     Each equivalence class in an entity resolution result is a cluster of entity
     references.
-    That is, each cluster in the ground truth or in another entity resolution
-    result is an entity profile.
-
-    Intuition tells us that pairs of entity references from the input set will
-    be processed and either added to a cluster of entity references or not.
-    The interesting thing to note is that the mechanics are very similar to
-    the mechanics of the Fellegi-Sunter model.
-    The process itself, still compares items two at a time to determine whether
-    they refer to the same real-world entity or not.
-    This begs the question whether we can just move from one model to another
-    to interpret the results.
-
-    It turns out that by applying Kruskal's algorithm and using the union-find
-    data structure to do so, we can.
-    The input parameters in this variation of Kruskal's algorithm are the set
-    of entity references and a list of pairs of elements from that set.
-    The algorithm outputs disjoint sets of elements.
-
-    We recall that the Fellegi-Sunter model defines the output of the algorithm
-    as a list of pairs.
-    If we use the input set of entity references and a ground truth as it should
-    be defined for the Fellegi-Sunter model as input parameters, Kruskal's
-    algorithm will output a partition over the original set that contains the
-    entity profiles based on the associations defined in the ground truth of the
-    Fellegi-Sunter model.
-
-    Because this is a partition induced by the ground truth of the
-    \hyperref[subsec:fsm]{Fellegi-Sunter model}, this is the ground truth of the
-    algebraic model.
-    The proof of this statement relies on the properties of the union-find data
-    structure and those of Kruskal's algorithm: their stability and input order
-    neutrality with respect to the output disjoint sets.
+    A cluster of entity references is an entity profile.
 
     \subsubsection[algeval]{Specific Metrics}\label{subsubsec:algeval}
 
@@ -1120,78 +1064,133 @@ C(V_i, V_j) = \left\{
     They differ from the Rand index because pairwise metrics operate at the
     partition level and not at the partition class level.
     
-    Pairwise precision is defined as the ratio between the number of pairs in
-    $Res$ that are also in $G$ and the number of pairs in $Res$.
+    Pairwise precision (denoted \textit{PP}) is defined as the ratio between the
+    number of pairs in $Res$ that are also in $G$ and the number of pairs in
+    $Res$.
     In other words pairwise precision tells us how many pairs the entity
     resolution task got right out of the pairs it returned.
     \[
-        Pair~Precision = \frac{|Pairs(Res) \cap Pairs(G)|}{|Pairs(Res)|}
+        PP = \frac{|Pairs(Res) \cap Pairs(G)|}{|Pairs(Res)|}
     \]
 
-    Pairwise recall is defined as the ratio between the number of pairs in
-    $Res$ that are also in $G$ and the number of pairs in $G$.
+    Pairwise recall (denoted \textit{PR}) is defined as the ratio between the
+    number of pairs in $Res$ that are also in $G$ and the number of pairs in $G$.
     In other words, pairwise recall tells us how many pairs the entity
     resolution task got right from the ideal answer.
     \[
-        Pair~Recall = \frac{|Pairs(Res) \cap Pairs(G)|}{|Pairs(G)|}
+        PR = \frac{|Pairs(Res) \cap Pairs(G)|}{|Pairs(G)|}
     \]
-    The harmonic mean between pairwise precision and pairwise recall is called
-    the pairwise F1 score or the pairwise comparison measure\cite{Men10}.
+    The harmonic mean between pairwise precision and pairwise recall (denoted
+    \textit{PF1}) is called the pairwise F1 score or the pairwise comparison
+    measure\cite{Men10}.
     \[
-        Pair~Comparison = \frac{
-            2 \cdot Pair Precision \cdot Pair Recall
+        PF1=\frac{2 \cdot PP \cdot PR}{PP + PR}
     \]
 
     The cluster metrics are similarly called cluster precision, recall and
     comparison measure (or F1).
-    The cluster precision is the ratio between the number of identical clusters
-    between the entity resolution output and the ground truth and the number of
-    clusters in the entity resolution output.
+    The cluster precision (denoted \textit{CP}) is the ratio between the number
+    of identical clusters between the entity resolution output and the ground
+    truth and the number of clusters in the entity resolution output.
     In other words, we want to know how many clusters the entity resolution task
     got right in relation to its own output.
 
     \[
-        Cluster~Precision = \frac{|Clusters(Res) \cap Clusters(G)|}{
-            |Clusters(Res)|
-        }
+        CP=\frac{|Clusters(Res) \cap Clusters(G)|}{|Clusters(Res)|}
     \]
 
-    The cluster recall is the ratio between the number of clusters that are
-    common between the entity resolution task's result and the ground truth over
-    the number of clusters in the ground truth.
+    The cluster recall (denoted \textit{CR}) is the ratio between the number of
+    clusters that are common between the entity resolution task's result and
+    the ground truth over the number of clusters in the ground truth.
     In other words, this measures how many clusters did the entity resolution
     task get right in relation to the ground truth.
 
     \[
-        Cluster~Recall = \frac{|Clusters(Res) \cap Clusters(G)|}{
-            |Clusters(G)|
-        }
+        CR = \frac{|Clusters(Res) \cap Clusters(G)|}{|Clusters(G)|}
     \]
 
-    Finally, the cluster comparison metric is the harmonic mean between the
-    cluster precision and the cluster recall.
+    Finally, the cluster comparison metric (denoted \textit{CF1}) is the
+    harmonic mean between the cluster precision and the cluster recall.
 
     \[
-        Cluster~Comparison = \frac{
-            2 \cdot Cluster Precision \cdot Cluster Recall
-        }{Cluster Precision + Cluster Recall}
+        CF1 = \frac{2 \cdot CP \cdot CR}{CP + CR}
     \]
 
     The pairwise and cluster metrics provide more insight into how two entity
-    resolution results compare structurally.
-    The statistical metrics (precision, recall, f1 score) lack this ability to
-    introspect the structure of the compared items.
+    resolution results compare structurally which is an ability that statistical
+    metrics lack.
     The idea of discerning how the structures of two results compare was first
     suggested in Rand's paper that described his namesake index\cite{rand1971}.
     
-    Secondly, these quality metrics show similar results to the ones output by
-    the statistical metrics of the F-S model only in an ideal setting for the
-    statistical model.
-    When data is not ideally cleaned (errors, duplications, etc) these metrics
-    quickly start showing those misgivings, whereas the statistical metrics
-    might not.
-    We will come back to this idea in our experiment.
+    The pairwise quality metrics (the pairwise precision, recall and
+    comparison measure as well as the Rand Index and Adjusted Rand Index) mimic
+    more or less closely the statistical metrics of the F-S model.
+    The cluster quality metrics exposed by this model provide insights that
+    either complement or support the pairwise metrics.
+    
 
+    \subsection{From Probabilities to Algebra}\label{subsec:fsm-alg}
+
+    As stated before, one of the misgivings of the Fellegi-Sunter model is that
+    it captures relatively well the matching aspect of entity resolution without
+    doing as good a job for its clustering aspect.
+    The algebraic model allows a more complete perspective over how entity
+    resolution works by supporting measures of both matching (pairwise metrics)
+    and clustering.
+    One of the questions we asked initially is whether we could transition from
+    one model to the other to enjoy the more complete overview offered by the
+    algebraic model.
+
+    The answer to this question lies in the difference between how the two
+    models represent entity profiles and entity resolution output in general.
+    Intuitively, this becomes a question of whether we can automatically convert
+    sequences of pairs of items to clusters.
+    Then, if that is possible, the question becomes whether from a set of pairs
+    of items from an input set we can obtain a partition over the input set
+    itself.
+
+    The idea is to consider pairs of items as being edges in a graph.
+    Then we can take inspiration from Kruskal's algorithm to construct connected
+    the components of this graph.
+    We do this by utilizing the Union-Find data structure.
+    This very well known data structure that is used for constructing sets of
+    data incrementally can be used to construct the graph components as sets.
+
+    The algorithm takes as input a set of items and an iterable sequence of
+    pairs of items from that set.
+    The Union-Find data structure is initialized with all items in the set.
+    Then, with each pair it processes, it links items that are paired up in
+    the same `class'.
+
+    We can see that all of the items in the set are used and none are discarded.
+    The Union-Find data structure produces stable classes of items.
+    In case an item is part of two classes, these classes are merged.
+    As a result, all sets produced by the Union-Find data structure are
+    distinct.
+    Therefore the Union-Find data structure produces a partition over the input
+    set of items.
+
+    This can be applied to meet our needs by leveraging the input domain $Ref$
+    and the representation of the entity resolution result in the F-S model.
+    Recall that $Ref$ is always defined as a set of entity references.
+    We defined the output of the F-S model as a set of pairs of entity
+    references.
+    The ground truth expressed according to the F-S model and the $Ref$ set of
+    entity references are the input parameters of the Union-Find data structure.
+
+    The ground truth always contains the ideal entity resolution output
+    regardless of the mathematical model.
+    It can't be incomplete or faulty, by definition.
+    Therefore, when we apply the Union-Find data structure to the ground truth
+    it cannot return anything less than a ground truth because it processes all
+    the data in $Ref$ and the partition it creates over $Ref$ is stable (i.e
+    given the input sequence of pairs it can't produce two partitions over $Ref$
+    on two separate occasions).
+
+    If we have a ground truth expressed as an iterable sequence of matching
+    pairs and we know the input $Ref$ domain that's used for entity resolution,
+    we obtain an ideal partition induced by entity resolution over $Ref$.
+    
     \section{Experiments}\label{sec:experiments}
     \input{experiments}
 
@@ -1258,6 +1257,6 @@ C(V_i, V_j) = \left\{
     of any entity resolution task would make adopting and tuning entity
     resolution systems less costly and more transparent.
 
-    \bibliographystyle{ieeetr} % We choose the "plain" reference style
+    \bibliographystyle{ieeetr}
     \bibliography{er-general,er-related-work,er-additional-references,er-software}
 \end{document}
