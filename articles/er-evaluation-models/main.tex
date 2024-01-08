@@ -28,9 +28,12 @@ T \kern-.1667em \lower.7ex \hbox{E} \kern-.125emX}}
     
     \maketitle
     \begin{abstract}
+        \textcolor{green}{tb spus in 2 cuvinte ce inseamna ER}
         Despite well-established theoretical frameworks for entity resolution,
         there is a noticeable gap in its optimal application in practice.
-        This framework plays a pivotal role in shaping the functionality of
+        This framework 
+        \textcolor{green}{care framework? prop precedenta zice de framework-uri in general...}
+        plays a pivotal role in shaping the functionality of
         various metrics used to evaluate entity resolution algorithms.
         As a result, the interpretation derived from these metrics guides the
         determination of optimal input parameters for the algorithm under
@@ -38,6 +41,7 @@ T \kern-.1667em \lower.7ex \hbox{E} \kern-.125emX}}
         This indicates that the practical projection of theoretical models in
         entity resolution often deviates from their optimal utilization, leading
         to varied outcomes and understandings of the problem.
+        \textcolor{green}{tb mentionata si propunerea cu care vine acest paper; ce aduce el nou si care sunt concluziile studiului / investigatiei efectuate}
     \end{abstract}
 
     \begin{IEEEkeywords}
@@ -52,7 +56,9 @@ T \kern-.1667em \lower.7ex \hbox{E} \kern-.125emX}}
     sources~\cite{Qia17}.
     However, we share the opinion that identifying and linking data constitutes
     a more specialized process~\cite{Tal11}.
-    We also leave aside any classification based on number of sources.
+    We also leave aside any classification 
+    \textcolor{green}{of ???} 
+    based on number of sources.
     The task of gathering information about a generic pound of potatoes across
     various marketplaces is still an entity resolution task, in our view.
     Whether the information about marketplaces and the potatoes that find
@@ -72,6 +78,10 @@ T \kern-.1667em \lower.7ex \hbox{E} \kern-.125emX}}
     When there is such a wide array of past, present and future applications,
     evaluating entity resolution quality seems important.
     
+    \textcolor{green}{aici e nevoie de:\\
+    1. introducerea, pe scurt, a metodelor de evaluare din literatura, care sunt limitarile sau minusurile lor a.i. sa poti formula 1-2 research questions sau ipoteze pe care sa le valideze abordarea descrisa in articolul curent. Adica tb sa ai o motivatie pt toata munca efectuata;\\
+    2. evidentierea contributiilor pe care le aduce lucrarea atat relativ la alte lucrari din literatura care analizeaza metrici si metode de evaluare (deci cu ce e diferita de ceea ce exista pana acum in literatura), cat si din punct de vedere al plusului efectiv de valoare adus de analiza efectuata}
+
     We begin by exploring a few preliminaries focused on entity resolution
     itself and then describe the problem we are analyzing.
     After briefly summarizing the work that relates to our paper, we introduce
@@ -86,7 +96,9 @@ T \kern-.1667em \lower.7ex \hbox{E} \kern-.125emX}}
 
     \section{Preliminaries}\label{sec:preliminaries}
 
-    The following characterstics of entity resolution tasks stand out:
+    The following characterstics of entity resolution tasks stand out
+    \textcolor{green}{e nevoie de o referinta si as incepe propozitia spunand ca asta e oarecum rezumatulu multor lucrari din literatura de specialitate}
+    :
 
     \begin{itemize}
         \item\textit{A concern for a real-world entity}, for if the task were
@@ -122,7 +134,9 @@ T \kern-.1667em \lower.7ex \hbox{E} \kern-.125emX}}
     observer is key in our physical universe~\cite{schrodinger1926}.
     Perhaps we can use Schrodinger's insight as inspiration for bridging our own
     gaps in understanding entity resolution quality.
-    For instance, we may what are the perspectives available to us when we want
+    For instance, we may 
+    \textcolor{green}{say? notice?} 
+    what are the perspectives available to us when we want
     to determine which information relates to the same real object.
     In other words, does it matter in practice how we model an entity resolution
     task theoretically?
@@ -131,12 +145,16 @@ T \kern-.1667em \lower.7ex \hbox{E} \kern-.125emX}}
     model and how?
 
     Historically, entity resolution measurements owe much to the field of
-    information retrieval and to statistics.
+    information retrieval and statistics.
     Some of the measurements used to evaluate entity resolution quality seemed
     to faulter when put under scrutiny~\cite{Goga2015}.
-    This lead to using better measures that describe the outcomes more wholly
+    This 
+    \textcolor{green}{gap or discrepancy or divergence} 
+    leads to using better measures that describe the outcomes more wholly
     and more objectively.
-    This indicates both that there is more than one lens to view entity
+    This 
+    \textcolor{green}{I would add a noun for emphasising the incosistency of the evaluation setup available in literature} 
+    indicates both that there is more than one lens to view entity
     resolution through and that the principles we should look for in such a lens
     should at least cover completeness and objectivity.
     
@@ -177,6 +195,7 @@ T \kern-.1667em \lower.7ex \hbox{E} \kern-.125emX}}
     The abstract question above becomes whether we can interpret an entity
     resolution task's quality from a perspective that wasn't available at the
     time it was implemented or not?
+    \textcolor{green}{aici nu e f clar la ce anume se refera aceste perspective. TBA}
 
     \section{Related Work}\label{sec:related}
     
@@ -211,6 +230,7 @@ T \kern-.1667em \lower.7ex \hbox{E} \kern-.125emX}}
     resolution~\cite{fs1969,Ben2009Swoosh,Tal11} are invaluable resources.
     The models we present in this paper have been heavily documented before much
     better than we aspire to do here~\cite{Tal11,tal2013}.
+    \textcolor{green}{It's nice to be humble, but here I would write another reason/motivation; the aim of the paper is to analize the evaluation component, not to re-describe the models; the models' description is given, in a uniform manner, just for improving the paper readability, fluency, comprehensibility}
     
     Taking a different tack on describing entity resolution in a generic,
     abstract way, we have studies that show a process perspective over entity
@@ -233,25 +253,26 @@ T \kern-.1667em \lower.7ex \hbox{E} \kern-.125emX}}
     We start by saying that entity resolution operates on data sources.
 
     \begin{defn}
-        An \textit{data source} represents a sequence of decoded messages
+        A \textit{data source} represents a sequence of decoded messages
         that originate somewhere and can be processed by a computer program that
-        reads them over a communication channel.
+        reads them over a communication channel\footnote{The terms `decoded', `message' and `communication channel' refer to concepts
+        defined in information theory~\cite{ash2012it}.}.
     \end{defn}
 
-    The terms `decoded', `message' and `communication channel' refer to concepts
-    defined in information theory~\cite{ash2012it}.
+    
     
     An entity resolution task needs at least one data source to operate on.
     When the relevant information is split across multiple data sources, these
     can be merged into a single source.
     In the same way, a single data source can be split into multiple data
     sources.
-    Data sources may be bounded (files or databases) or unbounded(streams).
+    Data sources may be bounded (files or databases) or unbounded (streams).
     For the purposes of this paper, these attributes of data sources as well as
     their number are inconsequential.
     
     In the context of the definition of a data source, entity resolution is the
     computer program processing the data source.
+    \textcolor{green}{Is ER a program? I recomend to consider it as a pb in the entire paper} 
     What sets entity resolution tasks apart from other computer programs are the
     notions they use to process information from the data source.
 
@@ -264,7 +285,7 @@ T \kern-.1667em \lower.7ex \hbox{E} \kern-.125emX}}
     Attributes by themselves are not enough to describe an entity.
     For example, `red' fully describes an entity only if we are looking for
     colors.
-    If we're looking for fruit, `red' is only one of several attributes that
+    If we are looking for fruit, `red' is only one of several attributes that
     help describe fruit.
     We might be interested whether the fruit is `sour' or `sweet' as well as
     whether it is `small', `medium' or `large'.
@@ -339,7 +360,7 @@ T \kern-.1667em \lower.7ex \hbox{E} \kern-.125emX}}
     process such as scraping, traits in the sense described here are actually
     integral to the entity resolution process itself.
     
-    The notion that's the most similar to that of a trait is the pattern
+    The notion that is the most similar to that of a trait is the pattern
     recognition notion of a `feature':
     \textit{an individual measurable property or characteristic of a
     phenomenon}\cite{bishop2006pattern}.
@@ -369,7 +390,7 @@ T \kern-.1667em \lower.7ex \hbox{E} \kern-.125emX}}
     This trait might optimize certain attributes of the entity references for
     comparison.
     
-    To avoid confusing traits and attributes, it's easy to think about traits
+    To avoid confusing traits and attributes, it is easy to think about traits
     as not being a part of the data source, but rather as a part of the entity
     resolution task implementation.
     Entity resolution tasks extract attributes that they assign to entity
@@ -401,14 +422,18 @@ T \kern-.1667em \lower.7ex \hbox{E} \kern-.125emX}}
     \section{Formalizing Entity Resolution}\label{sec:entity-resolution}
 
     In a broad sense, the entity resolution process is usually comprised of four
-    different activities\cite{Pap19,Tal11}:
+    different activities\cite{Pap19,Tal11}
+    \textcolor{green}{I would use "steps" (instead of activities) in order to higlight their order - it is a process that involves all these 4 components}
+    :
     \begin{itemize}
         \item \textit{entity reference extraction} --- the first phase of entity
         resolution deals with extracting entity references from multiple
-        sources, as detailed in the introduction of this paper;
+        sources, as detailed  
+        \textcolor{green}{in section \ref{sec:terminology}} 
+        of this paper;
         \item \textit{blocking} and \textit{filtering} --- at this stage, the
         entity resolution task groups in the same `block' entities that share
-        similar traits and then within each block all entities that can't
+        similar traits and then within each block all entities that cannot
         possibly match are filtered \textit{out}; the intent here is to allow
         entity resolution tasks to work with large amounts of data~\cite{Pap19};
         \item \textit{matching} --- one of the defining activities of the entity
@@ -420,33 +445,33 @@ T \kern-.1667em \lower.7ex \hbox{E} \kern-.125emX}}
 
     In this paper, we concern ourselves with the last two stages of the entity
     resolution process.
+    \textcolor{green}{this decision must be motivated (a simple argument could be enough) - e.g. the focus is actually on the final evaluation}
     From now on, when we use the term \textit{entity resolution} we only refer
-    to matching and clustering.
+    to matching and clustering steps.
 
     However, because extraction plays a big part in how data is structured
-    within any entity resolution process, we start formalizing entity resolution
-    by formalizing the data extraction using the notions from
+    within any entity resolution process, we start specifying the entity resolution problem by formalizing the data extraction using the notions from
     Section~\ref{sec:terminology}.
     
     Given:
     \begin{itemize}
-        \item $n \in N^*$ pairs (($S_i$, $n_i$), $1 \leq i \leq n$, $n_i \in N$), 
+        \item $n \in N^*$ pairs ($S_i$, $n_i$), $1 \leq i \leq n$, $n_i \in N$, 
         where $S_i$ is a data source and $n_i$ is the number of messages in
         $S_i$,
-        \item $m_i \in N^*$ traits, ($t_{ij}$, $1 \leq j \leq m_i$) for each
+        \item $m_i \in N^*$ traits $t_{ij}$, $1 \leq j \leq m_i$ for each
         information source $S_i$ so that
         \item each trait $t_{ij}$ can generate at most $a_{ij} \in N^*$
         attributes,
     \end{itemize}
     an entity resolution task $ER$ applies each trait $t_{ij}$ onto the source
-    $S_i$, ($1 \leq i \leq n$, $1 \leq j \leq m_i$), in order to extract
+    $S_i$, $1 \leq i \leq n$, $1 \leq j \leq m_i$, in order to extract
     $r_{{S_i}k}$ entity references where
-    ($0 \leq k \leq n_i \cdot \sum^{m_i}_{j=1}a_{ij}$).
+    $0 \leq k \leq n_i \cdot \sum^{m_i}_{j=1}a_{ij}$.
     
     Next, we denote with $A$ the domain of all possible attributes that can be
     used by $ER$.
 
-    In this context, let $r_{{S_i}{k_j}}$ denote the $k_j$th ($1 \leq j \leq k$)
+    In this context, let $r_{{S_i}{k_j}}$ denote the $k_j$th, $1 \leq j \leq k$
     entity reference extracted from the source $S_i$.
     Then $r_{{S_i}{k_j}}$ is a tuple
     \[
@@ -475,7 +500,7 @@ T \kern-.1667em \lower.7ex \hbox{E} \kern-.125emX}}
 
     \[
         Ref = \bigcup_{i \in N^*,1 \leq j \leq k} r_{{S_i}{k_j}}
-        \textrm{, with r, S and k specified above}
+        \textrm{, with } r \textrm{, }S \textrm{ and } k \textrm{ specified above.}
     \]
 
     The $Ref$ domain is constructed through entity reference extraction.
@@ -484,7 +509,7 @@ T \kern-.1667em \lower.7ex \hbox{E} \kern-.125emX}}
     Every type of entity resolution task can be made to work on such an input
     domain~\cite{Pap19}.
     De-duplication tasks that use a single data source work out of the box.
-    Record linking tasks that use two or more data sources can embed the an
+    Record linking tasks that use two or more data sources can embed an
     attribute that identifies the data source of each entity reference.
     Regardless of the optics, the input domain contains only entity references.
     The relevance of the original data source of an entity reference rests with
@@ -498,14 +523,16 @@ T \kern-.1667em \lower.7ex \hbox{E} \kern-.125emX}}
         Res=\{P_x \mid x \in \mathbb{N^*}, P_x \in P\}
     \]
 
+    \noindent
     as the domain of collections of entity profiles.
 
-    This finally allows us to formalize entity resolution itself as a function:
+    This specification, finally, allows us to formalize entity resolution itself as a function:
 
     \[
         e(r_1, r_2, \ldots, r_n): Ref^n \rightarrow Res\text{, where }n\in\mathbb{N^*}
     \]
     
+    \noindent
     which takes in a sequence of entity references and outputs a sequence of
     entity profiles.
 
@@ -518,7 +545,9 @@ T \kern-.1667em \lower.7ex \hbox{E} \kern-.125emX}}
     will always be a set of profiles.
 
     If $Res$ is the domain of all collections of entity profiles, one of
-    these sequences must be the ideal one.
+    these sequences 
+    \textcolor{green}{which ones?} 
+    must be the ideal one.
     The ideal collection of entity profiles contains the approximation which is
     closest to our understanding of the real world items represented by the
     entity profiles.
@@ -553,6 +582,7 @@ T \kern-.1667em \lower.7ex \hbox{E} \kern-.125emX}}
     \]
     scores how similar the result of \textit{e} is to \textit{G}.
     \end{defn}
+    \textcolor{green}{oare nu e confuz sa se noteze cu e si o functie (2 ecuatii mai devreme) si si ca indice?? Imi scapa mie ceva oare?}
 
     In practice, we should strive to implement quality metric as \textit{pure}
     functions, guarding their execution from any side-effects specific to
@@ -594,6 +624,8 @@ T \kern-.1667em \lower.7ex \hbox{E} \kern-.125emX}}
     This paper aims to take a deeper look at how two of the models described
     therein might be connected.
 
+    \textcolor{green}{e nevoie sa argumentezi de ce te-ai oprit doar asupra acestor 2 modele din multimea celor existente!}
+
     \subsection[fsm]{Fellegi-Sunter Model}\label{subsec:fsm}
 
     In the late 1960s Ivan Fellegi and Alan Sunter wrote the seminal
@@ -606,7 +638,7 @@ T \kern-.1667em \lower.7ex \hbox{E} \kern-.125emX}}
     
     \subsubsection[fsm-desc]{Description}\label{subsubsec:fsm-desc}
 
-    The original model defines record linkage as an operation over two input
+    The original Fellegi-Sunter (F-S) model defines record linkage as an operation over two input
     sets, $A$ and $B$.
     The result of the operation is a set containing pairs of items
     $X = \{(a, b), a \in A, b \in B\}$ or $X = A \times B$.
@@ -701,6 +733,12 @@ T \kern-.1667em \lower.7ex \hbox{E} \kern-.125emX}}
         $U$).
     \end{itemize}
 
+
+    \textcolor{green}{some remarks:\\ 
+    1. While Fellegi and Sunter show that the classification rule is optimal in terms of statistical power, the result is based on several assumptions that do not hold in practice - check this work \href{https://www.jstor.org/stable/23024863?seq=1}{link}\\
+    2. there are some generic versions of FS model - e.g. \href{https://www.jstor.org/stable/pdf/24246450.pdf}{link}, \href{https://projecteuclid.org/journals/annals-of-applied-statistics/volume-8/issue-4/Detecting-duplicates-in-a-homicide-registry-using-a-Bayesian-partitioning/10.1214/14-AOAS779.full}{link}\\
+    }
+
     \subsubsection[fms-term]{Terminology Mapping}\label{subsubsec:fsm-term}
 
     To link the Fellegi-Sunter model to our own terminology, let's start by
@@ -729,7 +767,7 @@ T \kern-.1667em \lower.7ex \hbox{E} \kern-.125emX}}
     We start constructing our $Ref$ domain by using traits to extract $n_1$
     entity references from $S_1$ and $n_2$ entity references from $S_2$.
     Then $Ref = \{r_{{S_i}{k_j}},~1 \leq k_j \leq n_i, i \in {1, 2} \}$.
-    If, say there's 5 elements in $S_1$ and 10 elements in $S_2$ then $k_1$ goes
+    If, say there is 5 elements in $S_1$ and 10 elements in $S_2$ then $k_1$ goes
     from 1 to 5 and $k_2$ goes from 1 to 10.
 
     The result domain is expressed as $X = A \times B$ in this model.
@@ -831,13 +869,15 @@ T \kern-.1667em \lower.7ex \hbox{E} \kern-.125emX}}
     recall and it is used to capture the tradeoff between precision and
     recall\cite{hitesh2012}.
 
+    \textcolor{green}{e bine ca pentru fiecare metrica sa fie precizat domeniul valorilor posibile si ce inseamna bine (predictii bune) si ce inseamna rau (predictii gresite)}
+
     \subsection[algebraic]{Algebraic Model}\label{subsec:algebraic}
 
     Initially proposed as a model to discern information quality in entity
     resolution over large datasets\cite{tal2007algebraic}, the algebraic model
     for entity resolution was later refined to describe entity resolution
     itself\cite{Tal11}.
-    While the Fellegi-Sunter model described in Subsection~\ref{subsec:fsm}is a
+    While the Fellegi-Sunter model described in Subsection~\ref{subsec:fsm} is a
     probabilistic model that partitions input in two data sources to compare,
     this model allows as many information sources as necessary.
     Another improvement is the support for transitive matching.
@@ -849,7 +889,7 @@ T \kern-.1667em \lower.7ex \hbox{E} \kern-.125emX}}
     
     \begin{defn} If $X$ is a set and $R$ is a rule that takes two elements from
     $X$, $x$ and $y$, and tells us whether $x$ is in relationship $y$ in the way
-    denoted with $R$ then we call $R$ a \textit{binary relation} on
+    denoted with $R$, then we call $R$ a \textit{binary relation} on
     $X$\cite{hoffman1971linear}.
     \end{defn}
 
@@ -920,6 +960,9 @@ T \kern-.1667em \lower.7ex \hbox{E} \kern-.125emX}}
         when two references from that set refer to the same real-world entity is
         called \textit{entity resolution}.
     \end{defn}
+    \textcolor{green}{daca aici ai dat definitia ER in stilul modelului algebric, ar fi bine sa incluzi si la modeulul F-S o definitie pt ER in termenii F-S}
+
+
 
     Let's denote this relation with $ER$ and state that if $xERy$ then x and y
     are \textit{linked}\cite{Tal11}.
@@ -932,6 +975,7 @@ T \kern-.1667em \lower.7ex \hbox{E} \kern-.125emX}}
     step or aspect of the entity resolution process.
     The equivalence classes from the partition generated by $ER$ are also known
     as \textit{clusters} in the context of entity resolution.
+    \textcolor{green}{similar cu obs precedenta; ar fi bine ca si pt modelul F-S sa fie prezentata aceasta corespondenta dintre model si cei 4 pasi ai procesului ER}
 
     A last point of notice is that entity resolution tasks do not necessarily
     generate a unique outcome\cite{Tal11}.
@@ -941,6 +985,7 @@ T \kern-.1667em \lower.7ex \hbox{E} \kern-.125emX}}
     processed is irrelevant are called \textit{sequence neutral}\cite{Tal11}.
     In this paper we are only interested in sequence neutral entity resolution
     tasks.
+    \textcolor{green}{similar cu obs precedenta; ar fi bine ca si pt modelul F-S sa fie prezentata aceasta perspectiva legata de cardinalitatea iesirilor}
 
     \subsubsection[algrel]{Terminology Mapping}\label{subsubsec:algrel}
 
@@ -1025,7 +1070,9 @@ T \kern-.1667em \lower.7ex \hbox{E} \kern-.125emX}}
     The expected value of the Rand index of two random partitions does not take
     a constant value (say zero)~\cite{adjrand2001}.
     That lead to the introduction of the adjusted Rand index which follows the
-    same principles, but uses a specific distribution for
+    same principles, 
+    \textcolor{green}{adica 0 inseamna no match si 1 perfect match? sau la ce anume te referi prin "same principles"?}
+    but uses a specific distribution for
     randomness~\cite{adjrand1985}.
     Without going into detail, we can provide a formula for the adjusted Rand
     index by using the quantities we defined for the Rand index~\cite{Tal11}.
@@ -1036,17 +1083,17 @@ T \kern-.1667em \lower.7ex \hbox{E} \kern-.125emX}}
             \frac{(2\cdot a+b+c)}{2}-\left(\frac{(a+b)\cdot(a+c)}{a+b+c+d}\right)
         }
     \]
+    \textcolor{green}{tb precizat domeniul de valori posibile si ce inseamna valoare buna si valoarea rea}
 
     The third quality metric we can use for comparing partition similarity is
-    the Talburt-Wang index.
+    the Talburt-Wang index (TWI).
     The merit of this metric is that it closely follows the Rand index, but is
     much simpler to compute~\cite{Tal11}.
     \[
         TWI = \frac{\sqrt{|G|\cdot|Ref|}}{|G \cap Ref|},
     \]
-    where if $X$ is a set then $|X|$ represents the numer of elements in $X$.
-
-    The index uses the number of clusters that are found in both the ground
+    where if $X$ is a set, then $|X|$ represents the numer of elements in $X$. 
+    The TWI uses the number of clusters that are found in both the ground
     truth and in the entity resolution task's output.
     It provides a good approximation of how many clusters are returned correctly
     by the entity resolution task.
@@ -1056,8 +1103,9 @@ T \kern-.1667em \lower.7ex \hbox{E} \kern-.125emX}}
 
     Other similarity metrics used to compare partitions are the pairwise and
     cluster precision and recall metrics.
-    They were introduced first introduced in 2010 as an alternative quality
-    metric to be used for evaluating entity resolution results\cite{Men10}.
+    They were first introduced in 2010 as an alternative quality
+    metrics to be used for evaluating entity resolution results\cite{Men10}. 
+    \textcolor{green}{eu as include si referintele "radacina": https://www.jstor.org/stable/pdf/1756667.pdf, https://www.cs.utexas.edu/users/ml/papers/marlin-kdd-wkshp-03.pdf}
 
     Similarly to the Rand Index, pairwise metrics rely on extracting pairs of
     items to determine how similar two set partitions are.
@@ -1072,6 +1120,7 @@ T \kern-.1667em \lower.7ex \hbox{E} \kern-.125emX}}
     \[
         PP = \frac{|Pairs(Res) \cap Pairs(G)|}{|Pairs(Res)|}
     \]
+    \textcolor{green}{tb precizat domeniul de valori posibile si ce inseamna valoare buna si valoarea rea}
 
     Pairwise recall (denoted \textit{PR}) is defined as the ratio between the
     number of pairs in $Res$ that are also in $G$ and the number of pairs in $G$.
@@ -1080,15 +1129,18 @@ T \kern-.1667em \lower.7ex \hbox{E} \kern-.125emX}}
     \[
         PR = \frac{|Pairs(Res) \cap Pairs(G)|}{|Pairs(G)|}
     \]
+    \textcolor{green}{tb precizat domeniul de valori posibile si ce inseamna valoare buna si valoarea rea}
+
     The harmonic mean between pairwise precision and pairwise recall (denoted
     \textit{PF1}) is called the pairwise F1 score or the pairwise comparison
     measure\cite{Men10}.
     \[
         PF1=\frac{2 \cdot PP \cdot PR}{PP + PR}
     \]
+    \textcolor{green}{tb precizat domeniul de valori posibile si ce inseamna valoare buna si valoarea rea}
 
-    The cluster metrics are similarly called cluster precision, recall and
-    comparison measure (or F1).
+    The cluster metrics are similarly, called cluster precision, cluster recall and
+    cluster comparison measure (or CF1).
     The cluster precision (denoted \textit{CP}) is the ratio between the number
     of identical clusters between the entity resolution output and the ground
     truth and the number of clusters in the entity resolution output.
@@ -1098,6 +1150,7 @@ T \kern-.1667em \lower.7ex \hbox{E} \kern-.125emX}}
     \[
         CP=\frac{|Clusters(Res) \cap Clusters(G)|}{|Clusters(Res)|}
     \]
+    \textcolor{green}{tb precizat domeniul de valori posibile si ce inseamna valoare buna si valoarea rea}
 
     The cluster recall (denoted \textit{CR}) is the ratio between the number of
     clusters that are common between the entity resolution task's result and
@@ -1108,6 +1161,7 @@ T \kern-.1667em \lower.7ex \hbox{E} \kern-.125emX}}
     \[
         CR = \frac{|Clusters(Res) \cap Clusters(G)|}{|Clusters(G)|}
     \]
+    \textcolor{green}{tb precizat domeniul de valori posibile si ce inseamna valoare buna si valoarea rea}
 
     Finally, the cluster comparison metric (denoted \textit{CF1}) is the
     harmonic mean between the cluster precision and the cluster recall.
@@ -1115,9 +1169,10 @@ T \kern-.1667em \lower.7ex \hbox{E} \kern-.125emX}}
     \[
         CF1 = \frac{2 \cdot CP \cdot CR}{CP + CR}
     \]
+    \textcolor{green}{tb precizat domeniul de valori posibile si ce inseamna valoare buna si valoarea rea}
 
     The pairwise and cluster metrics provide more insight into how two entity
-    resolution results compare structurally which is an ability that statistical
+    resolution results compare structurally, which is an ability that statistical
     metrics lack.
     The idea of discerning how the structures of two results compare was first
     suggested in Rand's paper that described his namesake index\cite{rand1971}.
@@ -1131,6 +1186,8 @@ T \kern-.1667em \lower.7ex \hbox{E} \kern-.125emX}}
 
     \subsection{From Probabilities to Algebra}\label{subsec:fsm-alg}
 
+    \textcolor{green}{sub-sectiunea aceasta e f incitanta si cred ca reprezinta una din contributiile importante ale lucrarii; nu mi-e clar daca se poate prezenta ca o "aliniere" originala a celor 2 modele (adica daca s-a mai facut asa ceva in literatura pana acum in acelasi stil sau , daca s-a facut, dar s-a facut in alt fel) sau sub forma unor discutii/analize f revelatoare}
+    
     As stated before, one of the misgivings of the Fellegi-Sunter model is that
     it captures relatively well the matching aspect of entity resolution without
     doing as good a job for its clustering aspect.
@@ -1152,7 +1209,9 @@ T \kern-.1667em \lower.7ex \hbox{E} \kern-.125emX}}
     The idea is to consider pairs of items as being edges in a graph.
     Then we can take inspiration from Kruskal's algorithm to construct connected
     the components of this graph.
-    We do this by utilizing the Union-Find data structure.
+    We do this by utilizing the Union-Find data structure 
+    \textcolor{green}{add a reference!}
+    .
     This very well known data structure that is used for constructing sets of
     data incrementally can be used to construct the graph components as sets.
 
@@ -1170,7 +1229,9 @@ T \kern-.1667em \lower.7ex \hbox{E} \kern-.125emX}}
     Therefore the Union-Find data structure produces a partition over the input
     set of items.
 
-    This can be applied to meet our needs by leveraging the input domain $Ref$
+    This 
+    \textcolor{green}{algorithm/mapping?} 
+    can be applied to meet our needs by leveraging the input domain $Ref$
     and the representation of the entity resolution result in the F-S model.
     Recall that $Ref$ is always defined as a set of entity references.
     We defined the output of the F-S model as a set of pairs of entity
@@ -1180,21 +1241,23 @@ T \kern-.1667em \lower.7ex \hbox{E} \kern-.125emX}}
 
     The ground truth always contains the ideal entity resolution output
     regardless of the mathematical model.
-    It can't be incomplete or faulty, by definition.
+    It cannot be incomplete or faulty, by definition.
     Therefore, when we apply the Union-Find data structure to the ground truth
     it cannot return anything less than a ground truth because it processes all
     the data in $Ref$ and the partition it creates over $Ref$ is stable (i.e
-    given the input sequence of pairs it can't produce two partitions over $Ref$
+    given the input sequence of pairs it cannot produce two partitions over $Ref$
     on two separate occasions).
 
     If we have a ground truth expressed as an iterable sequence of matching
-    pairs and we know the input $Ref$ domain that's used for entity resolution,
+    pairs and we know the input $Ref$ domain that is used for entity resolution,
     we obtain an ideal partition induced by entity resolution over $Ref$.
     
     \section{Experiments}\label{sec:experiments}
     \input{experiments}
 
     \section[conclusion]{Conclusions}\label{sec:conclusions}
+
+    \textcolor{green}{tb adaugata o fraza despre context (ER) si scipul mare al studiului. Abia apoi vin evidentiate cele 2 mari concluzii/zontributii: maparea unui model in altul si analiza dpdv al metricilor}
 
     In this paper we have provided an overview of how theoretical models for
     entity resolution influence the data structures that are at play when we are
@@ -1239,7 +1302,7 @@ T \kern-.1667em \lower.7ex \hbox{E} \kern-.125emX}}
 
     In terms of theory, we would like to consider other models for entity
     resolution.
-    Firstly, there's existing models such as the one proposed by the Stanford
+    Firstly, there is existing models such as the one proposed by the Stanford
     Entity Resolution Framework\cite{Ben2009Swoosh} or the graph theoretical
     model of entity resolution which is widely used in entity alignment tasks.
     Then there are theoretical models that we can imagine in the realms of
@@ -1257,6 +1320,26 @@ T \kern-.1667em \lower.7ex \hbox{E} \kern-.125emX}}
     of any entity resolution task would make adopting and tuning entity
     resolution systems less costly and more transparent.
 
+
+    \textcolor{green}{things that are confused:\\
+    1. model vs. algorithm vs. task related to ER\\
+    2. scopul art: sa evidentiem mapparea FS vs model algebric sau sa analizam critic metricile (pt ca doar astfel se poate face o alegere eficienta a modelului de ER folosit, desi tb tinut cont ca suntem intr-un mediu oarecum controlat; unde avem niste dataset-uri limitate, nu de tip openworld pt care nu se calculeaza efectiv metricile, ci se estimeaza cumva - a se vedea problema despre bridging
+    the reality-ideality gap in entity resolution, where high performance on benchmark datasets often does not
+    translate into the real world \href{https://arxiv.org/pdf/2205.05889.pdf}{link}) sau ambele? :D\\
+    3. in fc de scopul de la pct 2 tb adaugat in introducere info despre contributie, precum si in Rel Work\\
+    4. def pt "perspectiva" (de sine statatoare sau relativ la un model sau la un algo de ER); \\
+    5. def pt "input config" \\
+    6. de verificat daca folosirea notiunii de "invariant" se poate demonstra si teoretic, nu doar empiric\\
+    7. relatia cu RelWork (ce e comun, ce e diferit cu alte lucrari care abordeaza maparea unui model in altul, respectiv evaluarea prin metrici); de vazut lucrari precum:\\
+    https://arxiv.org/pdf/2107.10590.pdf \\
+    https://arxiv.org/pdf/1509.04238.pdf\\
+    http://honors.cs.umd.edu/reports/hitesh.pdf\\
+    https://arxiv.org/pdf/2210.01230.pdf\\
+    8. tb spus de ce nu s-au inclus si alte metrici (de ex GMD)\\
+    9. tb spus ceva despre class imbalance (ce influenta are asupra metricilor faptul ca sunt doar cateva elemente aliniate/duplicate si multe elemente nealiniate)\\
+    10.
+    }
+    
     \bibliographystyle{ieeetr}
     \bibliography{er-general,er-related-work,er-additional-references,er-software}
 \end{document}

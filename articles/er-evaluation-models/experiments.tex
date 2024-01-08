@@ -29,19 +29,25 @@ rows containing records within which the fields are separated by comma.
 The data representation, however, is not important for the experiment's
 outcome.
 
+\textcolor{green}{e nevoie sa se argumenteze:\\
+1. de ce ai ales aceste 3 seturi de date (de ex pt ca sunt cele mai folosite in literatura)\\
+2. de ce ai ales si date reale si data generate, precizand si cum au fost generate aceste date (le putem numi date de control? pt ca de fapt nu sunt generate from scratch, ci e doar o sub-multime a unui dataset real).\\
+E nevoie si sa se precizeze dimensiunea aceastor seturi de date (cate exemple sunt, cate features sunt)}
+
 We use the benchmark datasets almost in their original forms and make use
 of the ideal mapping to establish the ground truth for each dataset.
 The only modification we make to these datasets is shifting the `id' column
 to the end.
 We make this modification so that algorithms that work on string data are prone
-to finding more matches.
+to find more matches.
 
 Conversely, for our custom dataset, we exert complete control over the
 entity resolution process.
 This is achieved by creating custom input sources for the entity resolution
 task through data generation.
-These sources use the ten chosen items from the `Buy' subset of the
-`Abt-Buy' dataset.
+These sources use ten chosen items from the `Buy' subset of the
+`Abt-Buy' dataset. 
+\textcolor{green}{tb spus cum s-au ales cele 10 samples; pur random sau urmarind principii didactice care sa ajute explicatiile}
 
 The data generation procedure divides the ten-item subset into two distinct
 tables:
@@ -81,10 +87,14 @@ We take the following record from the `Buy' subset as an example.
         \hline
         205554724&Seiko SXDA04& & &\$138.00\\
         \hline
-    \end{tabular}\label{tab:buy-record}
+    \end{tabular}
+    \label{tab:buy-record}
+    \caption{An example record of the 'Buy' subset}
 \end{table}
 
-The following record is the above data record's corresponding record in DG1.
+The following record is the above data record's corresponding record in DG1. 
+\textcolor{green}{I would rephrase the previous statement, avoiding the repetition of "record" word :D. Furthermore, I recommend using the label of the above tabel (above data record -> data record descriebd in Table \ref{tab:buy-record})}
+
 
 \begin{table}[ht]
     \setlength\tabcolsep{6pt}
@@ -94,7 +104,9 @@ The following record is the above data record's corresponding record in DG1.
         \hline
         Seiko SXDA04 & & \$138.00 & 205554724 \\
         \hline
-    \end{tabular}\label{tab:dg1-record}
+    \end{tabular}
+    \label{tab:dg1-record}
+    \caption{TBA!}
 \end{table}
 
 The corresponding DG2 record would then look as follows.
@@ -107,7 +119,9 @@ The corresponding DG2 record would then look as follows.
         \hline
         &Seiko SXDA04&205554724 \\
         \hline
-    \end{tabular}\label{tab:dg2-record}
+    \end{tabular}
+    \label{tab:dg2-record}
+    \caption{TBA!}
 \end{table}
 
 Using the extraction traits described before would yield us the
@@ -163,7 +177,9 @@ Our experiment consists of the following steps:
 The \texttt{ppjoin} algorithm treats entity resolution as a matching problem.
 Consequently, the mathematical model that fits it very well is the statistical
 model.
-From this it follows that in order to evaluate the quality of the algorithm
+From this it follows that 
+\textcolor{green}{I would replace "from this it follows that" by "Hence" / "Therefore" / "accordingly" / "consequently"} 
+in order to evaluate the quality of the algorithm
 under the algebraic model, we have to convert a list of matches (which is what
 \texttt{ppjoin} outputs) to a partition over a set.
 
@@ -192,19 +208,26 @@ lower values the recall should be higher.
 Figure~\ref{fig:mini-buy-fs} shows the \texttt{ppjoin} results at various
 values of the Jaccard threshold $t$.
 
+
+\textcolor{green}{please check this paper \href{https://hpi.de/fileadmin/user_upload/fachgebiete/naumann/publications/2013/On_Choosing_Thresholds_for_Duplicate_Detection.pdf}{link}, also - because it disscuss about a particular effect of dataset size in entity resolution in the context of choosing similarity thresholds. }
 \begin{figure}[!hp]
     \centering
     \captionsetup{justification=centering}
     \includegraphics[width=\columnwidth]{mini-buy-fsm-main}
-    \caption{statistical metrics on `mini-buy'}
+    \caption{Statistical metrics on `mini-buy' dataset
+    \textcolor{green}{for results of F-S model}
+    }
     \label{fig:mini-buy-fs}
 \end{figure}
 
-We can make some observations based on figure~\ref{fig:mini-buy-fs}.
+We can make some observations based on Figure~\ref{fig:mini-buy-fs}.
 For values of $t \geq 0.78$, we end up with fewer, but more accurate matches.
-For values of $0.36 \leq t \leq 0.6$, both precision and recall increase.
+\textcolor{green}{fewer = ?; daca P creste si R scade, inseamna ca FP scade si FN creste...nu?} 
+For values of $0.36 \leq t \leq 0.6$, both precision and recall increase. 
+\textcolor{green}{pe figura, in acest interval si P  si R scad. Oare de ce zici ca ele cresc?} 
 Our intuition tells us that precision should decrease as \textit{t} decreases,
 but that is not the case.
+\textcolor{green}{dar pe (0,0.2) P scade! asa cum zice urm propoz!} 
 When $t$ is nearing zero, recall is maximal while precision decreases towards
 zero.
 
@@ -212,7 +235,9 @@ The generated data set contains items such as those with the IDs
 \texttt{208114672} and \texttt{208114673} which are near-identical.
 For lower values of \textit{t}, the algorithm produces two true positives and
 two false positives.
-By itself, this change should lower the precision.
+By itself, this change 
+\textcolor{green}{Which one?} 
+should lower the precision.
 Lower values of \textit{t} also broaden the spectrum of what is available for
 comparison (e.g~items with shorter names, like \texttt{205554724}).
 By having new items to compare, we also increase the amount of true positives.
@@ -224,12 +249,15 @@ algorithm, the dynamic itself is not algorithm specific at all.
 Regardless of the algorithm that we use, given some specific circumstances it is
 possible to obtain the same dynamic which results in increasing precision
 contrary to our intuition.
-This is interesting because by influencing the value of the F1 score it also
+This is interesting because by influencing the value of the F1 score, it also
 determines the observer's perception of what input configuration they should use
-should they want a balanced output from the entity resolution task.
-In our example, we should aim for a value of $0.15\leq t \leq 0.38$.
+should they want a balanced output from the entity resolution task. 
+\textcolor{green}{e cam incalcita exprimarea; oare nu se potae reformula? in plus, as avea grija la folosirea "this" si "that"; e mai clar daca au si substantive langa ele; in fraza de mai sus, de ex. this is interesting -> this hypothesis / assumption is interesting} 
+In our example, we should aim for a value of $0.15\leq t \leq 0.38$ \textcolor{green}{in order to ???}.
 
-On the other hand, balance might not be at all what we're looking for.
+On the other hand, balance 
+\textcolor{green}{of P and R? or "trade-off of P and R"} 
+might not be at all what we are looking for.
 We see that perfect recall is achieved with $t \leq 0.38$ and perfect precision
 is achieved with $0.76 \leq t \leq 0.95$.
 These values are still useful in certain domains where entity resolution is
@@ -242,12 +270,12 @@ Perfect recall while still retaining some precision might be useful during
 research (works on the same topic) or medical diagnosis (other cases with the same
 symptoms).
 In these cases, sifting through false positives might be preferable to missing
-out on important information because of a false negative that's due to a
+out on important information because of a false negative that is due to a
 suboptimal input configuration.
 
 \subsubsection{Pairwise Metrics}
 
-The ground truth and the result of the process are represented as partitions
+The ground truth and the result of the ER process are represented as partitions
 over an input set of data.
 Because we include the IDs in both DG1 and DG2, the input data set will
 contain 20 items.
@@ -264,22 +292,25 @@ various values of \textit{t}.
     \centering
     \captionsetup{justification=centering}
     \includegraphics[width=\columnwidth]{mini-buy-algebraic-pairwise}
-    \caption{pairwise metrics on `mini-buy'}
+    \caption{Pairwise metrics on `mini-buy' dataset
+    \textcolor{green}{for results of algebric model}\\
+    \textcolor{green}{oare in legenda, la verde, nu ar tb sa fie pairwise F1?}
+    }
     \label{fig:mini-alg-pairwise}
 \end{figure}
 
-We can see a plot similar to the one in figure~\ref{fig:mini-buy-fs}.
-The optimal range for high F1 scores is the same and the precision plot's shape
+We can see a plot similar to the one in Figure~\ref{fig:mini-buy-fs}.
+The optimal range for high PF1 scores is the same to the case of statistical measures and the pairwise precision plot's shape
 is almost identical (save for a smoother in the statistical model).
 
 It is in terms of recall where we see a major difference from the statistical
 model's plot.
 More specifically, for $t \le 0.12$ pairwise recall drops significantly whereas
 statistical recall stays at the maximum value.
-The reason behind this lies in the difference between the two models of entity
+The reason behind this variation lies in the difference between the two models of entity
 resolution.
 Whereas the standard recall formula only accounts for false negatives (of which
-we can't have any using the generated data set), pairwise recall requires the
+we can not have any using the generated data set), pairwise recall requires the
 result data to be partitioned.
 The partitioning operation removes any duplicates a partition class might
 contain (such as duplicate matches returned by \texttt{ppjoin} for very low
@@ -302,13 +333,16 @@ Pairwise metrics are a form of measuring how well-formed the output of an entity
 resolution task is.
 The other widely spread family of metrics from this category that resembles
 statistical metrics are the cluster metrics, which are displayed in
-figure~\ref{fig:mini-alg-cluster}.
+Figure~\ref{fig:mini-alg-cluster} for 'mini-buy' dataset.
 
 \begin{figure}[!h]
     \centering
     \captionsetup{justification=centering}
     \includegraphics[width=\columnwidth]{mini-buy-algebraic-cluster}
-    \caption{cluster metrics on `mini-buy'}
+    \caption{Cluster metrics on `mini-buy' dataset 
+    \textcolor{green}{for results of algebric model}\\
+    \textcolor{green}{oare in legenda, la verde, nu ar tb sa fie cluster F1? (stiu ca e sisnonim cu CCM, dar cand s-a dat formula a fost botezata CF1, iar in prima figura s-a facut referire tot la F1)}
+    }
     \label{fig:mini-alg-cluster}
 \end{figure}
 
@@ -319,7 +353,7 @@ nears zero even more than the pairwise metrics.
 A more nuanced point is that recall decreases for $t \in \left[0.38,0.58\right]$
 much more pronouncedly.
 
-Clustering metrics also reveal interesting aspects about the other metrics we've
+Clustering metrics also reveal interesting aspects about the other metrics we have
 seen so far.
 For example, we expect increased statistical and pairwise precision to
 correspond to increased cluster precision.
@@ -371,13 +405,13 @@ Even though pairwise and cluster metrics complement the statistical metrics,
 sometimes all we want is a clear picture of the optimal input configurations for
 the algorithm.
 The easiest way to glean this information is by using one of the clustering
-indexes depicted in figure~\ref{fig:mini-alg}.
+indexes depicted in Figure~\ref{fig:mini-alg}.
 
 \begin{figure}[!h]
     \centering
     \captionsetup{justification=centering}
     \includegraphics[width=\columnwidth]{mini-buy-algebraic-main}
-    \caption{clustering indexes on `mini-buy'}
+    \caption{Clustering indexes on `mini-buy' dataset}
     \label{fig:mini-alg}
 \end{figure}
 
@@ -400,18 +434,20 @@ The only aspect where it is lagging is for $t\in\left[0.76,0.81\right]$.
 Here it fails to clarify the favorable circumstances due to high statistical
 precision and high cluster recall.
 
-Based on these observations, we can only echo the existing literature.
+Based on these observations, we can only echo the existing literature 
+\textcolor{green}{please add a ref!}
+.
 The Adjusted Rand Index or, if operational performance is key, the Talburt-Wang
 Index provide enough meaningful information to find the ballpark of the ideal
 configuration settings for an entity resolution task.
 
 \subsection{Outcomes from Benchmark Datasets}\label{subsec:experiment-benchmark}
 
-So far we've seen evidence on the generated miniature dataset that each
+So far we have seen evidence on the generated miniature dataset that each
 theoretical model provides a lens through which we can interpret various aspects
 of an entity resolution task's qualitative performance.
 Some invariants with respect to the entity resolution task have been discovered.
-Nothing related to the task that's being evaluated determines these phenomena.
+Nothing related to the task that is being evaluated determines these phenomena.
 However, we don't know if any of them are invariant with respect to the data
 being used.
 
@@ -426,11 +462,11 @@ performing entity resolution.
 
 In order to do this we shall use benchmark datasets.
 The first of these is the `Abt-Buy' data set~\cite{vldb2010} and the plots for
-our experiment are available in figures~\ref{fig:abt-buy-fsm-main},
+our experiment are available in Figures~\ref{fig:abt-buy-fsm-main},
 ~\ref{fig:abt-buy-algebraic-pairwise},~\ref{fig:abt-buy-algebraic-cluster}
 and~\ref{fig:abt-buy-algebraic-main}.
 
-\begin{figure*}[h]
+\begin{figure*}[ht]
     \begin{minipage}{0.24\textwidth}
         \centering
         \includegraphics[width=\textwidth]{abt-buy-fsm-main}
@@ -465,15 +501,19 @@ statistical/pairwise metrics.
 Another nice confirmation is that the pairwise recall is never perfect.
 Lastly, the clustering indexes are good approximates of the ballpark where
 we could find  interesting input configurations.
-All interesting values of \textit{t} are in the ballpark indicated by these
+All interesting values of \textit{t} 
+\textcolor{green}{I would indicate the value or the value's range for this optimal $t$} 
+are in the ballpark indicated by these
 indexes.
 
-On the other hand, we can clearly see that input configurations such as those
+On the other hand, we can clearly see that input configurations 
+\textcolor{green}{la ce anume te referi prin aceste "input configs"? Ai mai amintit si mai devreme, dar nicaieri nu e specifica clar la ce anume se refera; e vorba doar de pagrul $t$ sau si de algoritm de ER si alti params?}  
+such as those
 that take advantage of a high precision to high cluster recall correlation are
 dataset specific.
 
 We move on to the `Amazon-Google Products' data set~\cite{vldb2010} and observe
-the results in figures~\ref{fig:amazon-googleproducts-fsm-main},
+the results in Figures~\ref{fig:amazon-googleproducts-fsm-main},
 \ref{fig:amazon-googleproducts-algebraic-pairwise},
 \ref{fig:amazon-googleproducts-algebraic-cluster} and
 \ref{fig:amazon-googleproducts-algebraic-main}.
@@ -524,10 +564,11 @@ defined (TWI counts agreements on whole clusters while ARI counts agreeing
 pairs), confirming this assumption experimentally requires further work.
 Regardless, we can safely conclude that whether clustering indexes reveal
 ballparks for optimal input configurations is dataset dependent.
+\textcolor{green}{mie nu mi-e clar ce ai vrut sa spui :(}
 
 Finally, we look at the `DBLP-ACM' benchmark dataset~\cite{vldb2010}.
 The plots we obtained after running the experiment on this dataset are available
-in figures~\ref{fig:dblp2-acm-fsm-main},
+in Figures~\ref{fig:dblp2-acm-fsm-main},
 \ref{fig:dblp2-acm-algebraic-pairwise},
 \ref{fig:dblp2-acm-algebraic-cluster} and
 \ref{fig:dblp2-acm-algebraic-main}.
@@ -565,10 +606,23 @@ metrics.
 The other condition that is invariant with respect to the algorithm and the
 data sets is that cluster precision and cluster recall act as good balancing or
 confirmation metrics for the statistical and pairwise metrics, respectively.
+\textcolor{green}{mie nu mi-e clar ce ai vrut sa spui :(}
 
 We also see that the conjecture concerning the TWI as a good approximation for
 input configurations that yield high clustering scores holds for this data set,
-too.
+too. 
 The same can be said about the ARI for approximating high scores with regard to
 matching.
 These observations hold for all four datasets we have experimented on.
+
+
+\textcolor{green}{As incerca sa le enunt din nou acest concluzii, iar dupa ce sunt formulate le-as transforma in ipoteze, descriindu-le la inceputul sectiunii cu experimentele; astfel, ele vor reprezenta motivatia: avem 3-4 hipoteze si ne propunem sa le validam prin experimentele efectuate . Eu am retinut asa: \\
+1. hypothesis about precision - TBA \\
+2. recall in the statistical model is much higher than advertised by any of the other metrics.\\
+3. cluster precision and cluster recall act as good balancing or
+confirmation metrics for the statistical and pairwise metrics, respectively.\\
+4. TWI is a good approximation for input configurations that yield high clustering scores.\\
+5. ARI - ???\\
+6. ???
+}
+
