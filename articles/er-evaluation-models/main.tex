@@ -56,9 +56,8 @@ T \kern-.1667em \lower.7ex \hbox{E} \kern-.125emX}}
     sources~\cite{Qia17}.
     However, we share the opinion that identifying and linking data constitutes
     a more specialized process~\cite{Tal11}.
-    We also leave aside any classification 
-    \textcolor{green}{of ???} 
-    based on number of sources.
+    We also leave aside any classification of entity resolution algorithms based
+    on number of sources.
     The task of gathering information about a generic pound of potatoes across
     various marketplaces is still an entity resolution task, in our view.
     Whether the information about marketplaces and the potatoes that find
@@ -78,10 +77,6 @@ T \kern-.1667em \lower.7ex \hbox{E} \kern-.125emX}}
     When there is such a wide array of past, present and future applications,
     evaluating entity resolution quality seems important.
     
-    \textcolor{green}{aici e nevoie de:\\
-    1. introducerea, pe scurt, a metodelor de evaluare din literatura, care sunt limitarile sau minusurile lor a.i. sa poti formula 1-2 research questions sau ipoteze pe care sa le valideze abordarea descrisa in articolul curent. Adica tb sa ai o motivatie pt toata munca efectuata;\\
-    2. evidentierea contributiilor pe care le aduce lucrarea atat relativ la alte lucrari din literatura care analizeaza metrici si metode de evaluare (deci cu ce e diferita de ceea ce exista pana acum in literatura), cat si din punct de vedere al plusului efectiv de valoare adus de analiza efectuata}
-
     We begin by exploring a few preliminaries focused on entity resolution
     itself and then describe the problem we are analyzing.
     After briefly summarizing the work that relates to our paper, we introduce
@@ -160,29 +155,56 @@ T \kern-.1667em \lower.7ex \hbox{E} \kern-.125emX}}
     
     \section{Question}\label{sec:contributions}
 
-    Throughout the experience of working with entity resolution systems a few
-    caveats become apparent.
-    Firstly, adopting an entity resolution system is an arduous task at best.
-    It is expensive in terms of consumed hardware resources, but also in terms
-    of the manpower required to set up good data sets, data cleaning rules and
-    entire data engineering processing pipelines.
-    Because of this, finding optimal configuration parameters for entity
-    resolution tasks quickly and cheaply is very desirable.
-    Unfortunately, naively using `realistic' test datasets does not work often.
-    Stellar outcomes on the test dataset often turn out much worse when the task
-    is performed on production data.
+    \textcolor{green}{aici e nevoie de:\\
+    1. introducerea, pe scurt, a metodelor de evaluare din literatura, care sunt limitarile sau minusurile lor a.i. sa poti formula 1-2 research questions sau ipoteze pe care sa le valideze abordarea descrisa in articolul curent. Adica tb sa ai o motivatie pt toata munca efectuata;\\
+    2. evidentierea contributiilor pe care le aduce lucrarea atat relativ la alte lucrari din literatura care analizeaza metrici si metode de evaluare (deci cu ce e diferita de ceea ce exista pana acum in literatura), cat si din punct de vedere al plusului efectiv de valoare adus de analiza efectuata}
 
-    In this paper we would like to see what kind of perspectives over the task
-    output we are granted by two theoretical models of entity resolution.
-    Are there invariants we can glean on small scale data that we can transfer
-    to larger, more chaotic data sets?
-    More interestingly, are there invariants based in theory that we can
-    transfer from one entity resolution algorithm to another?
+    Working with entity resolution systems in the everyday life of a data
+    engineer is challenging at best.
+    Figuring out which entity resolution system best fits a current need is an
+    arduous task in itself.
+    Choosing a system is expensive because of the amount of work required to
+    measure its performance, that is to know whether the choice is correct.
+    As with other complex systems, once a choice is made, it is very rarely
+    revisited.
 
-    Breaking these larger questions down, we ask how much might a theoretical
-    model influence the actual task's quality readout?
-    That is, what is there to see past the numbers that we are shown when we
-    measure the quality of an entity resolution task?
+    There are many processes by which to make the choice.
+    However, an informed choice always relies on good measurements.
+    Moreover, good measurements are also an important indicator that we should
+    check periodically throught the operation time of the system.
+
+    The state of the art of entity resolution quality measurement has evolved to
+    incorporate metrics from various other fields of research in computer
+    science, most prominently information retrieval and graph
+    theory~\cite{hitesh2012}.
+    At a cursory review of how others would measure the quality of entity
+    resolution~\cite{fever2009,Pap19,Goga2015}, we find that the more popular
+    topic is evaluating entity matching quality or how good entity resolution
+    is at saying which two pieces of information match and which do not.
+    This is echoed in our practical experience, too.
+    This may be due to a confusion between entity matching and entity resolution
+    which still lingers~\cite{Tal11}.
+
+    We know that there are other perspectives available when speaking about
+    entity resolution quality as a whole.
+    The descriptions of other entity resolution quality metrics that go beyond
+    matching~\cite{Men10,tal2007algebraic} reveal different perspectives over
+    entity resolution itself.
+    These perspectives are expressed formally through theoretical models.
+    
+    In practice, we have noticed that always using the most popular metrics, we
+    end up overlooking essential aspects of the entity resolution result.
+    For example, for certain problems (most problems from the general subclass
+    of anomaly detection algorithms) we are very interested in highly sensitive
+    systems.
+    
+    Another question relates to the possible invariants that might be gleaned by
+    looking at small versus larger sets of data.
+    Are there teachings obtained from measuring entity resolution quality on a
+    small dataset, in a certain way that we can extrapolate to a larger dataset?
+    More interestingly, are some of these teachings independent of the entity
+    resolution solution being used?
+
     Even more concretely, is the clustering performance of entity resolution
     correlated to the matching performance of entity resolution?
     Does the theoretical model we use determine how information should be
