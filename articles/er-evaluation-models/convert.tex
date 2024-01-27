@@ -1,0 +1,64 @@
+
+\textcolor{green}{sub-sectiunea aceasta e f incitanta si cred ca reprezinta una din contributiile importante ale lucrarii; nu mi-e clar daca se poate prezenta ca o "aliniere" originala a celor 2 modele (adica daca s-a mai facut asa ceva in literatura pana acum in acelasi stil sau , daca s-a facut, dar s-a facut in alt fel) sau sub forma unor discutii/analize f revelatoare}
+    
+As stated before, one of the misgivings of the Fellegi-Sunter model is that
+it captures relatively well the matching aspect of entity resolution without
+doing as good a job for its clustering aspect.
+The algebraic model allows a more complete perspective over how entity
+resolution works by supporting measures of both matching (pairwise metrics)
+and clustering.
+One of the questions we asked initially is whether we could transition from
+one model to the other to enjoy the more complete overview offered by the
+algebraic model.
+
+The answer to this question lies in the difference between how the two
+models represent entity profiles and entity resolution output in general.
+Intuitively, this becomes a question of whether we can automatically convert
+sequences of pairs of items to clusters.
+Then, if that is possible, the question becomes whether from a set of pairs
+of items from an input set we can obtain a partition over the input set
+itself.
+
+The idea is to consider pairs of items as being edges in a graph.
+Then we can take inspiration from Kruskal's algorithm to construct connected
+the components of this graph.
+We do this by utilizing the Union-Find data structure 
+\textcolor{green}{add a reference!}
+.
+This very well known data structure that is used for constructing sets of
+data incrementally can be used to construct the graph components as sets.
+
+The algorithm takes as input a set of items and an iterable sequence of
+pairs of items from that set.
+The Union-Find data structure is initialized with all items in the set.
+Then, with each pair it processes, it links items that are paired up in
+the same `class'.
+
+We can see that all of the items in the set are used and none are discarded.
+The Union-Find data structure produces stable classes of items.
+In case an item is part of two classes, these classes are merged.
+As a result, all sets produced by the Union-Find data structure are
+distinct.
+Therefore the Union-Find data structure produces a partition over the input
+set of items.
+
+This algorithm can be applied to meet our needs by leveraging the input domain
+$Ref$ and the representation of the entity resolution result in the F-S model.
+Recall that $Ref$ is always defined as a set of entity references.
+We defined the output of the F-S model as a set of pairs of entity
+references.
+The ground truth expressed according to the F-S model and the $Ref$ set of
+entity references are the input parameters of the Union-Find data structure.
+
+The ground truth always contains the ideal entity resolution output
+regardless of the mathematical model.
+It cannot be incomplete or faulty, by definition.
+Therefore, when we apply the Union-Find data structure to the ground truth
+it cannot return anything less than a ground truth because it processes all
+the data in $Ref$ and the partition it creates over $Ref$ is stable (i.e
+given the input sequence of pairs it cannot produce two partitions over $Ref$
+on two separate occasions).
+
+If we have a ground truth expressed as an iterable sequence of matching
+pairs and we know the input $Ref$ domain that is used for entity resolution,
+we obtain an ideal partition induced by entity resolution over $Ref$.

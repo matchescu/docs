@@ -1,0 +1,180 @@
+In a broad sense, the entity resolution process is usually comprised of four
+different steps\cite{Pap19,Tal11}:
+
+\begin{itemize}
+    \item \textit{entity reference extraction} --- the first phase of entity
+    resolution deals with extracting entity references from multiple
+    sources, as detailed in Section~\ref{sec:terminology};
+    \item \textit{blocking} and \textit{filtering} --- at this stage, the
+    entity resolution task groups in the same `block' entities that share
+    similar traits and then within each block all entities that cannot
+    possibly match are filtered \textit{out}; the intent here is to allow
+    entity resolution tasks to work with large amounts of data~\cite{Pap19};
+    \item \textit{matching} --- one of the defining activities of the entity
+    resolution process, it consists of comparing entity references to one
+    another;
+    \item \textit{clustering} --- the other defining entity resolution
+    activity which collects matching references in entity profiles.
+\end{itemize}
+
+In this paper, we concern ourselves with the last two stages of the entity
+resolution process because the quality of the process' outcome largely
+depends on these steps.
+From now on, when we use the term \textit{entity resolution} we only refer
+to matching and clustering steps.
+
+However, because extraction plays a big part in how data is structured
+within any entity resolution process, we start specifying the entity
+resolution problem by formalizing the data extraction using the notions from
+Section~\ref{sec:terminology}.
+
+Given:
+\begin{itemize}
+    \item $n \in N^*$ pairs ($S_i$, $n_i$), $1 \leq i \leq n$, $n_i \in N$, 
+    where $S_i$ is a data source and $n_i$ is the number of messages in
+    $S_i$,
+    \item $m_i \in N^*$ traits $t_{ij}$, $1 \leq j \leq m_i$ for each
+    information source $S_i$ so that
+    \item each trait $t_{ij}$ can generate at most $a_{ij} \in N^*$
+    attributes,
+\end{itemize}
+an entity resolution task $ER$ applies each trait $t_{ij}$ onto the source
+$S_i$, $1 \leq i \leq n$, $1 \leq j \leq m_i$, in order to extract
+$r_{{S_i}k}$ entity references where
+$0 \leq k \leq n_i \cdot \sum^{m_i}_{j=1}a_{ij}$.
+
+Next, we denote with $A$ the domain of all possible attributes that can be
+used by $ER$.
+
+In this context, let $r_{{S_i}{k_j}}$ denote the $k_j$th, $1 \leq j \leq k$
+entity reference extracted from the source $S_i$.
+Then $r_{{S_i}{k_j}}$ is a tuple
+\[
+    (a_r, r \in N^*, a_r \in A), r_{{S_i}{k_j}} \in A^r
+\]
+where $r$ varies for each $k_j$.
+
+Defining traits and the organizing principle as external to the data source
+is what allows us to formalize entity references so simply.
+A trait is then a function that helps construct entity references.
+The definition of traits materializes only upon extracting entity references
+$r_{{S_i}{k_j}}$ with $ER$.
+The domain of this function is the domain of all attributes in the source
+$S_i$.
+We denote this domain with $A_{{S_i}{k_j}}$.
+
+A trait can be declared as a function:
+
+\[
+    t: S_i \rightarrow A_{{S_i}{k_j}}^x\textrm{, where }x \in N^*
+\]
+and $x$ varies with $k_j$.
+
+During the extraction process, \textit{ER}'s traits lead to the construction
+of the domain of entity references:
+
+\[
+    Ref = \bigcup_{i \in N^*,1 \leq j \leq k} r_{{S_i}{k_j}}
+    \textrm{, with } r \textrm{, }S \textrm{ and } k \textrm{ specified above.}
+\]
+
+The $Ref$ domain is constructed through entity reference extraction.
+After the entities have been extracted, we are no longer concerned with the
+input information sources.
+Every type of entity resolution task can be made to work on such an input
+domain~\cite{Pap19}.
+De-duplication tasks that use a single data source work out of the box.
+Record linking tasks that use two or more data sources can embed an
+attribute that identifies the data source of each entity reference.
+Regardless of the optics, the input domain contains only entity references.
+The relevance of the original data source of an entity reference rests with
+the entity resolution task and its matching and clustering algorithms.
+
+The output of entity resolution is always a collection of entity profiles.
+While the data representation of an entity profile is definable only per
+theoretical model, we can define the output domain of entity resolution
+
+\[
+    Res=\{P_x \mid x \in \mathbb{N^*}, P_x \in P\}
+\]
+
+\noindent
+as the domain of collections of entity profiles.
+
+This specification, finally, allows us to formalize entity resolution itself as a function:
+
+\[
+    e(r_1, r_2, \ldots, r_n): Ref^n \rightarrow Res\text{, where }n\in\mathbb{N^*}
+\]
+
+\noindent
+which takes in a sequence of entity references and outputs a sequence of
+entity profiles.
+
+Note that $Res$ is always going to be a collection containing unique entity
+profiles in any theoretical model of entity resolution because of the nature
+of the entity resolution problem.
+Entity resolution disambiguates information, making it impossible for
+identical items to be a part of a correct output.
+This should not be taken to mean that the output of entity resolution tasks
+will always be a set of profiles.
+
+If $Res$ is the domain of all collections of entity profiles, one of
+the collections that are part of $Res$ must be the collection of entity
+profiles that resembles our understanding of reality the most.
+
+\begin{defn}
+    We define the \textit{ground truth} \textbf{G} over the entity reference
+    domain \textit{Ref} as the entity resolution result comprised of entity
+    profiles:
+    \[
+        \{P_g \mid g \in \mathbb{N^*}\}\textrm{, such that:}
+    \]
+    \begin{itemize}
+        \item each $P_g$ describes an entity completely using the available
+        entity references from $Ref$, and
+        \item there are no entity references in \textit{Ref} which are not a
+        part of a $P_g \in G$.
+    \end{itemize}
+\end{defn}
+
+In other words the ground truth is the ideal entity resolution result for 
+the given input data, in a context, from a perspective.
+Knowing this, we can formalize entity resolution quality generically with
+respect to the ground truth.
+
+\begin{defn}
+Given an entity resolution \textit{e} and the ground truth \textit{G} for
+the entity reference domain $Ref$, a \textit{quality metric} is an
+idempotent function:
+\[
+    q: Res^2 \rightarrow \mathbb{R}
+\]
+which scores how similar the result of \textit{e} is to \textit{G}.
+\end{defn}
+
+In practice, we should strive to implement quality metric as \textit{pure}
+functions, guarding their execution from any side-effects specific to
+running a program on a computer.
+
+As stated before, the shape and structure of the items in $Res$, including
+$G$, depends on the mathematical model underpining a specific entity
+resolution task implementation.
+Because the input domain of the quality metrics changes according to the
+used mathematical model, the set of quality metrics available for describing
+the performance of a certain entity resolution task $Q = \{q_y \mid y \in
+\mathbb{N}\}$ is dependent on the mathematical model used for implementing
+that task.
+
+One possible answer to the question of whether it is possible to evaluate
+an entity resolution using a theoretical model which wasn't available at the
+time when the entity resolution was designed has to do with the
+applicability of quality metrics.
+
+A simple logical inference tells us that if two theoretical models represent
+entity profiles in the same way, they also share quality metrics.
+Essentially, if the entity resolution $e_1$ can be evaluated using a set of
+quality metrics $Q_1$ and $e_2$ can be evaluated using a set of quality
+metrics $Q_2$ such that $Q_1 \cap Q_2 \neq \emptyset$, we have a set of
+quality metrics $Q_\cap = Q_1 \cap Q_2$ that allows us to compare $e_1$ and
+$e_2$ based on $Q_\cap$.

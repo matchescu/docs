@@ -1,0 +1,169 @@
+Throughout this paper the term ``entity'' is reserved for real-world items.
+We need new terms for the computer-friendly representations of entities.
+We start by saying that entity resolution operates on data sources.
+
+\begin{defn}
+    A \textit{data source} represents a sequence of decoded messages
+    that originate somewhere and can be processed by a computer program that
+    reads them over a communication channel\footnote{The terms `decoded', `message' and `communication channel' refer to concepts
+    defined in information theory~\cite{ash2012it}.}.
+\end{defn}
+
+
+
+An entity resolution task needs at least one data source to operate on.
+When the relevant information is split across multiple data sources, these
+can be merged into a single source.
+In the same way, a single data source can be split into multiple data
+sources.
+Data sources may be bounded (files or databases) or unbounded (streams).
+For the purposes of this paper, these attributes of data sources as well as
+their number are inconsequential.
+
+In practical terms, entity resolution is a computer process that operates
+over a data source.
+In the process of entity resolution, we use specific notions to refer to the
+various levels in which data is organised.
+
+\begin{defn}
+    An \textit{attribute} is information about an entity that has a certain
+    meaning in a context given by a frame of reference and certain rules of
+    interpretation.
+\end{defn}
+
+Attributes by themselves are not enough to describe an entity.
+For example, `red' fully describes an entity only if we are looking for
+colors.
+If we are looking for fruit, `red' is only one of several attributes that
+help describe fruit.
+We might be interested whether the fruit is `sour' or `sweet' as well as
+whether it is `small', `medium' or `large'.
+
+\begin{defn}
+    An \textit{entity reference} is a collection of attributes that refer
+    to a real-world entity which can be formed by following an organizing
+    principle (or order) of the data source where the attributes are all
+    located.
+\end{defn}
+
+The organizing principle of a data source is simply an order that
+facilitates processing information in that data source.
+A CSV file has the organizing principle that attributes are separated by
+commas.
+Relational databases organize data in tables, columns and rows.
+Other storage organizes data in structured, semistructured or even
+unstructured ways (such as text).
+As an example of unstructured organization, named entity disambiguation uses
+the same organizing principle as named entity recognition built around
+mentions.
+When an entity resolution task processes a data source, it loads
+\textit{references}\cite{Ben2009Swoosh} to entities by taking advantage of
+the way that data source is organized.
+
+We shouldn't confuse the organizing principle of a data source with its
+structure, though.
+A table record in a database might store multiple attributes of the same
+entity in the same column.
+The entity reference will be constructed by extracting all attributes, not
+by dumbly considering each column to be an attribute.
+Entity reference extraction is also selective by nature.
+For entity resolution tasks that value geolocation above other things, the
+extracted references might skip over data that is not about geography.
+Similarly, in tasks that identify people, entity references will be
+comprised from attributes that are useful in identifying a person or a
+company.
+All this speaks to how the organizing principle of a data source is
+extrinsic to the data source and linked to the entity resolution's purpose.
+
+A final note on entity references is that attributes that each reference is
+bound to a data source.
+The definition above states this by mandating that all attributes comprising
+an entity reference are read from the same data source.
+
+So far we have dealt with structure, now it is time to deal with meaning and
+purpose.    
+Let's suppose that we are gathering information about colors.
+A data source represents colors as `red', `green' or `blue'.
+Another one represents them as \texttt{0xCC0000}, \texttt{00CC00} or
+\texttt{0x0000CC}.
+The organizing principle instructs the entity resolution task to construct
+entity references with a single attribute.
+It does not provide any semantic interpretation rules for the data.
+
+\begin{defn}
+    A \textit{trait} is a semantic rule that guides the entity resolution
+    task in recognizing the organizing principle of each information source
+    that it uses as input.
+\end{defn}
+
+Each entity resolution task is defined by specific objectives it aims to
+achieve.
+For every distinct task, there are key rules that guide the interpretation
+of the available data, emphasizing certain aspects over others.
+In our example, entity resolution focuses exclusively on identifying colors
+in different data sources.
+To achieve this goal, the traits of the entity resolution task instance
+might be specified, trained or inferred from a knowledge base to recognize
+various representations of colours.
+While we might think of traits as being a part of a generic data extraction
+process such as scraping, traits in the sense described here are actually
+integral to the entity resolution process itself.
+
+The notion that is the most similar to that of a trait is the pattern
+recognition notion of a `feature':
+\textit{an individual measurable property or characteristic of a
+phenomenon}\cite{bishop2006pattern}.
+The mechanics of how traits and features function is near identical.
+The difference between a trait as defined here and a feature is a matter of
+perspective.
+Features are part of constructing a broader, objective perspective on
+information.
+Traits as they are defined here are concerned with the contextual meaning.
+
+Pragmatically, traits can be viewed as algorithms that extract information
+according to the subjective goal of the entity resolution task.
+In their simplest form, traits might be configuration parameters for an
+entity resolution system.
+But they can also be algorithms that are part of the a system's code.
+
+For example, a trait called `profitable' that is supposed to specify whether
+a company earns more than it spends is different from the typical physical
+representation of profit and loss as two separate decimal values present
+in information organized in some way or another.
+The way we would handle this discrepancy while extracting entity references
+is by having an algorithm that outputs a truth value when gains exceed
+spending.
+
+Another example of a trait, is a configuration value that specifies the
+attributes that should be used when comparing two entity references.
+This trait might optimize certain attributes of the entity references for
+comparison.
+
+To avoid confusing traits and attributes, it is easy to think about traits
+as not being a part of the data source, but rather as a part of the entity
+resolution task implementation.
+Entity resolution tasks extract attributes that they assign to entity
+references based on the traits specific to each task.
+
+Traits are a necessary abstraction if we want the same entity resolution
+task to be able to process more than one data representation.
+They are useful for constructing individual entity references.
+However, we have not defined any notion that links entity references to an
+entity.
+
+\begin{defn}
+    The logical group of entity references that point to the same real-world
+    entity according to the entity resolution task's parameters is known as
+    the \textit{entity profile} of that real-world entity within the entity
+    resolution task.
+\end{defn}
+
+It is important to understand that the entity profile and the real-world
+entity are not the same.
+Entity profiles are simply digital collections of entity references that are
+formed because of how an entity resolution task was programmed and
+configured.
+
+By using the terms \textit{information source}, \textit{attribute},
+\textit{trait}, \textit{entity reference} and \textit{entity profile} we can
+finally move on to define entity resolution formally.

@@ -1,0 +1,242 @@
+In the late 1960s Ivan Fellegi and Alan Sunter wrote the seminal
+paper\cite{fs1969} for what was called record linkage and would later become
+known as entity resolution.
+To this day, the probabilistic model for entity resolution is this problem's
+most popular formalization.
+In this mathematical model, entity resolution is a function that aids in 
+probabilistic decision making.
+
+\subsubsection[fsm-desc]{Description}\label{subsubsec:fsm-desc}
+
+The original Fellegi-Sunter (F-S) model defines record linkage as an operation over two input
+sets, $A$ and $B$.
+The result of the operation is a set containing pairs of items
+$X = \{(a, b), a \in A, b \in B\}$ or $X = A \times B$.
+
+The model then deconstructs $X$ to two disjoint subsets $X = M \cup U$:
+\begin{itemize}
+    \item $M$ for pairs that contain matching items, and
+    \item $U$ for pairs that contain non-matching items,
+\end{itemize}
+or more formally:
+\begin{align}
+    M &= \{(a, b) | a == b, a \in A, b \in B\}~\textrm{and}\nonumber \\
+    U &= \{(a, b) | a \neq b, a \in A, b \in B\}\nonumber
+\end{align}
+
+The model proposes that if $a \in A$ and $b \in B$ are two vectors, their
+comparison will also be a vector denoted $\gamma \in \varGamma$, where
+$\varGamma$ denotes the set of all possible values of $\gamma$.
+The comparison between $a$ and $b$ is performed between each corresponding
+element in each of the two vectors.
+The elements of $\gamma$ vary according to the type of comparison that is
+performed\cite{winkler1990}.
+
+In this context, a match decision function can make one of three decisions
+regarding a pair from $X$ according to the F-S model:
+
+\begin{itemize}
+    \item consider it a \textit{link ($A_1$)} between the items;
+    \item consider it a \textit{non-link ($A_3$)} between the items, and
+    \item leave things undecided, thus marking it as a \textit{possible link
+          ($A_2$)}.
+\end{itemize}
+
+Then a linkage rule is a function $L:\varGamma \rightarrow D$,
+$D=\{d(\gamma)\}$, where
+
+\begin{align}
+    d(\gamma) = &\{P(A_1|\gamma),P(A_2|\gamma),P(A_3|\gamma)\}\textrm{, so
+    that:}\nonumber\\
+    &\sum_{i=1}^{3}P(A_i|\gamma) = 1\nonumber, \gamma \in \varGamma\nonumber
+\end{align}
+
+In other words, given a $\gamma \in \varGamma$, we have the linkage rule
+\[
+    L(\gamma) = \{P(A_1|\gamma), P(A_2|\gamma), P(A_3|\gamma)\}
+\]
+so that the probabilities sum up to $1$.
+
+When using this model the purpose of entity resolution is to find the
+optimal linkage rule.
+The F-S theorem defines it as the linkage rule that minimizes
+$P(A_2|\gamma)$.
+In other words, the optimal linkage rule according to the F-S model is the
+linkage rule without uncertainties.
+This inclination of this model towards optimization makes it well suited for
+both rule-based\cite{oyster2012} and machine learning\cite{deepm2020}
+implementations.
+
+In the probabilistic model, two conditional probabilities are interesting:
+
+\begin{align}
+    m(\gamma)&=P(\gamma(a, b) | (a, b) \in M)~\textrm{and}\nonumber\\
+    u(\gamma)&=P(\gamma(a, b) | (a, b) \in U)\textrm{.}\nonumber
+\end{align}
+
+\noindent
+$m(\gamma)$ is the probability of a $\gamma$ comparison vector given an
+$(a, b)$ \textit{link}.
+$u(\gamma)$ is the probability of a $\gamma$ comparison vector given an
+$(a, b)$ \textit{non-link}.
+For brevity, we have not used the complete notation pertaining to records
+from the original paper.
+
+The two probabilities outlined above are important because they help us
+express the probabilities of the Type I and Type II statistical errors
+associated with the decision function that sits at the core of the linkage
+rule definition above.
+The probabilities of the two types of error are expressed as:
+
+\begin{align}
+    \mu&=\sum_{\gamma \in \varGamma}u(\gamma)P(A_1|\gamma)\textrm{,~and}\nonumber\\
+    \lambda&=\sum_{\gamma \in \varGamma}m(\gamma)P(A_3|\gamma)\nonumber
+\end{align}
+
+where:
+
+\begin{itemize}
+    \item $\mu$ represents the Type I error of items that were erroneusly
+    linked (i.e pairs in $M$ that do not belong in $M$), and
+    \item $\lambda$ represents the Type II error of items that were
+    erroneously \textit{not} linked (i.e~pairs in $U$ that do not belong in
+    $U$).
+\end{itemize}
+
+
+\textcolor{green}{some remarks:\\ 
+1. While Fellegi and Sunter show that the classification rule is optimal in terms of statistical power, the result is based on several assumptions that do not hold in practice - check this work \href{https://www.jstor.org/stable/23024863?seq=1}{link}\\
+2. there are some generic versions of FS model - e.g. \href{https://www.jstor.org/stable/pdf/24246450.pdf}{link}, \href{https://projecteuclid.org/journals/annals-of-applied-statistics/volume-8/issue-4/Detecting-duplicates-in-a-homicide-registry-using-a-Bayesian-partitioning/10.1214/14-AOAS779.full}{link}\\
+}
+
+\subsubsection[fms-term]{Terminology Mapping}\label{subsubsec:fsm-term}
+
+To link the Fellegi-Sunter model to our own terminology, let's start by
+talking about $a \in A$ and $b \in B$.
+The F-S model calls $A$ and $B$ ``populations'' and $a$ and $b$,
+``population elements''.
+A distinction is made between records, denoted with $\alpha(a)$ and
+$\beta(b)$, and population elements.
+Most of the original paper refers to records.
+
+Population elements correspond to entities and records correspond to entity
+references in our terminology.
+When it comes to $\alpha(a)$ and $\beta(b)$, we think of them as special
+cases of traits.
+    
+The $A$ and $B$ populations equate to data sources.
+A ``population'' is a particular type of data source because it is defined
+as a set.
+The set is a specialization with respect to our definition of data sources.
+
+The Fellegi-Sunter model works under the assumption that there are two
+populations $A$ and $B$ and defines the linkage rule as a function that uses
+conditional probabilities that involve both populations.
+On the other hand, our $Ref$ domain is solitary.
+Using our terminology we would denote $A$ with $S_1$ and $B$ with $S_2$.
+We start constructing our $Ref$ domain by using traits to extract $n_1$
+entity references from $S_1$ and $n_2$ entity references from $S_2$.
+Then $Ref = \{r_{{S_i}{k_j}},~1 \leq k_j \leq n_i, i \in {1, 2} \}$.
+If, say there is 5 elements in $S_1$ and 10 elements in $S_2$ then $k_1$ goes
+from 1 to 5 and $k_2$ goes from 1 to 10.
+
+The result domain is expressed as $X = A \times B$ in this model.
+It is subsequently split into $M$ and $U$ the sets of matching and
+non-matching pairs in $X$, respectively.
+
+The $X$ in the original model is equivalent to $Res$ in our terminology.
+$Res$ can be defined as:
+\begin{align}
+    Res = &\{(r_{{S_i}{k}}, r_{{S_j}{l}})\mid~1 \leq k \leq |S_i|,
+    1 \leq l \leq |S_j|\}\textrm{, so that}\nonumber\\
+    &i \neq j, i,j \in \{1, 2\}\textrm{,}\nonumber
+\end{align}
+where $|S_i|$ denotes the number of entity references extracted from the
+source $S_i$.
+
+Each entity profile is represented as a pair of entity references.
+For example, if $r_{11}=(1, 2, 3)$ and $r_{21}=(4, 5, 6)$ are two entity
+references that refer to the same real-world entity, this model would return
+an entity profile as the following pair: $((1, 2, 3), (4, 5, 6))$.
+
+$M$ becomes the set containing the entity profiles that refer to entities.
+$U$ becomes the set of entity profiles that don't refer entities.
+Consequently, this model proposes that the result of entity resolution is a
+set of distinct pairs of entity references.
+
+A natural question is whether, instead of a single set of pairs of tuples we
+should expect two sets of pairs of tuples that would correspond to the two
+subsets $M$ and $U$ from the original paper.
+$M$ will grow proportionally to the maximum number of entity references
+extracted from a single data source.
+On the other hand, the size of $U$ is proportional to the product of the
+sizes of the populations $A$ and $B$.
+For practical reasons concerning resource usage, we think constructing $M$
+and inferring $U$ based on $M$ is the best choice.
+
+With the above definition for $Res$ we observe that this model explain
+matching very well, but clusters entities only two at a time.
+Linking more than two entity references, and especially implementing
+transitive entity reference linking does not seem possible with this
+model\cite{Tal11}.
+By transitive linking we mean that if the entity reference $r_1$ matches
+$r_2$ and $r_2$ matches $r_3$, we could infer that $r_1$ matches $r_3$.
+While there is work that extends the model to compare more than two entity
+references\cite{Kon19} at once, transitivity is still an issue so we will
+not dive deeper into topics concerning matching multiple entity references.
+
+\subsubsection[fsm-metrics]{Specific Metrics}\label{subsubsec:fsm-metrics}
+
+Because we have a clear definition of the Type I and Type II errors, we can
+give a clear context for the notions of true and false positive and true and
+false negative.
+This allows us to use any of the familiar statistical metrics that rely on
+these concepts.
+
+In defining true/false positives/negatives we use the sets $M$ and $U$ as
+they are defined in the original paper describing the F-S model.
+Depending on where a pair (output by the entity resolution function) is
+expected to be found, we define:
+
+\begin{itemize}
+    \item \textbf{true positives} as pairs predicted to be in $M$ that
+    should be in $M$,
+    \item \textbf{false positives}, or type I errors, as pairs predicted to
+    be in $M$, but should be in $U$,
+    \item \textbf{true negatives} as pairs predicted to be in $U$ that
+    should be in $U$, and
+    \item \textbf{false negatives}, or type II errors, as pairs predicted to
+    be in $U$, but should be in $M$.
+\end{itemize}
+
+Quality metrics for this model compare a ground truth, consisting of ideal
+tuple pairs, with the entity resolution task's output.
+$M$ is the ground truth in this context.
+Due to the impracticality of using $U$, our focus will be on concepts
+related to $M$: true positives, false positives, and false negatives.
+
+Several metrics based on these concepts exist, though the effectiveness of
+some has been questioned\cite{Goga2015}.
+With this in mind we choose three quality metrics that are widely used with
+this model:
+
+\begin{align}
+Precision &= \frac{TP}{TP+FP}\nonumber \\
+Recall &= \frac{TP}{TP+FN}\nonumber \\
+F_1 &=2 \cdot \frac{Precision \cdot Recall}{Precision+Recall}\nonumber
+\end{align}
+
+\textit{Precision} (or the positive predictive value) is defined as the
+number of correct predictions that were made in relation to the total number
+of predictions that were made.
+
+\textit{Recall} (or sensitivity) is defined as the number of correct
+predictions that were made in relation to the total number of positive
+predictions that could have been made (which corresponds to the number of
+items in the ground truth).
+
+The \textit{$F_1$} score is the harmonic mean of the precision and the
+recall and it is used to capture the tradeoff between precision and
+recall\cite{hitesh2012}.
+
+\textcolor{green}{e bine ca pentru fiecare metrica sa fie precizat domeniul valorilor posibile si ce inseamna bine (predictii bune) si ce inseamna rau (predictii gresite)}
