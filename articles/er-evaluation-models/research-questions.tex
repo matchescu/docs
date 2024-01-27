@@ -1,0 +1,116 @@
+In scientific literature, entity resolution has been attributed numerous
+characteristics\cite{Tal11,Pap19}.
+In the context of this paper, the following stand out:
+
+\begin{itemize}
+    \item\textit{A concern for a real-world entity}, for if the task were
+    not about a something from our world, there couldn't be any resolution;
+    \item\textit{No implication as to the used method}, because if we
+    stipulated a certain way to perform entity resolution, we might not be
+    able to;
+    \item\textit{The representation of information is computer friendly},
+    because if it weren't, it might not be possible to study the task by
+    means of computer science.
+\end{itemize}
+
+The first two statements suggest that entity resolution can be performed
+using any informational support.
+Simply imagine collecting notes about the same real-world object.
+Entity resolution becomes relevant to computer science when it involves
+processing information about real-world entities through computational
+methods, rather than directly interacting with the entities
+themselves~\cite{Tal11}.
+This approach is characterized by the constraint of handling data that is
+computable, indicating that entity resolution tasks executed on computers
+do not have direct access to the entities they aim to resolve~\cite{Chen09}.
+
+Whenever we talk about measuring the performance of an entity resolution
+task, we must note that we are confined to the information that is available
+to the computer running the task.
+Because of the nature of the problem, we judge the quality of the entity
+resolution task's result in terms of the information that is available to us
+about the real-world entity we're trying to resolve.
+This produces a gap between what a computer can provide and what the
+observer wishes to see.
+
+And so, it is said that beauty lies in the eye of the beholder and we are
+nearing a century since it has become apparent that the observer is key in
+our physical universe~\cite{schrodinger1926}.
+Perhaps we can use Schrodinger's insight as inspiration for bridging our own
+gaps in understanding entity resolution quality.
+For instance, we might notice that there are multiple perspectives available
+to us when we judge the quality of an entity resolution outcome.
+We refer to these perspectives as theoretical models of entity resolution.
+Each model provides a way of understanding entity resolution tasks, without
+actually altering the way any of them are implemented in practice.
+Important questions emerge from the gap between the computer accessible
+information and the user's expectations of an entity resolution task.
+Can evaluating the outcome of an entity resolution task from the viewpoint of a
+theoretical model yield an assessment of the task's own qualities?
+Are there invariant aspects in the assessment which remain consistent
+irrespective of the data on which the task operates?
+
+Next, another gap exists between the generic solutions provided by scientific
+literature or programming libraries and the specific needs derived from a
+context of the practitioners actually implementing entity resolution
+systems.
+
+Historically, entity resolution measurements owe much to the field of
+information retrieval and to statistics.
+Implementing entity resolution systems in practice, we often notice that
+using popular metrics borrowed from these fields (such as the F1 score) we
+end up overlooking some essential aspect.
+For example, in anomaly detection problems we are primarily interested in
+sensitivity, not the balanced outlook the F1 score provides.
+Note that anomaly detection is not exactly the particular case one might
+expect when we were talking earlier about `context'.
+
+In scientific literature and programming, generic solutions are preferred to
+specific ones.
+This bias towards generic solutions makes it hard for practitioners to rank
+entity resolution solutions by their usefulness in the context of the task
+at hand (e.g anomaly detection).
+Choosing an entity resolution solution remains a necessary step in
+implementing an entity resolution system.
+The longer it takes to find one, the higher the implementation costs.
+Also, choosing a complex system is often a decision that's difficult to
+change later and this contributes to the risk of making a poor choice.
+
+Papers have been published on the biases inherent in certain metrics
+and how they influence judging entity resolution outcomes in a specific
+context~\cite{Goga2015}.
+The few systems out there that do provide some form of ranking entity
+resolution solutions tend to use balanced metrics~\cite{papwithcode2019}.
+Our previous example shows taht being balanced is actually just another bias
+which may or may not be useful, depending on context.
+
+All this goes to show that the myriad ways~\cite{hitesh2012} in which we
+evaluate entity resolution quality suggests that we haven't found the ideal
+perspective for the entity resolution problem.
+It might also show that it will take us a long time to find it.
+From this point of view, it seems logical to look at how some of the existing
+metrics might complement one another.
+
+As previously stated, entity resolution quality evaluation owes much to
+information retrieval and to probability theory.
+Additionally, metrics originally designed to aid in graph theory problems have
+become useful, too~\cite{hitesh2012,Kon19}.
+Nevertheless, a cursory review of what is usually being measured in lieu of
+judging entity resolution quality~\cite{fever2009,Men10,Goga2015} shows an
+important interest for evaluating the quality of entity matching.
+At this point we refer to entity matching as simply finding out how similar two
+data are by using various comparison techniques.
+This may be due to a lingering confusion between entity matching and entity
+resolution~\cite{Tal11}.
+
+Literature~\cite{Tal11} describes other perspectives available to us regarding
+entity resolution, besides seeing it as a matching problem.
+The descriptions of other entity resolution quality metrics that go beyond
+matching~\cite{Men10,tal2007algebraic} reveal some of these alternative
+views.
+These perspectives are expressed formally through theoretical
+models\cite{Ben2009Swoosh,Tal11}.
+This begs the question how these perspectives relate to one another.
+Is it possible to use one model to judge the quality of an entity resolution
+result from one perspective and then another model to analyse the same result
+from another perspective?

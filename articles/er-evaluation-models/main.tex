@@ -28,20 +28,19 @@ T \kern-.1667em \lower.7ex \hbox{E} \kern-.125emX}}
     
     \maketitle
     \begin{abstract}
-        \textcolor{green}{tb spus in 2 cuvinte ce inseamna ER}
-        Despite well-established theoretical frameworks for entity resolution,
-        there is a noticeable gap in its optimal application in practice.
-        This framework 
-        \textcolor{green}{care framework? prop precedenta zice de framework-uri in general...}
-        plays a pivotal role in shaping the functionality of
-        various metrics used to evaluate entity resolution algorithms.
-        As a result, the interpretation derived from these metrics guides the
-        determination of optimal input parameters for the algorithm under
-        evaluation.
-        This indicates that the practical projection of theoretical models in
-        entity resolution often deviates from their optimal utilization, leading
-        to varied outcomes and understandings of the problem.
-        \textcolor{green}{tb mentionata si propunerea cu care vine acest paper; ce aduce el nou si care sunt concluziile studiului / investigatiei efectuate}
+        This paper examines entity resolution, the process of identifying if two
+        pieces of information represent the same real-world entity.
+        Despite well-established theoretical models in this field, challenges
+        persist in selecting appropriate entity resolution tasks for specific
+        contexts.
+        These models are associated with quality metrics that assess the
+        outcomes of entity resolution tasks.
+        Our study demonstrates the possibility of identifying abstract
+        conditions invariant to specific solutions and data sets, which instead
+        relate to the theoretical model used for evaluating entity resolution
+        outcomes.
+        This approach offers a novel perspective for understanding the
+        performance of entity resolution tasks.
     \end{abstract}
 
     \begin{IEEEkeywords}
@@ -64,9 +63,9 @@ T \kern-.1667em \lower.7ex \hbox{E} \kern-.125emX}}
     themselves passing through there is available in one or more places strikes
     us as non-consequential, too.
     
-    Because of its fundamental nature, the entity resolution problem goes by
-    many names such as: record linkage, data de-duplication, merge-purge,
-    named entity recognition and disambiguation, entity alignment or entity
+    Precisely because it is a fundamental problem, entity resolution goes by
+    many names: record linkage, data de-duplication, merge-purge, named entity
+    recognition and disambiguation (or NERD), entity alignment or entity
     matching~\cite{Tal11,fever2009,alhelbawy2014}.
     Entity resolution also has many practical applications ranging from linking
     medical records to diagnosing diseases or ailments, to translation, to doing
@@ -76,149 +75,33 @@ T \kern-.1667em \lower.7ex \hbox{E} \kern-.125emX}}
     is to gather more information about the same real-world object.
     When there is such a wide array of past, present and future applications,
     evaluating entity resolution quality seems important.
+
+    This paper is an introspection on how entity resolution theoretical models
+    influence our perception of entity resolution results.
+    We attempt to discuss whether entity resolution tasks themselves can be
+    evaluated to be better or worse based on their results.
+    Besides that, we're interested to see how metrics used for evaluating entity
+    resolution result quality complement one another.
+    Partly in order to answer that question, we are looking into ways in which
+    two differnt entity resolution models might provide different insights into
+    the quality of the same entity resolution result.
     
     We begin by exploring a few preliminaries focused on entity resolution
     itself and then describe the problem we are analyzing.
     After briefly summarizing the work that relates to our paper, we introduce
     terminology and a mental model that we use throughout the rest of the paper.
-    Following that we briefly introduce the theoretical models for entity
+    Afterwards, we briefly introduce the theoretical models for entity
     resolution that we chose for our analysis.
-    The experimental setup is next on our list as we present our findings using
-    an algorithm of choice over three well known data sets as well as over one
-    generated data set.
-    Next, we discuss the results we see pointing out invariant conditions that
+    We then run a few experiments using an entity resolution solution of choice
+    and present our findings using three well known data sets and one generated
+    data set.
+    Lastly, we discuss our observations, pointing out invariant conditions that
     do not seem to be related to the choice of data set.
 
-    \section{Preliminaries}\label{sec:preliminaries}
-
-    In scientific literature, entity resolution has been attributed numerous
-    characteristics\cite{Tal11,Pap19}.
-    In the current context, the following stand out:
-
-    \begin{itemize}
-        \item\textit{A concern for a real-world entity}, for if the task were
-        not about a something from our world, there couldn't be any resolution;
-        \item\textit{No implication as to the used method}, because if we
-        stipulated a certain way to perform entity resolution, we might not be
-        able to;
-        \item\textit{The representation of information is computer friendly},
-        because if it weren't, it might not be possible to study the task by
-        means of computer science.
-    \end{itemize}
-
-    The first two statements suggest that entity resolution can be performed
-    using any informational support.
-    Simply imagine collecting notes about the same real-world object.
-    Entity resolution's link with computer science exists only when posited.
-    Dealing with information about real-world objects instead of dealing with
-    the objects themselves directly~\cite{Tal11} doesn't transform entity
-    resolution into a computer science problem.
-    The self-imposed \textit{limitation} of dealing with information that is
-    interpretable by a computer does.
-    This entails that entity resolution tasks running on computers are not privy
-    to the entities they are meant to resolve~\cite{Chen09}.
-
-    Whenever we talk about measuring the performance of an entity resolution
-    task, we must note that we are confined to the information that is available
-    to the computer running the task.
-    Our interests lie in bridging this gap between reality and approximation
-    when it comes to the quality of entity resolution.
-
-    It is said that beauty lies in the eye of the beholder.
-    We are nearing a century since the date it has become apparent that the
-    observer is key in our physical universe~\cite{schrodinger1926}.
-    Perhaps we can use Schrodinger's insight as inspiration for bridging our own
-    gaps in understanding entity resolution quality.
-    For instance, we may 
-    \textcolor{green}{say? notice?} 
-    what are the perspectives available to us when we want
-    to determine which information relates to the same real object.
-    In other words, does it matter in practice how we model an entity resolution
-    task theoretically?
-    Is the observation of an entity resolution system made using a theoretical
-    model the same or different than the one made using a different theoretical
-    model and how?
-
-    Historically, entity resolution measurements owe much to the field of
-    information retrieval and statistics.
-    Some of the measurements used to evaluate entity resolution quality seemed
-    to faulter when put under scrutiny~\cite{Goga2015}.
-    This 
-    \textcolor{green}{gap or discrepancy or divergence} 
-    leads to using better measures that describe the outcomes more wholly
-    and more objectively.
-    This 
-    \textcolor{green}{I would add a noun for emphasising the incosistency of the evaluation setup available in literature} 
-    indicates both that there is more than one lens to view entity
-    resolution through and that the principles we should look for in such a lens
-    should at least cover completeness and objectivity.
+    \section[preliminaries-questions]{Preliminaries \& Research Questions}
+    \label{sec:preliminaries-questions}
+    \input{research-questions}
     
-    \section{Question}\label{sec:contributions}
-
-    \textcolor{green}{aici e nevoie de:\\
-    1. introducerea, pe scurt, a metodelor de evaluare din literatura, care sunt limitarile sau minusurile lor a.i. sa poti formula 1-2 research questions sau ipoteze pe care sa le valideze abordarea descrisa in articolul curent. Adica tb sa ai o motivatie pt toata munca efectuata;\\
-    2. evidentierea contributiilor pe care le aduce lucrarea atat relativ la alte lucrari din literatura care analizeaza metrici si metode de evaluare (deci cu ce e diferita de ceea ce exista pana acum in literatura), cat si din punct de vedere al plusului efectiv de valoare adus de analiza efectuata}
-
-    Working with entity resolution systems in the everyday life of a data
-    engineer is challenging at best.
-    Figuring out which entity resolution system best fits a current need is an
-    arduous task in itself.
-    Choosing a system is expensive because of the amount of work required to
-    measure its performance, that is to know whether the choice is correct.
-    As with other complex systems, once a choice is made, it is very rarely
-    revisited.
-
-    There are many processes by which to make the choice.
-    However, an informed choice always relies on good measurements.
-    Moreover, good measurements are also an important indicator that we should
-    check periodically throught the operation time of the system.
-
-    The state of the art of entity resolution quality measurement has evolved to
-    incorporate metrics from various other fields of research in computer
-    science, most prominently information retrieval and graph
-    theory~\cite{hitesh2012}.
-    At a cursory review of how others would measure the quality of entity
-    resolution~\cite{fever2009,Pap19,Goga2015}, we find that the more popular
-    topic is evaluating entity matching quality or how good entity resolution
-    is at saying which two pieces of information match and which do not.
-    This is echoed in our practical experience, too.
-    This may be due to a confusion between entity matching and entity resolution
-    which still lingers~\cite{Tal11}.
-
-    We know that there are other perspectives available when speaking about
-    entity resolution quality as a whole.
-    The descriptions of other entity resolution quality metrics that go beyond
-    matching~\cite{Men10,tal2007algebraic} reveal different perspectives over
-    entity resolution itself.
-    These perspectives are expressed formally through theoretical models.
-    
-    In practice, we have noticed that always using the most popular metrics, we
-    end up overlooking essential aspects of the entity resolution result.
-    For example, for certain problems (most problems from the general subclass
-    of anomaly detection algorithms) we are very interested in highly sensitive
-    systems.
-    
-    Another question relates to the possible invariants that might be gleaned by
-    looking at small versus larger sets of data.
-    Are there teachings obtained from measuring entity resolution quality on a
-    small dataset, in a certain way that we can extrapolate to a larger dataset?
-    More interestingly, are some of these teachings independent of the entity
-    resolution solution being used?
-
-    Even more concretely, is the clustering performance of entity resolution
-    correlated to the matching performance of entity resolution?
-    Does the theoretical model we use determine how information should be
-    represented at runtime?
-
-    Zooming out again, we ask another question: is it possible to switch from
-    one perspective to another?
-    Entity resolution theoretical models encompass all entity resolution
-    solutions: past, present and future.
-    The abstract question above becomes whether we can interpret an entity
-    resolution task's quality from a perspective that wasn't available at the
-    time it was implemented or not?
-    \textcolor{green}{aici nu e f clar la ce anume se refera aceste perspective. TBA}
-
     \section{Related Work}\label{sec:related}
     
     The topic addressed in this paper intersects with a significant body of
@@ -250,17 +133,18 @@ T \kern-.1667em \lower.7ex \hbox{E} \kern-.125emX}}
     
     Next, the syntheses on the theoretical models for entity
     resolution~\cite{fs1969,Ben2009Swoosh,Tal11} are invaluable resources.
-    The models we present in this paper have been heavily documented before much
-    better than we aspire to do here~\cite{Tal11,tal2013}.
-    \textcolor{green}{It's nice to be humble, but here I would write another reason/motivation; the aim of the paper is to analize the evaluation component, not to re-describe the models; the models' description is given, in a uniform manner, just for improving the paper readability, fluency, comprehensibility}
+    The models we present in this paper have been heavily documented
+    elsewhere~\cite{Tal11,tal2013}.    
+    We overview the models here to fill potential gaps in the reading flow of
+    the paper more than to address another need.
     
     Taking a different tack on describing entity resolution in a generic,
-    abstract way, we have studies that show a process perspective over entity
-    resolution tasks~\cite{Pap19,Chen09}.
-    These studies showcase the stages of the entity resolution process and the
+    abstract way, there are studies that shine a procedural light over entity
+    resolution~\cite{Pap19,Chen09}.
+    These studies showcase the steps of the entity resolution process and the
     significance, challenges and benefits of each.
-    With the help of such papers we find that matching and clustering are both
-    sides of the same process as well as stages in it.
+    These studies show us that matching and clustering (additionally to being
+    aspects of entity resolution) are steps in the entity resolution process.
 
     Lastly, we use the information provided by syntheses~\cite{hitesh2012} on
     entity resolution quality metrics to find the metrics that associate well
