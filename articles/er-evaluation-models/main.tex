@@ -292,11 +292,10 @@ T \kern-.1667em \lower.7ex \hbox{E} \kern-.125emX}}
     For the purposes of this paper, these attributes of data sources as well as
     their number are inconsequential.
     
-    In the context of the definition of a data source, entity resolution is the
-    computer program processing the data source.
-    \textcolor{green}{Is ER a program? I recomend to consider it as a pb in the entire paper} 
-    What sets entity resolution tasks apart from other computer programs are the
-    notions they use to process information from the data source.
+    In practical terms, entity resolution is a computer process that operates
+    over a data source.
+    In the process of entity resolution, we use specific notions to refer to the
+    various levels in which data is organised.
 
     \begin{defn}
         An \textit{attribute} is information about an entity that has a certain
@@ -444,15 +443,12 @@ T \kern-.1667em \lower.7ex \hbox{E} \kern-.125emX}}
     \section{Formalizing Entity Resolution}\label{sec:entity-resolution}
 
     In a broad sense, the entity resolution process is usually comprised of four
-    different activities\cite{Pap19,Tal11}
-    \textcolor{green}{I would use "steps" (instead of activities) in order to higlight their order - it is a process that involves all these 4 components}
-    :
+    different steps\cite{Pap19,Tal11}:
+
     \begin{itemize}
         \item \textit{entity reference extraction} --- the first phase of entity
         resolution deals with extracting entity references from multiple
-        sources, as detailed  
-        \textcolor{green}{in section \ref{sec:terminology}} 
-        of this paper;
+        sources, as detailed in Section~\ref{sec:terminology};
         \item \textit{blocking} and \textit{filtering} --- at this stage, the
         entity resolution task groups in the same `block' entities that share
         similar traits and then within each block all entities that cannot
@@ -466,13 +462,14 @@ T \kern-.1667em \lower.7ex \hbox{E} \kern-.125emX}}
     \end{itemize}
 
     In this paper, we concern ourselves with the last two stages of the entity
-    resolution process.
-    \textcolor{green}{this decision must be motivated (a simple argument could be enough) - e.g. the focus is actually on the final evaluation}
+    resolution process because the quality of the process' outcome largely
+    depends on these steps.
     From now on, when we use the term \textit{entity resolution} we only refer
     to matching and clustering steps.
 
     However, because extraction plays a big part in how data is structured
-    within any entity resolution process, we start specifying the entity resolution problem by formalizing the data extraction using the notions from
+    within any entity resolution process, we start specifying the entity
+    resolution problem by formalizing the data extraction using the notions from
     Section~\ref{sec:terminology}.
     
     Given:
@@ -668,9 +665,8 @@ T \kern-.1667em \lower.7ex \hbox{E} \kern-.125emX}}
     a probabilistic perspective over the entity resolution results corresponding
     to the Fellegi-Sunter model to an algebraic perspective.
 
-    Discussing these aspects takes enough space and the discussion is complex
-    enough so that adding a third theoretical model to the discussion might
-    result in chaos.
+    Discussing these aspects is complex and takes enough space to warrant adding
+    a third model to the conversation inopportune.
 
     \subsection[fsm]{Fellegi-Sunter Model}\label{subsec:fsm}
 
