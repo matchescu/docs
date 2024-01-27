@@ -632,7 +632,7 @@ T \kern-.1667em \lower.7ex \hbox{E} \kern-.125emX}}
     quality metrics $Q_\cap = Q_1 \cap Q_2$ that allows us to compare $e_1$ and
     $e_2$ based on $Q_\cap$.
     
-    \section[mm]{Mathematical Models for Entity Resolution}\label{sec:mm}
+    \section[models]{Entity Resolution Models}\label{sec:models}
 
     The representation of entity resolution results depends upon the theoretical
     model we use.
@@ -643,10 +643,34 @@ T \kern-.1667em \lower.7ex \hbox{E} \kern-.125emX}}
 
     John R. Talburt provides an overview of these models in his book ``Entity
     Resolution and Information Quality''\cite{Tal11}.
-    This paper aims to take a deeper look at how two of the models described
-    therein might be connected.
+    This paper aims to analyse two of the models described in that book with an
+    aim to understand how they influence our ability to measure the quality of
+    entity resolution.
 
-    \textcolor{green}{e nevoie sa argumentezi de ce te-ai oprit doar asupra acestor 2 modele din multimea celor existente!}
+    The Fellegi-Sunter model is the best known model for entity resolution.
+    Most of quality evaluations in the entity resolution space are made using
+    probabilistic metrics defined by this model.
+    When measuring results using these metrics, a common experience is not being
+    able to fully explain how the quality of the results output by a particular
+    entity resolution process varies with the data sets the process operates on.
+    A common attitude towards this lack of understanding is to chalk things off
+    to the characteristics of the underlying data and the size of the dataset.
+    This paper attempts to find out if there aren't some things we might be able
+    to infer regardless of those two qualities of the underlying data.
+
+    The second model this paper looks into is the elegant algebraic model.
+    The metrics it makes available to us are familiar metrics for anyone working
+    with graph networks or clusters of any kind.
+    It seems to be a good complement for the Fellegi-Sunter model.
+    This paper attempts to find out if the algebraic model can complement the
+    weaknesses of the Fellegi-Sunter model.
+    Furthermore, the paper looks into ways in which an observer can switch from
+    a probabilistic perspective over the entity resolution results corresponding
+    to the Fellegi-Sunter model to an algebraic perspective.
+
+    Discussing these aspects takes enough space and the discussion is complex
+    enough so that adding a third theoretical model to the discussion might
+    result in chaos.
 
     \subsection[fsm]{Fellegi-Sunter Model}\label{subsec:fsm}
 
