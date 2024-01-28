@@ -57,17 +57,22 @@ In other words, given a $\gamma \in \varGamma$, we have the linkage rule
 \]
 so that the probabilities sum up to $1$.
 
-When using this model the purpose of entity resolution is to find the
-optimal linkage rule.
 The F-S theorem defines it as the linkage rule that minimizes
 $P(A_2|\gamma)$.
 In other words, the optimal linkage rule according to the F-S model is the
 linkage rule without uncertainties.
-This inclination of this model towards optimization makes it well suited for
-both rule-based\cite{oyster2012} and machine learning\cite{deepm2020}
+
+\begin{defn}
+    The optimal linkage rule according to the F-S theorem is the entity
+    resolution for two given input populations.
+\end{defn}
+
+
+This inclination towards optimization makes the model well suited for both
+rule-based\cite{oyster2012} and machine learning\cite{deepm2020}
 implementations.
 
-In the probabilistic model, two conditional probabilities are interesting:
+The model accentuates two conditional probabilities:
 
 \begin{align}
     m(\gamma)&=P(\gamma(a, b) | (a, b) \in M)~\textrm{and}\nonumber\\
@@ -103,31 +108,50 @@ where:
     $U$).
 \end{itemize}
 
+While the model shows that the classification of pairs in link, non-link and
+probable link is optimal in terms of statistical power, sound criticism of the
+model was made in literature~\cite{tancredi2011fsmcrit}.
+The criticism centers mostly around the assumptions of probabilistic
+independence~\cite{winkler2014matching,tancredi2011fsmcrit} between various
+events described in the model.
+While the criticism is constructive and leads to substantial improvements added
+to the original model, the substrate of the improved models remains a
+probabilistic one.
+The quality metrics employed to determine the fitness of an entity resolution
+result remain the same as those granted by the original model.
 
-\textcolor{green}{some remarks:\\ 
-1. While Fellegi and Sunter show that the classification rule is optimal in terms of statistical power, the result is based on several assumptions that do not hold in practice - check this work \href{https://www.jstor.org/stable/23024863?seq=1}{link}\\
-2. there are some generic versions of FS model - e.g. \href{https://www.jstor.org/stable/pdf/24246450.pdf}{link}, \href{https://projecteuclid.org/journals/annals-of-applied-statistics/volume-8/issue-4/Detecting-duplicates-in-a-homicide-registry-using-a-Bayesian-partitioning/10.1214/14-AOAS779.full}{link}\\
-}
+In addition to improving the model's fundamentals, work was done to address some
+known limitations, such as the constraint of the model which limits the amount
+of input populations to two~\cite{sad2013genfsm,Kon19}.
+The assumption that the input data sources don't contain duplicates within
+them~\cite{fs1969,sad2014fsmdup} only compounds risk that this assumption does
+not hold true the more input data sources the model allows.
+Then there is the issue of entity resolution transitivity: if data \textit{A}
+and \textit{B} refer to the same entity, and data \textit{A} and \textit{C}
+refer to the same entity then they all refer to the same entity~\cite{Tal11}.
+For these two reasons and to be able to focus on the essential tools provided to
+us by the probabilistic model of entity resolution, we will not pursue the
+derived probabilistic models that can handle more than two input data sources. 
 
 \subsubsection[fms-term]{Terminology Mapping}\label{subsubsec:fsm-term}
 
-To link the Fellegi-Sunter model to our own terminology, let's start by
-talking about $a \in A$ and $b \in B$.
+To link the Fellegi-Sunter model to our own terminology, let's start by talking
+about `$a \in A$' and `$b \in B$'.
 The F-S model calls $A$ and $B$ ``populations'' and $a$ and $b$,
 ``population elements''.
 A distinction is made between records, denoted with $\alpha(a)$ and
 $\beta(b)$, and population elements.
 Most of the original paper refers to records.
-
-Population elements correspond to entities and records correspond to entity
-references in our terminology.
-When it comes to $\alpha(a)$ and $\beta(b)$, we think of them as special
-cases of traits.
-    
+Records seem to reflect what the computer knows during the entity resolution
+process, whereas $a$ and $b$ seem to be things a human would know and would be
+present in the input data sources.
+In short, population elements describe \textit{entities} and records are
+\textit{entity references} in our terminology.
+We can think of the mappings $\alpha(a)$ and $\beta(b)$ as \textit{traits} in
+our terminology.
 The $A$ and $B$ populations equate to data sources.
 A ``population'' is a particular type of data source because it is defined
 as a set.
-The set is a specialization with respect to our definition of data sources.
 
 The Fellegi-Sunter model works under the assumption that there are two
 populations $A$ and $B$ and defines the linkage rule as a function that uses
@@ -140,56 +164,65 @@ Then $Ref = \{r_{{S_i}{k_j}},~1 \leq k_j \leq n_i, i \in {1, 2} \}$.
 If, say there is 5 elements in $S_1$ and 10 elements in $S_2$ then $k_1$ goes
 from 1 to 5 and $k_2$ goes from 1 to 10.
 
+In this perspective, the extraction process outputs the adnotated set equivalent
+to $Ref$, where the adnotations mark the original source (in the sense of $S_i$)
+of the entity reference.
+
 The result domain is expressed as $X = A \times B$ in this model.
 It is subsequently split into $M$ and $U$ the sets of matching and
 non-matching pairs in $X$, respectively.
 
 The $X$ in the original model is equivalent to $Res$ in our terminology.
-$Res$ can be defined as:
+Since $Res$ is always a collection of entity profiles according to
+Section~\ref{sec:entity-resolution}, we must simply formalize the definition
+of the entity profile domain \textit{P} as a set of pairs of entity references:
 \begin{align}
-    Res = &\{(r_{{S_i}{k}}, r_{{S_j}{l}})\mid~1 \leq k \leq |S_i|,
+    P = &\{(r_{{S_i}{k}}, r_{{S_j}{l}})\mid~1 \leq k \leq |S_i|,
     1 \leq l \leq |S_j|\}\textrm{, so that}\nonumber\\
     &i \neq j, i,j \in \{1, 2\}\textrm{,}\nonumber
 \end{align}
 where $|S_i|$ denotes the number of entity references extracted from the
 source $S_i$.
 
-Each entity profile is represented as a pair of entity references.
-For example, if $r_{11}=(1, 2, 3)$ and $r_{21}=(4, 5, 6)$ are two entity
-references that refer to the same real-world entity, this model would return
-an entity profile as the following pair: $((1, 2, 3), (4, 5, 6))$.
+With this specification, the $Res$ domain is comprised of sets of entity
+profiles that are the result of performing the matching and clustering steps of
+the entity resolution process.
+The two steps are performed simultaneously because clustering is the same as
+matching in this model.
+That leads to representing entity profiles as pairs of entity references under
+the original F-S model.
 
-$M$ becomes the set containing the entity profiles that refer to entities.
-$U$ becomes the set of entity profiles that don't refer entities.
-Consequently, this model proposes that the result of entity resolution is a
-set of distinct pairs of entity references.
+For example, let's say $r_{11}=(1, 2, 3)$ and $r_{21}=(4, 5, 6)$ are two entity
+references that refer to the same real-world entity.
+Under this model an entity profile would be represented as the following pair:
+$((1, 2, 3), (4, 5, 6))$.
+$M$ is the set containing the entity profiles that refer to entities, while
+$U$ is the set of entity profiles that don't refer entities.
+Consequently, according to this model, M is the result of entity resolution.
 
-A natural question is whether, instead of a single set of pairs of tuples we
-should expect two sets of pairs of tuples that would correspond to the two
-subsets $M$ and $U$ from the original paper.
-$M$ will grow proportionally to the maximum number of entity references
-extracted from a single data source.
-On the other hand, the size of $U$ is proportional to the product of the
-sizes of the populations $A$ and $B$.
-For practical reasons concerning resource usage, we think constructing $M$
-and inferring $U$ based on $M$ is the best choice.
+A natural question is whether we should also include $U$ in the result.
+Since $M$ will grow proportionally to the maximum number of entity references
+extracted from a single data source and $U$ grows proportionally to
+$A \times B$, we propose constructing $M$ and inferring $U$ based on $M$ for
+practical reasons concerning memory space and processing time.
 
-With the above definition for $Res$ we observe that this model explain
-matching very well, but clusters entities only two at a time.
-Linking more than two entity references, and especially implementing
-transitive entity reference linking does not seem possible with this
-model\cite{Tal11}.
-By transitive linking we mean that if the entity reference $r_1$ matches
-$r_2$ and $r_2$ matches $r_3$, we could infer that $r_1$ matches $r_3$.
-While there is work that extends the model to compare more than two entity
-references\cite{Kon19} at once, transitivity is still an issue so we will
-not dive deeper into topics concerning matching multiple entity references.
+Another concern is whether the entity resolution result is uniquely determined
+for a given input under this model.
+There is evidence in literature that solutions under this model converge towards
+a unique solution when given the same input data\cite{winkler2014matching}.
+
+With the above definition for $Res$ and taking into account the limitations
+expressed in the previous paragraph~(\ref{subsubsec:fsm-desc}),
+we observe that this model explains matching well.
+Clustering entities only two at a time looks like a form of information loss.
+As stated before, not being able to describe the result in terms of how well the
+entity resolution task discovered transitive links between entity references
+seems like a shortcoming.
 
 \subsubsection[fsm-metrics]{Specific Metrics}\label{subsubsec:fsm-metrics}
 
-Because we have a clear definition of the Type I and Type II errors, we can
-give a clear context for the notions of true and false positive and true and
-false negative.
+Because we have a clear definition of the Type I and Type II errors, we also
+have clear definitions of true and false positives and true and false negatives.
 This allows us to use any of the familiar statistical metrics that rely on
 these concepts.
 
@@ -223,8 +256,14 @@ this model:
 \begin{align}
 Precision &= \frac{TP}{TP+FP}\nonumber \\
 Recall &= \frac{TP}{TP+FN}\nonumber \\
-F_1 &=2 \cdot \frac{Precision \cdot Recall}{Precision+Recall}\nonumber
+F_1 &= 2 \cdot \frac{Precision \cdot Recall}{Precision+Recall}\nonumber
 \end{align}
+
+These metrics fit our quality metric definition from~\ref{sec:entity-resolution}
+and are defined on $Res^2$ with their result falling within the
+$\left[0, 1\right] \subset \mathbb{R}$ closed interval.
+Their input consists of two entity resolution results (represented as presented
+previously) and their output is always a real number.
 
 \textit{Precision} (or the positive predictive value) is defined as the
 number of correct predictions that were made in relation to the total number
@@ -239,4 +278,3 @@ The \textit{$F_1$} score is the harmonic mean of the precision and the
 recall and it is used to capture the tradeoff between precision and
 recall\cite{hitesh2012}.
 
-\textcolor{green}{e bine ca pentru fiecare metrica sa fie precizat domeniul valorilor posibile si ce inseamna bine (predictii bune) si ce inseamna rau (predictii gresite)}
