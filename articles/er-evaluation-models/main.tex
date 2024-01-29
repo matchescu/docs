@@ -146,11 +146,16 @@ T \kern-.1667em \lower.7ex \hbox{E} \kern-.125emX}}
     These studies show us that matching and clustering (additionally to being
     aspects of entity resolution) are steps in the entity resolution process.
 
-    Lastly, we use the information provided by syntheses~\cite{hitesh2012} on
-    entity resolution quality metrics to find the metrics that associate well
-    with a given theoretical perspective.
-    For example, clustering or distance metrics do not describe well a
-    probabilistic system.
+    Lastly, we note syntheses that present numerous entity resolution metrics
+    and their application~\cite{hitesh2012,graf2021frost,barnes2015practioner}.
+    This paper is very similar to these syntheses because it, too enumerates
+    metrics and it, too attempts to use those metrics to gather deeper insights
+    that would alleviate the burden of adopting entity resolution.
+    We use this work to find how strong is the association between certain
+    metrics to an entity resolution model.
+    However, our approach is to discern between theoretical models and attempt
+    to extract invariant conditions rooted in the model instead of simply using
+    the metrics to evaluate the entity resolution result.
 
     \section[terminology]{Terminology}\label{sec:terminology}
     \input{terminology}
@@ -213,9 +218,11 @@ T \kern-.1667em \lower.7ex \hbox{E} \kern-.125emX}}
 
     \textcolor{green}{tb adaugata o fraza despre context (ER) si scipul mare al studiului. Abia apoi vin evidentiate cele 2 mari concluzii/zontributii: maparea unui model in altul si analiza dpdv al metricilor}
 
-    In this paper we have provided an overview of how theoretical models for
-    entity resolution influence the data structures that are at play when we are
-    working with entity resolution systems in practice.
+    We compared two perspectives over entity resolution in theoretical and
+    practical terms.
+    Our declared objective was to find invariant conditions that might help us
+    bridge the gap between computer knowledge and user expectation.
+
     The data structures involved using the Fellegi-Sunter model for entity
     resolution revolve around pairs of entity references, whereas those that
     are specific to the algebraic model are centered around sets and partitions
@@ -254,26 +261,26 @@ T \kern-.1667em \lower.7ex \hbox{E} \kern-.125emX}}
 
     \section[future]{Future Work}\label{sec:future}
 
-    In terms of theory, we would like to consider other models for entity
-    resolution.
-    Firstly, there is existing models such as the one proposed by the Stanford
-    Entity Resolution Framework\cite{Ben2009Swoosh} or the graph theoretical
-    model of entity resolution which is widely used in entity alignment tasks.
-    Then there are theoretical models that we can imagine in the realms of
-    recommender systems or a retrieval augmented generative AI.
+    The current paper covers only two models and there are more to cover.
+    Existing models such as the one proposed by the Stanford Entity Resolution
+    Framework\cite{Ben2009Swoosh} or graph theoretical models used frequently in
+    entity alignment tasks are prime candidates.
+    On the other hand, we can also propose new models based on recent
+    developments in the field of machine learning and artificial intelligence.
 
-    The other route to take is to run experiments using more and more algorithms
-    to find out whether the conjectures outlined in this paper are worth proving.
+    From an experimental perspective, we can expand our experiment base using
+    more and more algorithms to find out whether the conjectures outlined in
+    the current paper are worth proving.
     Given the costs of fine-tuning an entity resolution system, a good step
-    forward seems to be finding some invariants that would allow us to test
-    the system with smaller datasets.
+    forward seems to be finding more invariants that would allow us to draw
+    conclusions on entity resolution system using small data sets.
 
-    Lastly, this paper was about finding invariants in the realm of qualitative
-    measurements of entity resolution tasks.
-    Implementing a system that shows the qualitative and quantitative metrics
-    of any entity resolution task would make adopting and tuning entity
-    resolution systems less costly and more transparent.
-
+    Lastly, another significant dimension of entity resolution refers to the
+    quantitative measurement of performance.
+    Let us not forget that entity resolution is usually a very expensive process
+    in terms of the computational resources it uses.
+    Therefore a solution that balances well the outcome quality with performance
+    is desirable.
 
     \textcolor{green}{things that are confused:\\
     1. model vs. algorithm vs. task related to ER\\
@@ -286,9 +293,9 @@ T \kern-.1667em \lower.7ex \hbox{E} \kern-.125emX}}
     6. de verificat daca folosirea notiunii de "invariant" se poate demonstra si teoretic, nu doar empiric\\
     7. relatia cu RelWork (ce e comun, ce e diferit cu alte lucrari care abordeaza maparea unui model in altul, respectiv evaluarea prin metrici); de vazut lucrari precum:\\
     https://arxiv.org/pdf/2107.10590.pdf \\
-    https://arxiv.org/pdf/1509.04238.pdf\\
-    http://honors.cs.umd.edu/reports/hitesh.pdf\\
-    https://arxiv.org/pdf/2210.01230.pdf\\
+    https://arxiv.org/pdf/1509.04238.pdf \\
+    http://honors.cs.umd.edu/reports/hitesh.pdf \\
+    https://arxiv.org/pdf/2210.01230.pdf \\
     8. tb spus de ce nu s-au inclus si alte metrici (de ex GMD)\\
     9. tb spus ceva despre class imbalance (ce influenta are asupra metricilor faptul ca sunt doar cateva elemente aliniate/duplicate si multe elemente nealiniate)\\
     10.
