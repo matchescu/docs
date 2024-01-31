@@ -20,25 +20,27 @@ of items from an input set we can obtain a partition over the input set
 itself.
 
 The idea is to consider pairs of items as being edges in a graph.
-Then we can take inspiration from Kruskal's algorithm to construct connected
-the components of this graph.
-We do this by utilizing the Union-Find data structure 
-\textcolor{green}{add a reference!}
-.
-This very well known data structure that is used for constructing sets of
-data incrementally can be used to construct the graph components as sets.
+Taking inspiration from Kruskal's algorithm~\cite{kruskal1956} to construct
+partitions using a slightly altered version of the first algorithm presented by
+Hopcroft and Ulman~\cite{hopcroft1973set}.
+The algorithm uses the Union-Find data structure~\cite{unionfind1964}.
+This data structure was originally used to keep track of a partition of a set,
+where partition classes could be merged.
+It allows answering whether two elements of the set are in the same partition
+class or not.
 
-The algorithm takes as input a set of items and an iterable sequence of
-pairs of items from that set.
+Our version of the algorithm takes as input a set of items and an iterable
+sequence of pairs of items from that set.
 The Union-Find data structure is initialized with all items in the set.
-Then, with each pair it processes, it links items that are paired up in
-the same `class'.
+Each pair it processes represents a pair of items that must be placed in the
+same partition class.
+The set merging algorithm accomplishes this.
 
 We can see that all of the items in the set are used and none are discarded.
-The Union-Find data structure produces stable classes of items.
-In case an item is part of two classes, these classes are merged.
-As a result, all sets produced by the Union-Find data structure are
-distinct.
+The Union-Find data structure produces stable partition classes of items.
+In case an item is part of two partition classes, these classes are merged.
+The algorithm leaves the items that do not appear in the list of pairs passed as
+input in singleton partition classes.
 Therefore the Union-Find data structure produces a partition over the input
 set of items.
 

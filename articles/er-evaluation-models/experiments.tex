@@ -17,9 +17,11 @@ well~\cite{matchescu-er-metrics2023}.
 \subsection{Datasets}\label{subsec:data}
 
 All experiment datasets are available on GitHub\cite{expdata2023}.
-These datasets are comprised of three well-known datasets used for
-benchmarking entity resolution tasks: Abt-Buy, DBLP-ACM and
-Amazon-GoogleProducts~\cite{vldb2010} and a generated dataset~\cite{expdata2023}.
+To ensure we are working with standard data that simulates real data and which
+is widely used and therefore familiar, we use the Abt-Buy, DBLP-ACM and
+Amazon-GoogleProducts~\cite{vldb2010} data sets.
+For small scale experiments we are using our own control
+dataset~\cite{expdata2023} which we create from existing data.
 To ease experimentation, we use the original tabular representation
 which allows us to take advantage of Pandas~\cite{pandas2010,pandas2023}
 and also has the benefit of not requiring adaptation to an internal format.
@@ -29,25 +31,63 @@ rows containing records within which the fields are separated by comma.
 The data representation, however, is not important for the experiment's
 outcome.
 
-\textcolor{green}{e nevoie sa se argumenteze:\\
-1. de ce ai ales aceste 3 seturi de date (de ex pt ca sunt cele mai folosite in literatura)\\
-2. de ce ai ales si date reale si data generate, precizand si cum au fost generate aceste date (le putem numi date de control? pt ca de fapt nu sunt generate from scratch, ci e doar o sub-multime a unui dataset real).\\
-E nevoie si sa se precizeze dimensiunea aceastor seturi de date (cate exemple sunt, cate features sunt)}
+\textcolor{green}{
+E nevoie si sa se precizeze dimensiunea aceastor seturi de date (cate exemple
+sunt, cate features sunt)
+}
+\textcolor{orange}{
+    Pare repetitiv sa adaug aici informatia care este publicata in tabelul
+    "Table 1. Overview of real-world evaluation match tasks"
+    din sursa citata.
+    Am facut mai clar lucrul ca informatia e acolo, dar nu stiu daca e ok.
+    Daca nu, pot face un tabel si aici.    
+}
 
-We use the benchmark datasets almost in their original forms and make use
-of the ideal mapping to establish the ground truth for each dataset.
-The only modification we make to these datasets is shifting the `id' column
-to the end.
-We make this modification so that algorithms that work on string data are prone
-to find more matches.
+% The Abt-Buy dataset is an e-commerce data set which consists of two collections
+% of entity references: Abt and Buy.
+% Abt contains 1081 entity references from abt.com, each having the following
+% attributes: id, name, description, price.
+% Buy contains 1092 entities from buy.com with the same attributes as the entity
+% references in Abt plus one additional attribute: manufacturer.
+% The ground truth has 1097 matching pairs of entity references.
 
-Conversely, for our custom dataset, we exert complete control over the
-entity resolution process.
-This is achieved by creating custom input sources for the entity resolution
-task through data generation.
-These sources use ten chosen items from the `Buy' subset of the
-`Abt-Buy' dataset. 
-\textcolor{green}{tb spus cum s-au ales cele 10 samples; pur random sau urmarind principii didactice care sa ajute explicatiile}
+% DBLP-ACM is a bibliographic dataset and comprises two entity reference
+% collections: DBLP2 and ACM.
+% DBLP2 contains 2616 entity references with the following attributes: id, title,
+% authors, venue and year.
+% ACM contains 2294 entity references, with the same attributes as the entity
+% references in DBLP2.
+% The ground truth contains 2224 matching pairs of entity references.
+
+% Another e-commerce dataset, Amazon-GoogleProducts holds two entity reference
+% collections: Amazon and GoogleProducts.
+% Amazon contains 1363 entity references with the following attributes: id, title,
+% description, manufacturer and price.
+% GoogleProducts contains 3226 entity references, with the same attributes as the
+% entity references in the Amazon subset.
+% The ground truth contains 1300 matching pairs of entity references.
+% The particularity of the Amazon-GoogleProducts dataset is the use of textual
+% values even for the id attribute values.
+
+We use the benchmark datasets almost in their original forms and the ideal
+mapping to establish the ground truth for each dataset.
+The sizes, the attributes that might match as well as the information about the
+ideal pairing of entity references can be found in the original
+paper~\cite{vldb2010}.
+
+In order to make entity matching algorithms that use prefix matching, we make a
+slight adjustment to the benchmark datasets and move the `id' column to the last
+position in each data set.
+
+With our custom dataset, the goal is to exert complete control over the entity
+resolution process.
+This is achieved by creating custom input data sources for the entity resolution
+process through data generation.
+The data sources each contain ten chosen items from the `Buy' subset of the
+`Abt-Buy' dataset.
+The chosen items exacerbate faults in data.
+There are many empty or missing attribute values and the data is full of
+near-duplicate entity references.
 
 The data generation procedure divides the ten-item subset into two distinct
 tables:
@@ -76,8 +116,7 @@ This attribute amalgamates words from all attributes in the source data records
 into a cohesive text unit per record.
 We employ this process to effectively ensure sequence neutrality.
 
-Let's see how this plays out in practice.
-We take the following record from the `Buy' subset as an example.
+Let us take the following record from the `Buy' subset as an example.
 
 \begin{table}[ht]
     \setlength\tabcolsep{5pt}
@@ -92,9 +131,7 @@ We take the following record from the `Buy' subset as an example.
     \caption{An example record of the 'Buy' subset}
 \end{table}
 
-The following record is the above data record's corresponding record in DG1. 
-\textcolor{green}{I would rephrase the previous statement, avoiding the repetition of "record" word :D. Furthermore, I recommend using the label of the above tabel (above data record -> data record descriebd in Table \ref{tab:buy-record})}
-
+The following entry corresponds to the record in Table \ref{tab:buy-record}.
 
 \begin{table}[ht]
     \setlength\tabcolsep{6pt}
@@ -174,24 +211,44 @@ Our experiment consists of the following steps:
           of the stored results.
 \end{itemize}
 
+Similar experiments were performed in the past~\cite{draisbach2013choosing}.
+Those experiments were looking at the relationship between the size of a dataset
+and a threshold used for configuring a similarity measure.
+A threshold that is a configuration of a similarity measure plays a different
+role than the role of the Jaccard threshold in the context of \texttt{ppjoin}
+even though both thresholds limit the amount of data being compared during the 
+match phase of the entity resolution process.
+The Jaccard threshold as used in \texttt{ppjoin} acts as an influence on the
+fundamental probabilities defined by the Fellegi-Sunter model, actively
+manipulating the number of attributes that take part in the matching phase of
+the entity resolution process.
+On the other hand, configuring a threshold for a similarity measure affects the
+comparison being performed at the level of each attribute value.
+The number of attributes that take part in the comparison remains unchanged.
+
+In contrast, our experiment uses multiple benchmark datasets of similar size and
+different makeup.
+Our control dataset is, indeed, small but we are not interested in its size, but
+in its makeup.
+The purpose of our experiment is to find invariants (perhaps other than dataset
+size) which could prove useful in analysing entity resolution quality.
+To this end we want to examine the effect of simply changing the looking glass
+through which we inspect entity resolution results.
+
 The \texttt{ppjoin} algorithm treats entity resolution as a matching problem.
-Consequently, the mathematical model that fits it very well is the statistical
-model.
-From this it follows that 
-\textcolor{green}{I would replace "from this it follows that" by "Hence" / "Therefore" / "accordingly" / "consequently"} 
-in order to evaluate the quality of the algorithm
-under the algebraic model, we have to convert a list of matches (which is what
-\texttt{ppjoin} outputs) to a partition over a set.
+Consequently, Fellegi-Sunter is the most fitting entity resolution model.
+Therefore, in order to evaluate the quality of the algorithm under the algebraic
+model, we have to convert a list of matches (the data structure output by the
+ \texttt{ppjoin} algorithm) to a partition over a set.
 
 For our own generated data we are able to generate the ground truth partition
 for the algebraic model based on the input data.
 For the benchmark data sets we convert the ideal mapping to a partition over the
-input data using the Union-Find data structure and a simplified version of
-Kruskal's algorithm.
+input data using the algorithm presented in Subsection~\ref{subsec:fsm-alg}.
 
 \subsection{Outcomes from Generated Data}\label{subsec:experiment-mini-buy}
 
-\subsubsection{Statistical Results}
+\subsubsection{Fellegi-Sunter Model Results}
 
 The ground truth and the results are represented as lists of pairs.
 The ground truth was generated by iterating over both input data sources using
@@ -208,8 +265,6 @@ lower values the recall should be higher.
 Figure~\ref{fig:mini-buy-fs} shows the \texttt{ppjoin} results at various
 values of the Jaccard threshold $t$.
 
-
-\textcolor{green}{please check this paper \href{https://hpi.de/fileadmin/user_upload/fachgebiete/naumann/publications/2013/On_Choosing_Thresholds_for_Duplicate_Detection.pdf}{link}, also - because it disscuss about a particular effect of dataset size in entity resolution in the context of choosing similarity thresholds. }
 \begin{figure}[!hp]
     \centering
     \captionsetup{justification=centering}
@@ -221,57 +276,77 @@ values of the Jaccard threshold $t$.
 \end{figure}
 
 We can make some observations based on Figure~\ref{fig:mini-buy-fs}.
-For values of $t \geq 0.78$, we end up with fewer, but more accurate matches.
-\textcolor{green}{fewer = ?; daca P creste si R scade, inseamna ca FP scade si FN creste...nu?} 
-For values of $0.36 \leq t \leq 0.6$, both precision and recall increase. 
-\textcolor{green}{pe figura, in acest interval si P  si R scad. Oare de ce zici ca ele cresc?} 
-Our intuition tells us that precision should decrease as \textit{t} decreases,
-but that is not the case.
-\textcolor{green}{dar pe (0,0.2) P scade! asa cum zice urm propoz!} 
-When $t$ is nearing zero, recall is maximal while precision decreases towards
-zero.
+For values of $t \geq 0.78$, we end up with fewer (lower recall), but more
+accurate matches (higher precision) than compared to lower values of $t$ because
+the amount of false positives decreases and the amount of false negatives
+increases.
 
-The generated data set contains items such as those with the IDs
-\texttt{208114672} and \texttt{208114673} which are near-identical.
+For $0.6 \leq t \le 0.78$, precision decreases because the false
+positive rate increases and recall increases because the false negative rate
+decreases.
+This is in line with expectations: the prefix becomes shorter causing a higher
+percentage of attributes to be identical.
+However, the prefix length is not short enough so that some of the matching
+entity references in the ground truth that are more different from one another
+will also be captured by \texttt{ppjoin}.
+
+Compared to the previous interval, for values of $0.36 \leq t \le 0.6$, both
+precision and recall increase compared to the previous interval.
+As the prefix drops, more and more items from the ground truth are matched.
+The number of false negatives decreases while the number of false positives
+does not increase as fast as the number of true positives.
+
+When $t$ is nearing zero there is an expected increase in recall due to fewer
+and fewer overall negatives.
+Precision, expectedly decreases due to an ever higher false positive rate.
+
+We need to make a small note on near-identical items in the control data set,
+such as \texttt{208114672} and \texttt{208114673}.
 For lower values of \textit{t}, the algorithm produces two true positives and
 two false positives.
-By itself, this change 
-\textcolor{green}{Which one?} 
-should lower the precision.
-Lower values of \textit{t} also broaden the spectrum of what is available for
-comparison (e.g~items with shorter names, like \texttt{205554724}).
+By itself, the increase in false positives intuitively lowers precision.
+However, lower values of \textit{t} also broaden the comparison space which
+now contains entity references with short values for the name attribute,
+like \texttt{205554724}.
 By having new items to compare, we also increase the amount of true positives.
 This dynamic ends up increasing precision as we lower values of \textit{t} so
 long as we are not operating on the full input set.
 
 Note that while we do describe the dynamic specifically for the \texttt{ppjoin}
-algorithm, the dynamic itself is not algorithm specific at all.
-Regardless of the algorithm that we use, given some specific circumstances it is
-possible to obtain the same dynamic which results in increasing precision
-contrary to our intuition.
-This is interesting because by influencing the value of the F1 score, it also
-determines the observer's perception of what input configuration they should use
-should they want a balanced output from the entity resolution task. 
-\textcolor{green}{e cam incalcita exprimarea; oare nu se potae reformula? in plus, as avea grija la folosirea "this" si "that"; e mai clar daca au si substantive langa ele; in fraza de mai sus, de ex. this is interesting -> this hypothesis / assumption is interesting} 
-In our example, we should aim for a value of $0.15\leq t \leq 0.38$ \textcolor{green}{in order to ???}.
+algorithm, the dynamic of having an increased number of true positives offset
+precision in an unexpected direction is not algorithm specific at all.
+Regardless of the algorithm that we use, given some circumstances specific for
+that algorithm, it should be possible to obtain the same effect we see here.
+This observation is interesting because most entity resolution users look at the
+F1 score thinking that it provides a good balance between precision and recall.
+These users rarely analyse the components of the F1 score.
+This situation can lead to unexpected outcomes.
+For instance, there might be a substantial drop in F1 scores, which are
+indicators of accuracy, when the input data for the entity resolution process is
+changed.
+The reason for this is that the precision or recall may be higher than expected
+for the ideal configuration determined in the controlled scenario.
 
-On the other hand, balance 
-\textcolor{green}{of P and R? or "trade-off of P and R"} 
-might not be at all what we are looking for.
-We see that perfect recall is achieved with $t \leq 0.38$ and perfect precision
-is achieved with $0.76 \leq t \leq 0.95$.
-These values are still useful in certain domains where entity resolution is
-prominently applied.
+On the other hand, a balanced trade-off between precision and recall might not
+be a requirement.
 For instance, a core legal principle applicable in many jurisdictions across the
 world states that is far more favourable to let 100 guilty people escape than to
 put one innocent behind bars.
 By that logic, we only care about precision.
 Perfect recall while still retaining some precision might be useful during
-research (works on the same topic) or medical diagnosis (other cases with the same
-symptoms).
+research (e.g~finding papers on the same topic) or medical diagnosis (other
+cases with the same symptoms).
 In these cases, sifting through false positives might be preferable to missing
 out on important information because of a false negative that is due to a
 suboptimal input configuration.
+
+Our control dataset (which is purposefully flawed) instructs us that the ideal
+configuration values for our algorithm are:
+\begin{itemize}
+    \item $0.15 \leq t \leq 0.38$ for the best balanced outcome
+    \item $t \leq 0.38$ for the most sensitive system
+    \item $0.76 \leq t \leq 0.95$ for the highest precision
+\end{itemize}
 
 \subsubsection{Pairwise Metrics}
 
@@ -315,9 +390,12 @@ result data to be partitioned.
 The partitioning operation removes any duplicates a partition class might
 contain (such as duplicate matches returned by \texttt{ppjoin} for very low
 values of \textit{t}).
-This means that statistical recall simply does not account for the situation
-when the entity resolution algorithm returns extremely large amounts of data
-that also happen to contain all the true positives in the ground truth.
+Probabilistic recall seems to fail to adequately address situations where the
+volume of data returned at the end of the entity resolution process vastly
+exceeds the size of the ground truth, despite encompassing all true positives.
+While in the context of a control dataset this may seem like an unlikely issue,
+consider that for practical applications the size of the ground truth is often
+several orders of magnitude smaller than the size of the input.
 
 We note again that while the circumstances in which we show this behaviour are
 specific to \texttt{ppjoin}, the phenomenon in itself is specific to the model
@@ -434,11 +512,8 @@ The only aspect where it is lagging is for $t\in\left[0.76,0.81\right]$.
 Here it fails to clarify the favorable circumstances due to high statistical
 precision and high cluster recall.
 
-Based on these observations, we can only echo the existing literature 
-\textcolor{green}{please add a ref!}
-.
 The Adjusted Rand Index or, if operational performance is key, the Talburt-Wang
-Index provide enough meaningful information to find the ballpark of the ideal
+Index provide enough meaningful information to find ballpark figures for ideal
 configuration settings for an entity resolution task.
 
 \subsection{Outcomes from Benchmark Datasets}\label{subsec:experiment-benchmark}
