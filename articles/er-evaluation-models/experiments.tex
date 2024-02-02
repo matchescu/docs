@@ -1,12 +1,26 @@
-So far we have shown how theoretical models influence the data structures
-that are available to an entity resolution task.
-The question was whether this also has some perceivable outcome in an
-experimental setup.
-Our experiment proposes using the same entity resolution algorithm across
-different data sets to explore whether there are some invariant conditions
-that hold true regardless of the data set.
+So far we have shown how entity resolution models influence data structures
+that are part of the application programming interface of an entity resolution
+computer algorithm.
+In the introduction we were asking whether there might be invariant conditions
+that are not dependent on the data on which we perform entity resolution.
+The experiments we have designed are meant to find some invariant conditions
+that depend on a particular entity resolution model.
 
-The code for running the experiment is available on GitHub~\cite{matchescu}.
+Secondly, we want to determine which metrics (if any) are more reliable in the
+face of changes in underlying data.
+To do that, we use the same entity resolution algorithm across multiple data
+sets and manipulate its configuration in ways that would result in predictable
+outcomes.
+
+Third, we have stated an interest in switching from one entity resolution model
+to another to gather more information using the same ground truth.
+In our experiment we want show both the similarity and the complementarity of
+some of the metrics from an entity resolution model with respect to metrics from
+another entity resolution model.
+This train of thought leads to a comparative analysis of the metrics we obtain
+by running one entity resolution algorithm on different data sets.
+
+The code for running the experiments is available on GitHub~\cite{matchescu}.
 Running the experiment does not require any specific hardware.
 We use the Python~\cite{python} programming language (version 3.11) and the
 Numpy~\cite{numpy} and Pandas~\cite{pandas2023} libraries for efficient
@@ -367,123 +381,95 @@ various values of \textit{t}.
     \centering
     \captionsetup{justification=centering}
     \includegraphics[width=\columnwidth]{mini-buy-algebraic-pairwise}
-    \caption{Pairwise metrics on `mini-buy' dataset
-    \textcolor{green}{for results of algebric model}\\
-    \textcolor{green}{oare in legenda, la verde, nu ar tb sa fie pairwise F1?}
-    }
-    \label{fig:mini-alg-pairwise}
+    \caption{Algebraic pairwise metrics on `mini-buy' dataset}\label{fig:mini-alg-pairwise}
 \end{figure}
 
-We can see a plot similar to the one in Figure~\ref{fig:mini-buy-fs}.
-The optimal range for high PF1 scores is the same to the case of statistical measures and the pairwise precision plot's shape
-is almost identical (save for a smoother in the statistical model).
+Because pairwise metrics do not support transitivity~\cite{Men10,hitesh2012},
+they are should be closely related to probabilistic metrics.
+Indeed, we see a plot similar to the one in Figure~\ref{fig:mini-buy-fs}.
+The optimal configuration for a balanced entity resolution in terms of pairwise
+equivalence of the result to the ground truth is very similar to the range we
+observed based on probabilistic measures.
+The pairwise precision plot's shape is almost identical, too.
+All of these signs convince us of a successful conversion of the probabilistic
+ground truth to an algebraic ground truth.
 
-It is in terms of recall where we see a major difference from the statistical
-model's plot.
-More specifically, for $t \le 0.12$ pairwise recall drops significantly whereas
-statistical recall stays at the maximum value.
-The reason behind this variation lies in the difference between the two models of entity
-resolution.
+The only outlier we see is the pairwise recall plot
+For $t \le 0.12$ pairwise recall drops significantly whereas statistical recall
+stays at the maximum value.
+The reason behind this variation lies in the difference between the two models
+of entity resolution.
 Whereas the standard recall formula only accounts for false negatives (of which
-we can not have any using the generated data set), pairwise recall requires the
-result data to be partitioned.
-The partitioning operation removes any duplicates a partition class might
-contain (such as duplicate matches returned by \texttt{ppjoin} for very low
-values of \textit{t}).
+we can not have any using the generated data set), pairwise recall requires all
+the result data to be partitioned and singleton clusters play an ever more
+important part in the computed recall score as their number increases.
+
+This situation leads to presenting our first invariant condition candidate.
 Probabilistic recall seems to fail to adequately address situations where the
 volume of data returned at the end of the entity resolution process vastly
 exceeds the size of the ground truth, despite encompassing all true positives.
-While in the context of a control dataset this may seem like an unlikely issue,
-consider that for practical applications the size of the ground truth is often
-several orders of magnitude smaller than the size of the input.
+While in the context of a small control dataset it may not seem likely that this
+would raise concerns, consider that for practical applications the size of the
+ground truth is often several orders of magnitude smaller than the size of the
+input.
+Taking into account other factors (like data cleanliness, for example), we see
+that the odds of this situation occuring is not negligible at all.
+Large entity resolution results are more likely to be obtained from large input
+data sets than from smaller data sets, after all.
 
-We note again that while the circumstances in which we show this behaviour are
-specific to \texttt{ppjoin}, the phenomenon in itself is specific to the model
-we employ when we evaluate the algorithm's performance.
+Therefore, while the input data set size certainly matters, the entity
+resolution model used to interpret result also matters in the case of
+probabilistic recall.
 Other algorithms may provide the conditions for this phenomenon using their own
 input configurations.
-To ensure a valid measurement system (one that is both accurate and precise), we
-should collect pairwise metrics along with statistical metrics.
+
+In the end, pairwise metrics seem to be a more accurate way of interpreting
+results that is similar to the probabilistic metrics.
 
 \subsubsection{Cluster Metrics}
 
-Pairwise metrics are a form of measuring how well-formed the output of an entity
-resolution task is.
-The other widely spread family of metrics from this category that resembles
-statistical metrics are the cluster metrics, which are displayed in
-Figure~\ref{fig:mini-alg-cluster} for 'mini-buy' dataset.
+Cluster metrics attempt to show how close two partitions over the same set are.
+This family of metrics borrows naming from probabilistic metrics even though
+the aspects being measured are quite different.
+We see a plot of these cluster metrics over the `miny-buy' data set in
+Figure~\ref{fig:mini-alg-cluster}.
 
 \begin{figure}[!h]
     \centering
     \captionsetup{justification=centering}
     \includegraphics[width=\columnwidth]{mini-buy-algebraic-cluster}
-    \caption{Cluster metrics on `mini-buy' dataset 
-    \textcolor{green}{for results of algebric model}\\
-    \textcolor{green}{oare in legenda, la verde, nu ar tb sa fie cluster F1? (stiu ca e sisnonim cu CCM, dar cand s-a dat formula a fost botezata CF1, iar in prima figura s-a facut referire tot la F1)}
-    }
-    \label{fig:mini-alg-cluster}
+    \caption{Algebraic cluster metrics on `mini-buy' dataset}\label{fig:mini-alg-cluster}
 \end{figure}
 
-It is refreshing to see that the optimal value of \textit{t} for a well-balanced
-output should still be in the $\left[0.15,0.38\right]$ interval.
+The optimal configuration of the algorithm when balance between precision and
+recall is required still consists of $0.15 \le t \le 0.38$.
 We also notice that cluster metrics point out the lack of recall when \textit{t}
 nears zero even more than the pairwise metrics.
-A more nuanced point is that recall decreases for $t \in \left[0.38,0.58\right]$
-much more pronouncedly.
+This is due to singletons having a larger influence over this metric when the
+sizes of the partition classes are larger (such as when duplicates abound).
+Cluster recall also decreases for $0.38 \le t \le 0.58$ much more pronouncedly
+than probabilistic recall or pairwise recall when partition classes are larger.
 
-Clustering metrics also reveal interesting aspects about the other metrics we have
-seen so far.
-For example, we expect increased statistical and pairwise precision to
-correspond to increased cluster precision.
-This is only somewhat true.
-As \textit{t} decreases, we see statistical and pairwise precision increasing
-along with cluster precision.
-What is interesting is just how much cluster precision increases.
-As \textit{t} decreases, more and larger clusters are returned by the entity
-resolution task.
-For a series of values of \textit{t} the number of returned clusters does not
-change much, while the shape of the partition returned by the entity resolution
-task becomes more and more similar to the shape of the ground truth.
-As the entity resolution task starts returning larger and larger clusters, the
-cluster precision drops significantly even though the number of clusters
-returned by the entity resolution task drops as well.
-
-A similar effect can be observed for cluster recall as we increase the value of
-\textit{t}.
-When statistical precision increases, there is a good chance that the number of
-clusters in the entity resolution result which are in agreement with the ground
-truth would also increase.
-Because there are fewer matches as statistical precision increases, we have a
-partition that contains many singletons.
-This causes cluster precision to decrease (because it relates to the number of
-clusters returned by the entity resolution task) and cluster recall to increase
-(because it relates to the number of clusters in the ground truth which remains
-constant).
-
-These phenomena do not depend on the entity resolution algorithm, but are
-characteristics of cluster precision and cluster recall.
-Higher statistical recall will always mean fewer and larger clusters some of
-which will overlap with clusters in the ground truth.
-Higher statistical precision will always mean more singleton clusters returned
-by the entity resolution task which, in turn, will increase cluster recall.
-
-Remembering that we might not care about balanced output, we can consider
-cluster precision and cluster recall as metrics that balance out the bias built
-into statistical precision and recall.
-Furthermore, cluster precision and recall can also be used together with
-pairwise metrics to confirm any blind spots in the statistical metrics.
-
-In our own practical example, we will use these findings to keep an eye on
-$t\in\left[0.76,0.81\right]$ as an interesting input configuration when we are
-biased towards better precision.
+Cluster precision also has an interesting relationship with the other precision
+metrics.
+Take, for example, the similarity between the curves of the probabilistic and
+pairwise precision and notice that the cluster precision curve is quite
+different even on our control data set show in Figure~\ref{fig:mini-alg-cluster}.
+As the number of singletons increases when we get fewer and fewer true positives
+in the matching phase of the entity resolution process, the cluster precision
+naturally drops.
+In fact, we might say that cluster precision behaves as a complement to the
+other precision metrics, having higher values when the other precision metrics
+have low values and lower values when the other precision metrics have high
+values.
+This relationship between the three precision metrics looks like a good
+candidate for our second invariant condition.
 
 \subsubsection{Clustering Indexes}
 
-Even though pairwise and cluster metrics complement the statistical metrics,
-sometimes all we want is a clear picture of the optimal input configurations for
-the algorithm.
-The easiest way to glean this information is by using one of the clustering
-indexes depicted in Figure~\ref{fig:mini-alg}.
+Clustering indexes are, just like pairwise and cluster metrics, means to
+determine the similarity of two partitions over a set.
+The plots of the three indexes we want to study are in Figure~\ref{fig:mini-alg}.
 
 \begin{figure}[!h]
     \centering
@@ -495,49 +481,53 @@ indexes depicted in Figure~\ref{fig:mini-alg}.
 
 We observe that the plot of the Adjusted Rand Index indicates both the desirable
 and the undesirable values of \textit{t}.
-Notice that it ranks $t\in\left[0.76,0.81\right]$ almost as highly as
-$t\in\left[0.15,0.38\right]$.
+We note that this index rates the configuration $0.76 \le t \le 0.81$ almost as
+good as our running leader, $0.15 \le t \le 0.38$.
 By following its plot, we should stay clear of values of \textit{t} from other
-intervals --- especially those at the extremities of the definition interval.
+intervals.
+It does a good job at identifying many of the problems spotted by precision and
+cluster metrics.
 
-By comparison with the ARI, the Rand Index itself is not very informative.
+By comparison with the ARI, the Rand Index is not very informative.
 It signals that recall is not perfect for values of \textit{t} nearing zero and
-does give the highest score for $t\in\left[0.76,0.81\right]$.
+gives its highest score for a configuration of $0.76 \le t \le 0.81$.
 However, it also gives high scores for values of \textit{t} where all the other
 metrics do not.
 
-The Talburt-Wang index's plot is a fairly good indicator, taking all our former
-observations into account.
-The only aspect where it is lagging is for $t\in\left[0.76,0.81\right]$.
-Here it fails to clarify the favorable circumstances due to high statistical
-precision and high cluster recall.
+Note that even though both the Rand Index and its adjusted version are pairwise
+metrics, they display plots that are more similar to the plot of the cluster
+metrics.
 
-The Adjusted Rand Index or, if operational performance is key, the Talburt-Wang
-Index provide enough meaningful information to find ballpark figures for ideal
-configuration settings for an entity resolution task.
+The Talburt-Wang index's plot is a cluster-based indicator and it exhibits a
+plot that has a similar shape to the ARI and the cluster metrics, albeit less
+pronounced.
+Compared to the ARI, it does not reveal $0.76 \le t \le 0.81$ as an interesting
+configuration.
+
+We might be able to extract a third invariant condition from the relationship
+between the Talburt-Wang Index, the ARI and cluster metrics.
+All of these metrics indicate the same neighbourhoods for favourable
+configurations of the entity resolution algorithm.
+The conjecture here is that the best generic configuration balanced between
+precision and recall of an entity resolution algorithm will be found within the
+agreement area between ARI on one side and TWI or cluster metrics on the other.
+The configuration obtained this way will be very good regardless of conditions
+related to the data.
+In our specific case, this means that we should expect to get the best results
+using our \texttt{ppjoin} algorithm with a configuration $0.18 \le t \le 0.38$.
 
 \subsection{Outcomes from Benchmark Datasets}\label{subsec:experiment-benchmark}
 
 So far we have seen evidence on the generated miniature dataset that each
 theoretical model provides a lens through which we can interpret various aspects
 of an entity resolution task's qualitative performance.
-Some invariants with respect to the entity resolution task have been discovered.
-Nothing related to the task that is being evaluated determines these phenomena.
-However, we don't know if any of them are invariant with respect to the data
-being used.
+We have stated a few potential invariant conditions that seem to be related to
+the entity resolution model more than to anything else.
+By running the experiment on benchmark data we want to verify whether these
+conditions are related to some attributes of the data in our control data set.
 
-We want to understand if there are conditions or phenomena that could help us
-extract universally good input configurations for an entity resolution algorithm
-by using a small dataset.
-There already seem to exist some interesting relationships between metrics
-including a blind spot in how statistical recall is computed regardless of the
-used entity resolution algorithm.
-Now we have to see if any of them persist if we change the data used for
-performing entity resolution.
-
-In order to do this we shall use benchmark datasets.
-The first of these is the `Abt-Buy' data set~\cite{vldb2010} and the plots for
-our experiment are available in Figures~\ref{fig:abt-buy-fsm-main},
+The first setup we try uses the `Abt-Buy' data set.
+The plots for our experiment are available in Figures~\ref{fig:abt-buy-fsm-main},
 ~\ref{fig:abt-buy-algebraic-pairwise},~\ref{fig:abt-buy-algebraic-cluster}
 and~\ref{fig:abt-buy-algebraic-main}.
 
@@ -568,24 +558,15 @@ and~\ref{fig:abt-buy-algebraic-main}.
     \end{minipage}
 \end{figure*}\label{abt-buy}
 
-We can see that the statistical model still has a pronounced bias towards higher
-recall values.
-The other invariant that also seems to hold for this dataset as well is the
-balancing/confirmation action of the cluster metrics with respect to the
-statistical/pairwise metrics.
-Another nice confirmation is that the pairwise recall is never perfect.
-Lastly, the clustering indexes are good approximates of the ballpark where
-we could find  interesting input configurations.
-All interesting values of \textit{t} 
-\textcolor{green}{I would indicate the value or the value's range for this optimal $t$} 
-are in the ballpark indicated by these
-indexes.
-
-On the other hand, we can clearly see that input configurations 
-\textcolor{green}{la ce anume te referi prin aceste "input configs"? Ai mai amintit si mai devreme, dar nicaieri nu e specifica clar la ce anume se refera; e vorba doar de pagrul $t$ sau si de algoritm de ER si alti params?}  
-such as those
-that take advantage of a high precision to high cluster recall correlation are
-dataset specific.
+The invariant conditions proposed so far all hold true.
+The probabilistic recall is still exceedingly high when nearing zero and the
+pairwise metrics do a good job of showing that.
+Next, the cluster precision is complementary to the pairwise and probabilistic
+precision.
+Finally, the highest harmonic mean between precision and recall is well within
+the target interval we envisioned at the end of the
+Subsection~\ref{subsec:experiment-mini-buy}.
+Furthermore, the ARI, TWI and the cluster metrics correlate.
 
 We move on to the `Amazon-Google Products' data set~\cite{vldb2010} and observe
 the results in Figures~\ref{fig:amazon-googleproducts-fsm-main},
@@ -620,28 +601,16 @@ the results in Figures~\ref{fig:amazon-googleproducts-fsm-main},
     \end{minipage}
 \end{figure*}\label{amazon-google}
 
-The plotted data shows that the statistical model is biased toward high recall
-in this data set, also.
-It also shows that pairwise metrics show lower score for recall while
-maintaining the shape of the plot for statistical metrics.
-Albeit less clearly, we still see that cluster precision and cluster recall can
-still act as a balancing weight or confirmation for the statistical metrics or
-pairwise metrics, respectively.
+The picture is very similar to that painted in the experiment run on top of the
+`Abt-Buy' dataset.
+The probabilistic recall is very high due to an imbalance between the entity
+resolution result size and the ground truth size.
+The pairwise metrics are not prone to this evaluation fallacy and this is shown.
+Cluster precision complements pairwise and probabilistic precision very clearly.
+And, finally, the best score for entity resolution that is balanced between
+probabilistic precision and recall is well within the target interval.
 
-On the other hand, we start seeing that the clustering indexes are no longer
-individually indicating a ballpark correctly.
-The Talburt-Wang index seems to indicate the same optimal input configuration as
-the cluster metrics, whereas the Adjusted Rand Index seems to provide a ballpark
-of optimal input configurations that would also maximize scores obtained for
-pairwise metrics and statistical metrics.
-Even though one can assume that this is because of how the two indexes are
-defined (TWI counts agreements on whole clusters while ARI counts agreeing
-pairs), confirming this assumption experimentally requires further work.
-Regardless, we can safely conclude that whether clustering indexes reveal
-ballparks for optimal input configurations is dataset dependent.
-\textcolor{green}{mie nu mi-e clar ce ai vrut sa spui :(}
-
-Finally, we look at the `DBLP-ACM' benchmark dataset~\cite{vldb2010}.
+Finally, we look at the `DBLP-ACM' benchmark dataset.
 The plots we obtained after running the experiment on this dataset are available
 in Figures~\ref{fig:dblp2-acm-fsm-main},
 \ref{fig:dblp2-acm-algebraic-pairwise},
@@ -675,29 +644,9 @@ in Figures~\ref{fig:dblp2-acm-fsm-main},
     \end{minipage}
 \end{figure*}\label{dblp2-acm}
 
-Looking at the plots for this last dataset we again see confirmation that recall
-in the statistical model is much higher than advertised by any of the other
-metrics.
-The other condition that is invariant with respect to the algorithm and the
-data sets is that cluster precision and cluster recall act as good balancing or
-confirmation metrics for the statistical and pairwise metrics, respectively.
-\textcolor{green}{mie nu mi-e clar ce ai vrut sa spui :(}
-
-We also see that the conjecture concerning the TWI as a good approximation for
-input configurations that yield high clustering scores holds for this data set,
-too. 
-The same can be said about the ARI for approximating high scores with regard to
-matching.
-These observations hold for all four datasets we have experimented on.
-
-
-\textcolor{green}{As incerca sa le enunt din nou acest concluzii, iar dupa ce sunt formulate le-as transforma in ipoteze, descriindu-le la inceputul sectiunii cu experimentele; astfel, ele vor reprezenta motivatia: avem 3-4 hipoteze si ne propunem sa le validam prin experimentele efectuate . Eu am retinut asa: \\
-1. hypothesis about precision - TBA \\
-2. recall in the statistical model is much higher than advertised by any of the other metrics.\\
-3. cluster precision and cluster recall act as good balancing or
-confirmation metrics for the statistical and pairwise metrics, respectively.\\
-4. TWI is a good approximation for input configurations that yield high clustering scores.\\
-5. ARI - ???\\
-6. ???
-}
-
+Probabilistic recall is almost twice as high as pairwise recall, even though
+they have the same plot.
+Cluster precision is again very high where probabilistic precision and
+pairwise precision are very low.
+The configuration $t=0.32$ which has the highest F1 score is still within the
+predicted interval.

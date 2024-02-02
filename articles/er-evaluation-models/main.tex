@@ -18,7 +18,7 @@ T \kern-.1667em \lower.7ex \hbox{E} \kern-.125emX}}
 
 % Document
 \begin{document}
-    \title{Lessons Learned While Comparing Two Entity Resolution Models}
+    \title{A Tale of Two Entity Resolution Models}
     \author{Andrei Olar}
 
     \maketitle
@@ -174,6 +174,9 @@ T \kern-.1667em \lower.7ex \hbox{E} \kern-.125emX}}
 
     John R. Talburt provides an overview of these models in his book ``Entity
     Resolution and Information Quality''\cite{Tal11}.
+    The main models presented there are the Fellegi-Sunter~\cite{fs1969} model,
+    the Stanford Entity Resolution Framework~\cite{Ben2009Swoosh} model and the
+    algebraic\cite{tal2007algebraic} model.
     This paper aims to analyse two of the models described in that book with an
     aim to understand how they influence our ability to measure the quality of
     entity resolution.
@@ -190,17 +193,18 @@ T \kern-.1667em \lower.7ex \hbox{E} \kern-.125emX}}
     to infer regardless of those two qualities of the underlying data.
 
     The second model this paper looks into is the elegant algebraic model.
-    The metrics it makes available to us are familiar metrics for anyone working
-    with graph networks or clusters of any kind.
+    The metrics it makes available to us are familiar metrics to those working
+    with clusters of items.
     It seems to be a good complement for the Fellegi-Sunter model.
-    This paper attempts to find out if the algebraic model can complement the
-    weaknesses of the Fellegi-Sunter model.
     Furthermore, the paper looks into ways in which an observer can switch from
     a probabilistic perspective over the entity resolution results corresponding
     to the Fellegi-Sunter model to an algebraic perspective.
 
-    Discussing these aspects is complex and takes enough space to warrant adding
-    a third model to the conversation inopportune.
+    The complexity of the discussion and the presentational space required force
+    us to give up on the Stanford Framework for Entity Resolution model.
+    This means that we won't go into the metrics that are more commonly linked
+    to it either, such as the generalized merged distance, the basic merge
+    distance or variation of information~\cite{Men10}.
 
     \subsection[fsm]{Fellegi-Sunter Model}\label{subsec:fsm}
     \input{fsm}
@@ -216,48 +220,52 @@ T \kern-.1667em \lower.7ex \hbox{E} \kern-.125emX}}
 
     \section[conclusion]{Conclusions}\label{sec:conclusions}
 
-    \textcolor{green}{tb adaugata o fraza despre context (ER) si scipul mare al studiului. Abia apoi vin evidentiate cele 2 mari concluzii/zontributii: maparea unui model in altul si analiza dpdv al metricilor}
+    Entity resolution is a complex task that still holds many unknowns.
+    When evaluating entity resolution results in practice it often happens that
+    the results on control data sets are not the same as the results obtained
+    on `real-world' data.
+    In the end, those results speak about certain expectations that stem from
+    the way we interpret data.
 
-    We compared two perspectives over entity resolution in theoretical and
-    practical terms.
-    Our declared objective was to find invariant conditions that might help us
-    bridge the gap between computer knowledge and user expectation.
+    We set out on a journey to find out whether entity resolution models might
+    provide an answer.
+    Entity resolution models can be understood in many ways.
+    Our own perception is that entity resolution models are simply theoretical
+    perspectives over the practical act of determining whether two entity
+    references refer to the same real-world entity.
 
-    The data structures involved using the Fellegi-Sunter model for entity
-    resolution revolve around pairs of entity references, whereas those that
-    are specific to the algebraic model are centered around sets and partitions
-    over sets.
-    One interesting finding is that a transition from the Fellegi-Sunter model
-    to the algebraic model is possible using the Union-Find data structure and
-    a simplified version of Kruskal's algorithm.
+    Depending on the entity resolution model, we saw that we may have different
+    data structures to take into account when running an entity resolution
+    process: from lists of pairs to partitions over a set.
+    Depending on the perspective and the data structures we choose, we can say
+    different things about the data we analyse.
+    We posited that we can even change our point of view from one perspective to
+    another without any data loss.
 
-    Having this knowledge we ran an experiment using the \texttt{ppjoin}
-    algorithm on a generated data set.
-    By looking at the results we saw how theoretical models provide different
-    perspectives on the same algorithm.
-    Having this outlook on things, we were able to glean insights that have
-    nothing to do with the algorithm but with the perspectives themselves.
+    Lastly, our experiment setup was designed to find invariant conditions that
+    might help reduce the time of picking a good entity resolution algorithm
+    configuration by leveraging entity resolution models.
+    One such condition is that probabilistic recall is always going to be
+    distorted when the size of the entity resolution result is much greater than
+    the size of the ground truth.
+    Luckily, pairwise recall is the perfect antidote for this distortion.
+    Probabilistic metrics might be cheap and easy to use, but use pairwise
+    metrics when in doubt.
 
-    To see whether the perspectives change if the underlying data changes, we
-    ran the experiment on three different benchmark datasets.
-    A first conjecture that arises after doing so states that the Fellegi-Sunter
-    model for entity resolution provides a perspective over the quality of the
-    entity resolution results which is overly optimistic in evaluating recall.
-    This leads to higher F1 scores and possibly to wrong conclusions when
-    comparing entity resolution solutions using the F1 score.
-
-    The second conjecture is that we can safely use the Talburt-Wang Index to
-    find input configurations of the entity resolution task in which it performs
-    clustering well.
-    The Adjusted Rand Index can be used in the same way to find input conditions
-    where the entity resolution task performs matching well.
-
-    We will not draw any conclusion with regard to extrapolating observations on
-    smaller sets to larger sets of data or to the overall performance of the
-    algorithm even though the data suggests that at least the ballpark stays the
-    same.
-    In order to make such claims, we need to design and run experiments using
-    other entity resolution algorithms.
+    Another invariant is that cluster precision is a good counterweight to
+    probabilistic and pairwise precision.
+    This leads to cluster metrics forming a harmonious complement to
+    probabilistic metrics, pairwise metrics and to the Adjusted Rand Index (ARI)
+    which is also pair-based.
+    
+    This leads us to our third invariant: the Talburt-Wang Index and the cluster
+    metrics on one side and the Adjusted Rand Index on the other usually agree
+    only when there is a good balance between precision and recall.
+    That means that the configuration value intervals where these metrics agree
+    on a control data set provides us with a good estimation of the best
+    configuration options for running an entity resolution algorithm.
+    These configurations seem to hold true irrespective of the data we run
+    entity resolution on.
 
     \section[future]{Future Work}\label{sec:future}
 
@@ -270,32 +278,19 @@ T \kern-.1667em \lower.7ex \hbox{E} \kern-.125emX}}
 
     From an experimental perspective, we can expand our experiment base using
     more and more algorithms to find out whether the conjectures outlined in
-    the current paper are worth proving.
-    Given the costs of fine-tuning an entity resolution system, a good step
-    forward seems to be finding more invariants that would allow us to draw
-    conclusions on entity resolution system using small data sets.
+    the current paper are worth proving formally.
+    The other aspect that is left unresolved is the claim that probabilistic
+    recall provides a distorted interpretation over the entity resolution result
+    when the result size is significantly larger than the ground truth.
+    Albeit challenging, experiments to verify this claim can and should be
+    designed.
 
     Lastly, another significant dimension of entity resolution refers to the
     quantitative measurement of performance.
-    Let us not forget that entity resolution is usually a very expensive process
-    in terms of the computational resources it uses.
-    Therefore a solution that balances well the outcome quality with performance
-    is desirable.
-
-    \textcolor{green}{things that are confused:\\
-    1. model vs. algorithm vs. task related to ER\\
-    2. scopul art: sa evidentiem mapparea FS vs model algebric sau sa analizam critic metricile (pt ca doar astfel se poate face o alegere eficienta a modelului de ER folosit, desi tb tinut cont ca suntem intr-un mediu oarecum controlat; unde avem niste dataset-uri limitate, nu de tip openworld pt care nu se calculeaza efectiv metricile, ci se estimeaza cumva - a se vedea problema despre bridging
-    the reality-ideality gap in entity resolution, where high performance on benchmark datasets often does not
-    translate into the real world \href{https://arxiv.org/pdf/2205.05889.pdf}{link}) sau ambele? :D\\
-    3. in fc de scopul de la pct 2 tb adaugat in introducere info despre contributie, precum si in Rel Work\\
-    4. def pt "perspectiva" (de sine statatoare sau relativ la un model sau la un algo de ER); \\
-    5. def pt "input config" \\
-    6. de verificat daca folosirea notiunii de "invariant" se poate demonstra si teoretic, nu doar empiric\\
-    8. tb spus de ce nu s-au inclus si alte metrici (de ex GMD)\\
-    9. tb spus ceva despre class imbalance (ce influenta are asupra metricilor faptul ca sunt doar cateva elemente aliniate/duplicate si multe elemente nealiniate)\\
-    10.
-    }
-    
+    Entity resolution is usually an expensive process in terms of computational
+    resources.
+    A solution that balances well the outcome quality with performance is
+    desirable.
     \bibliographystyle{ieeetr}
     \bibliography{er-general,er-related-work,er-additional-references,er-software}
 \end{document}
