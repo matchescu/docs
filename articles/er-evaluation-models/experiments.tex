@@ -30,12 +30,13 @@ well~\cite{matchescu-er-metrics2023}.
 
 \subsection{Datasets}\label{subsec:data}
 
-All experiment datasets are available on GitHub\cite{expdata2023}.
+For small scale experiments we are using our own control
+dataset~\cite{expdata2023} which we createdl from existing data 
+\textcolor{green}{I Would specify here the original dataset used for building the control dataset}
+. 
 To ensure we are working with standard data that simulates real data and which
 is widely used and therefore familiar, we use the Abt-Buy, DBLP-ACM and
-Amazon-GoogleProducts~\cite{vldb2010} data sets.
-For small scale experiments we are using our own control
-dataset~\cite{expdata2023} which we create from existing data.
+Amazon-GoogleProducts~\cite{vldb2010} benchmarked data sets. 
 To ease experimentation, we use the original tabular representation
 which allows us to take advantage of Pandas~\cite{pandas2010,pandas2023}
 and also has the benefit of not requiring adaptation to an internal format.
@@ -43,7 +44,7 @@ The tabular data is stored on disk as CSV files.
 Each CSV file has a first row containing the column headings and subsequent
 rows containing records within which the fields are separated by comma.
 The data representation, however, is not important for the experiment's
-outcome.
+outcome. All experiment datasets are available on GitHub\cite{expdata2023}.
 
 \textcolor{green}{
 E nevoie si sa se precizeze dimensiunea aceastor seturi de date (cate exemple
@@ -56,6 +57,7 @@ sunt, cate features sunt)
     Am facut mai clar lucrul ca informatia e acolo, dar nu stiu daca e ok.
     Daca nu, pot face un tabel si aici.    
 }
+\textcolor{green}{eu zic ca prinde bine sa reiei si tabelul (partea stanga) - pe langa referinta - : baza de date (cele 3 si tiny-DS), ce atribute sunt, care e tipul lor (string/numeric/date) si cate entitati; mai mult, datasetul DBLP-Scholar nu a fost prins in experimentele tale - de ce?}
 
 % The Abt-Buy dataset is an e-commerce data set which consists of two collections
 % of entity references: Abt and Buy.
@@ -93,7 +95,7 @@ In order to make entity matching algorithms that use prefix matching, we make a
 slight adjustment to the benchmark datasets and move the `id' column to the last
 position in each data set.
 
-With our custom dataset, the goal is to exert complete control over the entity
+With our tiny custom dataset, the goal is to exert complete control over the entity
 resolution process.
 This is achieved by creating custom input data sources for the entity resolution
 process through data generation.
@@ -130,7 +132,7 @@ This attribute amalgamates words from all attributes in the source data records
 into a cohesive text unit per record.
 We employ this process to effectively ensure sequence neutrality.
 
-Let us take the following record from the `Buy' subset as an example.
+Let us take the following record from the `Buy' subset as an example (see Table \ref{tab:buy-record}).
 
 \begin{table}[ht]
     \setlength\tabcolsep{5pt}
@@ -141,11 +143,11 @@ Let us take the following record from the `Buy' subset as an example.
         205554724&Seiko SXDA04& & &\$138.00\\
         \hline
     \end{tabular}
-    \label{tab:buy-record}
     \caption{An example record of the 'Buy' subset}
+    \label{tab:buy-record}
 \end{table}
 
-The following entry corresponds to the record in Table \ref{tab:buy-record}.
+The following entry corresponds to the record in Table \ref{tab:dg1-record}.
 
 \begin{table}[ht]
     \setlength\tabcolsep{6pt}
@@ -156,11 +158,11 @@ The following entry corresponds to the record in Table \ref{tab:buy-record}.
         Seiko SXDA04 & & \$138.00 & 205554724 \\
         \hline
     \end{tabular}
+    \caption{An example record of the \textcolor{green}{???} subset}
     \label{tab:dg1-record}
-    \caption{TBA!}
 \end{table}
 
-The corresponding DG2 record would then look as follows.
+The corresponding DG2 record would then look as follows (see Table \ref{tab:dg2-record}).
 
 \begin{table}[ht]
     \setlength\tabcolsep{5pt}
@@ -171,8 +173,8 @@ The corresponding DG2 record would then look as follows.
         &Seiko SXDA04&205554724 \\
         \hline
     \end{tabular}
+    \caption{An example record of the \textcolor{green}{???} subset}
     \label{tab:dg2-record}
-    \caption{TBA!}
 \end{table}
 
 Using the extraction traits described before would yield us the
@@ -239,6 +241,7 @@ the entity resolution process.
 On the other hand, configuring a threshold for a similarity measure affects the
 comparison being performed at the level of each attribute value.
 The number of attributes that take part in the comparison remains unchanged.
+\textcolor{green}{to disscuss their conclusion!}
 
 In contrast, our experiment uses multiple benchmark datasets of similar size and
 different makeup.
@@ -260,12 +263,12 @@ for the algebraic model based on the input data.
 For the benchmark data sets we convert the ideal mapping to a partition over the
 input data using the algorithm presented in Subsection~\ref{subsec:fsm-alg}.
 
-\subsection{Outcomes from Generated Data}\label{subsec:experiment-mini-buy}
+\subsection{Outcomes from Control Data}\label{subsec:experiment-mini-buy}
 
 \subsubsection{Fellegi-Sunter Model Results}
 
 The ground truth and the results are represented as lists of pairs.
-The ground truth was generated by iterating over both input data sources using
+The ground truth was built by iterating over both input data sources using
 the same cursor and outputting pairs of records.
 Note that there are duplicate CSV records that only differ on the `id' column.
 
@@ -283,9 +286,7 @@ values of the Jaccard threshold $t$.
     \centering
     \captionsetup{justification=centering}
     \includegraphics[width=\columnwidth]{mini-buy-fsm-main}
-    \caption{Statistical metrics on `mini-buy' dataset
-    \textcolor{green}{for results of F-S model}
-    }
+    \caption{Statistical metrics on `mini-buy' dataset for results of F-S model}
     \label{fig:mini-buy-fs}
 \end{figure}
 
@@ -385,8 +386,8 @@ various values of \textit{t}.
 \end{figure}
 
 Because pairwise metrics do not support transitivity~\cite{Men10,hitesh2012},
-they are should be closely related to probabilistic metrics.
-Indeed, we see a plot similar to the one in Figure~\ref{fig:mini-buy-fs}.
+they should be closely related to probabilistic metrics.
+Indeed, we see a plot similar to the one in Figure~\ref{fig:mini-buy-fs} for statistical metrics.
 The optimal configuration for a balanced entity resolution in terms of pairwise
 equivalence of the result to the ground truth is very similar to the range we
 observed based on probabilistic measures.
@@ -404,10 +405,10 @@ we can not have any using the generated data set), pairwise recall requires all
 the result data to be partitioned and singleton clusters play an ever more
 important part in the computed recall score as their number increases.
 
-This situation leads to presenting our first invariant condition candidate.
+This situation leads to presenting our \textbf{first invariant condition candidate.
 Probabilistic recall seems to fail to adequately address situations where the
 volume of data returned at the end of the entity resolution process vastly
-exceeds the size of the ground truth, despite encompassing all true positives.
+exceeds the size of the ground truth, despite encompassing all true positives.}
 While in the context of a small control dataset it may not seem likely that this
 would raise concerns, consider that for practical applications the size of the
 ground truth is often several orders of magnitude smaller than the size of the
@@ -458,12 +459,12 @@ different even on our control data set show in Figure~\ref{fig:mini-alg-cluster}
 As the number of singletons increases when we get fewer and fewer true positives
 in the matching phase of the entity resolution process, the cluster precision
 naturally drops.
-In fact, we might say that cluster precision behaves as a complement to the
+In fact, we might say that \textbf{cluster precision behaves as a complement to the
 other precision metrics, having higher values when the other precision metrics
 have low values and lower values when the other precision metrics have high
 values.
 This relationship between the three precision metrics looks like a good
-candidate for our second invariant condition.
+candidate for our second invariant condition.}
 
 \subsubsection{Clustering Indexes}
 
@@ -508,9 +509,9 @@ We might be able to extract a third invariant condition from the relationship
 between the Talburt-Wang Index, the ARI and cluster metrics.
 All of these metrics indicate the same neighbourhoods for favourable
 configurations of the entity resolution algorithm.
-The conjecture here is that the best generic configuration balanced between
+The conjecture here is that \textbf{the best generic configuration balanced between
 precision and recall of an entity resolution algorithm will be found within the
-agreement area between ARI on one side and TWI or cluster metrics on the other.
+agreement area between ARI on one side and TWI or cluster metrics on the other.}
 The configuration obtained this way will be very good regardless of conditions
 related to the data.
 In our specific case, this means that we should expect to get the best results
@@ -518,7 +519,7 @@ using our \texttt{ppjoin} algorithm with a configuration $0.18 \le t \le 0.38$.
 
 \subsection{Outcomes from Benchmark Datasets}\label{subsec:experiment-benchmark}
 
-So far we have seen evidence on the generated miniature dataset that each
+So far we have seen evidence on the controlled miniature dataset that each
 theoretical model provides a lens through which we can interpret various aspects
 of an entity resolution task's qualitative performance.
 We have stated a few potential invariant conditions that seem to be related to
@@ -527,7 +528,7 @@ By running the experiment on benchmark data we want to verify whether these
 conditions are related to some attributes of the data in our control data set.
 
 The first setup we try uses the `Abt-Buy' data set.
-The plots for our experiment are available in Figures~\ref{fig:abt-buy-fsm-main},
+The plots with performance metrics for our experiment are available in Figures~\ref{fig:abt-buy-fsm-main},
 ~\ref{fig:abt-buy-algebraic-pairwise},~\ref{fig:abt-buy-algebraic-cluster}
 and~\ref{fig:abt-buy-algebraic-main}.
 
@@ -559,7 +560,7 @@ and~\ref{fig:abt-buy-algebraic-main}.
 \end{figure*}\label{abt-buy}
 
 The invariant conditions proposed so far all hold true.
-The probabilistic recall is still exceedingly high when nearing zero and the
+The probabilistic recall is still exceedingly high when the threshold is nearing zero and the
 pairwise metrics do a good job of showing that.
 Next, the cluster precision is complementary to the pairwise and probabilistic
 precision.
@@ -650,3 +651,5 @@ Cluster precision is again very high where probabilistic precision and
 pairwise precision are very low.
 The configuration $t=0.32$ which has the highest F1 score is still within the
 predicted interval.
+
+\textcolor{green}{add some words about the limitations (e.g. complexity)}

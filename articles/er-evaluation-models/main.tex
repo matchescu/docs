@@ -3,6 +3,7 @@
 % Packages
 \usepackage{amsmath,amsfonts,amsthm}
 \usepackage{algorithmic}
+\usepackage{balance}
 \usepackage[caption=false,font=normalsize,labelfont=sf,textfont=sf]{subfig}
 \usepackage{enumitem}
 \usepackage{hyperref}
@@ -19,7 +20,19 @@ T \kern-.1667em \lower.7ex \hbox{E} \kern-.125emX}}
 % Document
 \begin{document}
     \title{A Tale of Two Entity Resolution Models}
-    \author{Andrei Olar}
+    % \author{Andrei Olar \textcolor{green}{eu m-as bucura sa ma incluzi si pe mine; daca este de acord poti formata ca mai jos partea de autori}}
+    \author{
+        \IEEEauthorblockN{
+            Andrei Olar\IEEEauthorrefmark{1},
+            Laura Dio\c san\IEEEauthorrefmark{2}
+        }
+        \IEEEauthorblockA{
+            Faculty of Mathematics and Computer Science, Babe\c s-Bolyai University\\
+            Email: 
+                \IEEEauthorrefmark{1}andrei.olar@ubbcluj.ro,
+                \IEEEauthorrefmark{2}laura.diosan@ubbcluj.ro
+        }
+    }
 
     \maketitle
 
@@ -101,7 +114,7 @@ T \kern-.1667em \lower.7ex \hbox{E} \kern-.125emX}}
     \section[preliminaries-questions]{Preliminaries \& Research Questions}
     \label{sec:preliminaries-questions}
     \input{research-questions}
-    
+
     \section{Related Work}\label{sec:related}
     
     The topic addressed in this paper intersects with a significant body of
@@ -157,13 +170,14 @@ T \kern-.1667em \lower.7ex \hbox{E} \kern-.125emX}}
     to extract invariant conditions rooted in the model instead of simply using
     the metrics to evaluate the entity resolution result.
 
-    \section[terminology]{Terminology}\label{sec:terminology}
+    \section{Theoretical background}
+    \subsection[terminology]{Terminology pre-requisites}\label{sec:terminology}
     \input{terminology}
     
-    \section{Formalizing Entity Resolution}\label{sec:entity-resolution}
+    \subsection{Formalizing Entity Resolution}\label{sec:entity-resolution}
     \input{formalization}
 
-    \section[models]{Entity Resolution Models}\label{sec:models}
+    \subsection[models]{Entity Resolution Models}\label{sec:models}
 
     The representation of entity resolution results depends upon the theoretical
     model we use.
@@ -206,13 +220,13 @@ T \kern-.1667em \lower.7ex \hbox{E} \kern-.125emX}}
     to it either, such as the generalized merged distance, the basic merge
     distance or variation of information~\cite{Men10}.
 
-    \subsection[fsm]{Fellegi-Sunter Model}\label{subsec:fsm}
+    \subsubsection[fsm]{Fellegi-Sunter Model}\label{subsec:fsm}
     \input{fsm}
 
-    \subsection[algebraic]{Algebraic Model}\label{subsec:algebraic}
+    \subsubsection[algebraic]{Algebraic Model}\label{subsec:algebraic}
     \input{algebraic}
 
-    \subsection{From Probabilities to Algebra}\label{subsec:fsm-alg}
+    \subsubsection{From Probabilities to Algebra}\label{subsec:fsm-alg}
     \input{convert}
         
     \section{Experiments}\label{sec:experiments}
@@ -245,29 +259,29 @@ T \kern-.1667em \lower.7ex \hbox{E} \kern-.125emX}}
     Lastly, our experiment setup was designed to find invariant conditions that
     might help reduce the time of picking a good entity resolution algorithm
     configuration by leveraging entity resolution models.
-    One such condition is that probabilistic recall is always going to be
+    One such condition is that \textbf{probabilistic recall is always going to be
     distorted when the size of the entity resolution result is much greater than
-    the size of the ground truth.
+    the size of the ground truth.}
     Luckily, pairwise recall is the perfect antidote for this distortion.
     Probabilistic metrics might be cheap and easy to use, but use pairwise
     metrics when in doubt.
 
-    Another invariant is that cluster precision is a good counterweight to
-    probabilistic and pairwise precision.
+    Another invariant is that \textbf{cluster precision is a good counterweight to
+    probabilistic and pairwise precision.}
     This leads to cluster metrics forming a harmonious complement to
     probabilistic metrics, pairwise metrics and to the Adjusted Rand Index (ARI)
     which is also pair-based.
     
-    This leads us to our third invariant: the Talburt-Wang Index and the cluster
+    This leads us to our third invariant: \textbf{the Talburt-Wang Index and the cluster
     metrics on one side and the Adjusted Rand Index on the other usually agree
-    only when there is a good balance between precision and recall.
+    only when there is a good balance between precision and recall.}
     That means that the configuration value intervals where these metrics agree
     on a control data set provides us with a good estimation of the best
     configuration options for running an entity resolution algorithm.
     These configurations seem to hold true irrespective of the data we run
     entity resolution on.
 
-    \section[future]{Future Work}\label{sec:future}
+    % \section[future]{Future Work}\label{sec:future}
 
     The current paper covers only two models and there are more to cover.
     Existing models such as the one proposed by the Stanford Entity Resolution
@@ -291,6 +305,10 @@ T \kern-.1667em \lower.7ex \hbox{E} \kern-.125emX}}
     resources.
     A solution that balances well the outcome quality with performance is
     desirable.
+
+
+    \balance
+
     \bibliographystyle{ieeetr}
     \bibliography{er-general,er-related-work,er-additional-references,er-software}
 \end{document}
