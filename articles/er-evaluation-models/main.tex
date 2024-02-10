@@ -42,7 +42,7 @@ T \kern-.1667em \lower.7ex \hbox{E} \kern-.125emX}}
     \maketitle
     \begin{abstract}
         This paper examines entity resolution, the process of identifying if two
-        pieces of information represent the same real-world entity.
+        information represent the same real-world entity.
         Despite well-established theoretical models in this field, challenges
         persist in selecting appropriate entity resolution tasks for specific
         contexts.
@@ -68,48 +68,49 @@ T \kern-.1667em \lower.7ex \hbox{E} \kern-.125emX}}
     sources~\cite{Qia17}.
     However, we share the opinion that identifying and linking data constitutes
     a more specialized process~\cite{Tal11}.
-    We also leave aside any classification of entity resolution algorithms based
-    on number of sources.
     The task of gathering information about a generic pound of potatoes across
     various marketplaces is still an entity resolution task, in our view.
     Whether the information about marketplaces and the potatoes that find
     themselves passing through there is available in one or more places strikes
     us as non-consequential, too.
+    Besides not talking about identity problems, we also leave aside any
+    classification of entity resolution algorithms based on number of sources.
     
     Precisely because it is a fundamental problem, entity resolution goes by
     many names: record linkage, data de-duplication, merge-purge, named entity
     recognition and disambiguation (or NERD), entity alignment or entity
     matching~\cite{Tal11,fever2009,alhelbawy2014}.
-    Entity resolution also has many practical applications ranging from linking
-    medical records to diagnosing diseases or ailments, to translation, to doing
-    background checks for financial crime or to identifying plagiarism.
+    The number of names is matched by the number of practical applications for
+    entity resolution, ranging from linking medical records to assisting in
+    medical diagnostics, to translation, to doing background checks for
+    financial crime or to identifying plagiarism.
     Combining information from different media (sound, images, motion, smell,
     etc.) can also be regarded as a form of entity resolution when the purpose
     is to gather more information about the same real-world object.
-    When there is such a wide array of past, present and future applications,
-    evaluating entity resolution quality seems important.
+    With such a wide array of past, present and future applications for entity
+    resolution, evaluating its quality seems important.
 
-    This paper is an introspection on how entity resolution theoretical models
-    influence our perception of entity resolution results and tasks.
-    We attempt to discuss whether entity resolution solutions themselves can be
-    deemed more or less suitable within a context based on their results.
-    In doing so we're also interested to see how metrics used for evaluating
-    entity resolution result quality complement one another.
-    Partly in order to answer this last question, we are looking into ways in
-    which two differnt entity resolution models might provide different insights
-    into the quality of the same entity resolution result.
+    With the current paper, our goal is to introspect how entity resolution
+    theoretical models influence our perception over entity resolution results.
+    The discussion is around choosing entity resolution solutions that are
+    more or less suitable based on how we perceive their outcomes.
+    In this context, we are interested in how entity resolution quality metrics
+    complement one another.
+    Partly in order to answer this last question, we are looking into the
+    diversity of the insights provided by different entity resolution models
+    regarding the same entity resolution result.
     
-    We begin by exploring a few preliminaries that detail the goals of this
-    paper.
+    We begin with a preliminary description focused on further detailing the
+    goals of this paper.
     After briefly summarizing the work that relates to our paper, we introduce
-    terminology and a mental model that we use throughout the rest of the paper.
-    Afterwards, we briefly introduce the theoretical models for entity
-    resolution that we chose for our analysis.
-    We then run a few experiments using an entity resolution solution of choice
-    and present our findings using three well known data sets and one generated
-    data set.
-    Lastly, we discuss our observations, pointing out invariant conditions that
-    do not seem to be related to the choice of data set.
+    terminology and a mental model that we use throughout the remaining
+    sections.
+    Afterwards, we revisit the two theoretical models for entity resolution
+    chosen for our analysis.
+    The text describing theoretical models is accompanied by experiments using
+    an entity resolution solution of choice for which we present our findings.
+    We discuss our observations, pointing out invariant conditions that do not
+    seem to be related to the choice of data set.
 
     \section[preliminaries-questions]{Preliminaries \& Research Questions}
     \label{sec:preliminaries-questions}
@@ -130,8 +131,9 @@ T \kern-.1667em \lower.7ex \hbox{E} \kern-.125emX}}
     The majority of the referenced systems in this context offer several generic
     metrics for assessing entity resolution performance.
 
-    At the dawn of the 21st century, FEBRL~\cite{febrl2002} emerged as one of the
-    first extensible systems to tackle measuring entity resolution performance.
+    At the dawn of the 21st century AD, FEBRL~\cite{febrl2002} emerged as one of
+    the first extensible systems to tackle measuring entity resolution
+    performance.
     It was succeeded by FEVER~\cite{fever2009} and OYSTER~\cite{oyster2012}.
     These systems have all paved the way to generalizing our understanding about
     entity resolution and to ever more improvements in the quality of entity
@@ -155,17 +157,18 @@ T \kern-.1667em \lower.7ex \hbox{E} \kern-.125emX}}
     abstract way, there are studies that shine a procedural light over entity
     resolution~\cite{Pap19,Chen09}.
     These studies showcase the steps of the entity resolution process and the
-    significance, challenges and benefits of each.
+    significance, challenges and benefits of each step.
     These studies show us that matching and clustering (additionally to being
     aspects of entity resolution) are steps in the entity resolution process.
 
     Lastly, we note syntheses that present numerous entity resolution metrics
     and their application~\cite{hitesh2012,graf2021frost,barnes2015practioner}.
-    This paper is very similar to these syntheses because it, too enumerates
-    metrics and it, too attempts to use those metrics to gather deeper insights
-    that would alleviate the burden of adopting entity resolution.
-    We use this work to find how strong is the association between certain
-    metrics to an entity resolution model.
+    The current paper is very similar to these syntheses because it, too
+    enumerates metrics and it, too attempts to use those metrics to gather
+    deeper insights that would alleviate the burden of adopting entity
+    resolution.
+    We use this work to find the strongest associations of certain metrics with
+    an entity resolution model.
     However, our approach is to discern between theoretical models and attempt
     to extract invariant conditions rooted in the model instead of simply using
     the metrics to evaluate the entity resolution result.
@@ -207,15 +210,18 @@ T \kern-.1667em \lower.7ex \hbox{E} \kern-.125emX}}
     to infer regardless of those two qualities of the underlying data.
 
     The second model this paper looks into is the elegant algebraic model.
-    The metrics it makes available to us are familiar metrics to those working
-    with clusters of items.
+    The metrics we most strongly associate with this model should be very
+    familiar to data clustering afficionados.
     It seems to be a good complement for the Fellegi-Sunter model.
-    Furthermore, the paper looks into ways in which an observer can switch from
-    a probabilistic perspective over the entity resolution results corresponding
-    to the Fellegi-Sunter model to an algebraic perspective.
 
-    The complexity of the discussion and the presentational space required force
-    us to give up on the Stanford Framework for Entity Resolution model.
+    Additionally to presenting the two models, the question of whether they can
+    be used in conjunction to analyse the same result needs an answer.
+    The paper describes how an observer can switch from a probabilistic
+    perspective on entity resolution to an algebraic one.
+
+    The complexity of the discussion and the presentational space required,
+    force us to leave the Stanford Entity Resolution Framework model out of the
+    conversation for the time being.
     This means that we won't go into the metrics that are more commonly linked
     to it either, such as the generalized merged distance, the basic merge
     distance or variation of information~\cite{Men10}.
@@ -259,22 +265,22 @@ T \kern-.1667em \lower.7ex \hbox{E} \kern-.125emX}}
     Lastly, our experiment setup was designed to find invariant conditions that
     might help reduce the time of picking a good entity resolution algorithm
     configuration by leveraging entity resolution models.
-    One such condition is that \textbf{probabilistic recall is always going to be
-    distorted when the size of the entity resolution result is much greater than
-    the size of the ground truth.}
+    One such condition is that \textbf{probabilistic recall is always going to
+    be distorted when the size of the entity resolution result is much greater
+    than the size of the ground truth.}
     Luckily, pairwise recall is the perfect antidote for this distortion.
     Probabilistic metrics might be cheap and easy to use, but use pairwise
     metrics when in doubt.
 
-    Another invariant is that \textbf{cluster precision is a good counterweight to
-    probabilistic and pairwise precision.}
+    Another invariant is that \textbf{cluster precision is a good counterweight
+    to probabilistic and pairwise precision.}
     This leads to cluster metrics forming a harmonious complement to
     probabilistic metrics, pairwise metrics and to the Adjusted Rand Index (ARI)
     which is also pair-based.
     
-    This leads us to our third invariant: \textbf{the Talburt-Wang Index and the cluster
-    metrics on one side and the Adjusted Rand Index on the other usually agree
-    only when there is a good balance between precision and recall.}
+    This leads us to our third invariant: \textbf{the Talburt-Wang Index and the
+    cluster metrics on one side and the Adjusted Rand Index on the other usually
+    agree only when there is a good balance between precision and recall.}
     That means that the configuration value intervals where these metrics agree
     on a control data set provides us with a good estimation of the best
     configuration options for running an entity resolution algorithm.

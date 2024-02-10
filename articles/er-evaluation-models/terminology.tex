@@ -1,6 +1,8 @@
 Throughout this paper the term ``entity'' is reserved for real-world items.
-We need new terms for the computer-friendly representations of entities.
-We start by saying that entity resolution operates on data sources.
+This requires introducing new terms for the computer-friendly representations of
+entities.
+We start by saying that when entity resolution is performed by computers, it
+uses data sources.
 
 \begin{defn}
     A \textit{data source} represents a sequence of decoded messages
@@ -13,17 +15,16 @@ We start by saying that entity resolution operates on data sources.
 
 An entity resolution task needs at least one data source to operate on.
 When the relevant information is split across multiple data sources, these
-can be merged into a single source.
-In the same way, a single data source can be split into multiple data
-sources.
+can be merged back into a single source.
+Similarly, a single data source can be split into multiple data sources.
 Data sources may be bounded (files or databases) or unbounded (streams).
 For the purposes of this paper, these attributes of data sources as well as
 their number are inconsequential.
+In practical terms and as far as we are concerned it should suffice to know that
+entity resolution is a computer process that operates over data sources.
 
-In practical terms, entity resolution is a computer process that operates
-over a data source.
-In the process of entity resolution, we use specific notions to refer to the
-various levels in which data is organised.
+In the process of entity resolution, we also use specific notions to refer to
+the various levels in which data is organised.
 
 \begin{defn}
     An \textit{attribute} is information about an entity that has a certain
@@ -41,47 +42,52 @@ whether it is `small', `medium' or `large'.
 
 \begin{defn}
     An \textit{entity reference} is a collection of attributes that refer
-    to a real-world entity which can be formed by following an organizing
-    principle (or order) of the data source where the attributes are all
-    located.
+    to a real-world entity which is constructed by following an organizing
+    principle (or order) of the data source containing the attributes.
 \end{defn}
 
 The organizing principle of a data source is simply an order that
 facilitates processing information in that data source.
 A CSV file has the organizing principle that attributes are separated by
 commas.
-Relational databases organize data in tables, columns and rows.
+Relational databases typically organize data in tables, columns and rows.
 Other storage organizes data in structured, semistructured or even
 unstructured ways (such as text).
 As an example of unstructured organization, named entity disambiguation uses
-the same organizing principle as named entity recognition built around
-mentions.
-When an entity resolution task processes a data source, it loads
-\textit{references}\cite{Ben2009Swoosh} to entities by taking advantage of
-the way that data source is organized.
+the same organizing principle as named entity recognition which is built around
+the notion of a `mention'.
+In the process of entity resolution, it loads \textit{references} to entities
+from a data source by taking advantage of the way that data source is
+organized~\cite{Ben2009Swoosh}.
 
-We shouldn't confuse the organizing principle of a data source with its
-structure, though.
-A table record in a database might store multiple attributes of the same
-entity in the same column.
-The entity reference will be constructed by extracting all attributes, not
-by dumbly considering each column to be an attribute.
-Entity reference extraction is also selective by nature.
+Even though they usually go hand in hand for well-structured data, let us not
+confuse the organisation principle of information with its structure, though.
+Multiple attributes of the same entity might be stored in the same column of the
+same database table row, for example.
+In this case, the entity reference will contain all attributes, not the whole
+value determined by the row and column.
+
+Besides not being bound to structure, entity reference extraction is also
+selective.
 For entity resolution tasks that value geolocation above other things, the
 extracted references might skip over data that is not about geography.
 Similarly, in tasks that identify people, entity references will be
 comprised from attributes that are useful in identifying a person or a
 company.
-All this speaks to how the organizing principle of a data source is
-extrinsic to the data source and linked to the entity resolution's purpose.
 
-A final note on entity references is that attributes that each reference is
-bound to a data source.
-The definition above states this by mandating that all attributes comprising
-an entity reference are read from the same data source.
+These remarks speak to the extrinsic nature of the organizing principle of a
+data source relative to that data source.
+From the standpoint of entity resolution, the organization of information in a
+data source is determined by the purpose for conducting entity resolution.
 
-So far we have dealt with structure, now it is time to deal with meaning and
-purpose.    
+Finally we note that entity references contain attributes from a single data
+source.
+Our definition of entity references states this explicitly to avoid confusion
+regarding the provenance of entity references.
+
+Given that information organisation is driven by purpose, we move on to
+describing and defining notions related to meaning and purpose in the context of
+entity resolution.
 Let's suppose that we are gathering information about colors.
 A data source represents colors as `red', `green' or `blue'.
 Another one represents them as \texttt{0xCC0000}, \texttt{00CC00} or
@@ -91,37 +97,47 @@ entity references with a single attribute.
 It does not provide any semantic interpretation rules for the data.
 
 \begin{defn}
-    A \textit{trait} is a semantic rule that guides the entity resolution
-    task in recognizing the organizing principle of each information source
-    that it uses as input.
+    A \textit{trait} is a semantic rule that contributes to realizing the
+    organizing principle related to the purpose of a specific entity resolution
+    solution over an input data source.
 \end{defn}
 
-Each entity resolution task is defined by specific objectives it aims to
-achieve.
-For every distinct task, there are key rules that guide the interpretation
-of the available data, emphasizing certain aspects over others.
-In our example, entity resolution focuses exclusively on identifying colors
-in different data sources.
+Whenever entity resolution is performed, it is performed with purpose and
+agency.
+There are specific objectives involved, such as medical diagnoses, plagiarism
+detection or illegal financial transaction monitoring.
+Different purposes bring into existence different key rules that guide the
+interpretation of the available data, emphasizing certain aspects over others.
+These rules are typically implemented deliberately to serve the purpose for
+performing entity resolution.
+
+In our trivial example, entity resolution focuses exclusively on identifying
+colors in different data sources.
 To achieve this goal, the traits of the entity resolution task instance
 might be specified, trained or inferred from a knowledge base to recognize
 various representations of colours.
 While we might think of traits as being a part of a generic data extraction
 process such as scraping, traits in the sense described here are actually
 integral to the entity resolution process itself.
+In practice, generic data collection and extraction usually come into play when
+constructing the input data sources used in the entity resolution process.
+On the other hand, traits come into play within entity resolution, when
+constructing entity references.
 
-The notion that is the most similar to that of a trait is the pattern
-recognition notion of a `feature':
+The most similar notion to that of a trait is the pattern recognition notion of
+a `feature':
 \textit{an individual measurable property or characteristic of a
 phenomenon}\cite{bishop2006pattern}.
 The mechanics of how traits and features function is near identical.
-The difference between a trait as defined here and a feature is a matter of
-perspective.
+The difference between a trait as defined here and a pattern recognition feature
+is a matter of perspective.
 Features are part of constructing a broader, objective perspective on
 information.
-Traits as they are defined here are concerned with the contextual meaning.
+Traits as they are defined here are concerned with mapping an objective
+information to the entity resolution context.
 
-Pragmatically, traits can be viewed as algorithms that extract information
-according to the subjective goal of the entity resolution task.
+Pragmatically, traits can be viewed as computing functions that process
+information according to the subjective goal of the entity resolution task.
 In their simplest form, traits might be configuration parameters for an
 entity resolution system.
 But they can also be algorithms that are part of the a system's code.
@@ -138,31 +154,36 @@ Another example of a trait, is a configuration value that specifies the
 attributes that should be used when comparing two entity references.
 This trait might optimize certain attributes of the entity references for
 comparison.
+Some entity resolution algorithms allow configuring thresholds (such as the
+Jaccard threshold~\cite{jaccard1912}) to determine an upper limit to the number
+of attributes of entity references.
 
 To avoid confusing traits and attributes, it is easy to think about traits
-as not being a part of the data source, but rather as a part of the entity
-resolution task implementation.
-Entity resolution tasks extract attributes that they assign to entity
-references based on the traits specific to each task.
+as not being a part of the data source, but rather as a part of a specific
+implementation of entity resolution.
+Entity resolution computer programs extract attributes that they assign to 
+entity references based on the specific traits built into each such program.
 
-Traits are a necessary abstraction if we want the same entity resolution
-task to be able to process more than one data representation.
+Traits are a necessary abstraction that allows us to envision multiple entity
+resolution implementations over the same data source.
+These implementations would differ in their purpose.
 They are useful for constructing individual entity references.
-However, we have not defined any notion that links entity references to an
-entity.
+
+In the definition of entity resolution as the task of determining whether two
+information refer to the same real-world item, entity references are the two
+information.
+Next, we provide the notion that defines the representation of the real-world
+item throughout the entity resolution process.
 
 \begin{defn}
-    The logical group of entity references that point to the same real-world
-    entity according to the entity resolution task's parameters is known as
-    the \textit{entity profile} of that real-world entity within the entity
-    resolution task.
+    The logical grouping of entity references that point to the same real-world
+    object according throughout entity resolution is known as the \textit{entity
+    profile} of the real-world object.
 \end{defn}
 
-It is important to understand that the entity profile and the real-world
-entity are not the same.
-Entity profiles are simply digital collections of entity references that are
-formed because of how an entity resolution task was programmed and
-configured.
+The entity profile must not be confused with the real-world object it describes.
+Entity profiles are representations of the real-world object that are available
+to the system performing entity resolution.
 
 By using the terms \textit{information source}, \textit{attribute},
 \textit{trait}, \textit{entity reference} and \textit{entity profile} we can
