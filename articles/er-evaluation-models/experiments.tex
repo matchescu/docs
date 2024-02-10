@@ -34,8 +34,9 @@ well~\cite{matchescu-er-metrics2023}.
 To ensure we are working with standard data that simulates real data and which
 is widely used and therefore familiar, we use the Abt-Buy, DBLP-ACM and
 Amazon-GoogleProducts~\cite{vldb2010} benchmark data sets.
-We did not use the DBLP-Scholar because of practical reasons concerning the
-run time of the experiment.
+We did not use the DBLP-Scholar data set from the same source because of
+practical reasons concerning the run time of the experiment on the available
+hardware.
 
 For our initial small scale experiments we built our own control
 dataset~\cite{expdata2023} from the `Buy' component of the `Abt-Buy' data set.
@@ -88,15 +89,16 @@ sunt, cate features sunt)
 % The particularity of the Amazon-GoogleProducts dataset is the use of textual
 % values even for the id attribute values.
 
-We use the benchmark datasets almost in their original forms and the ideal
-mapping to establish the ground truth for each dataset.
 The sizes, the attributes that might match as well as the information about the
 ideal pairing of entity references can be found in the original
 paper~\cite{vldb2010}.
 
+We use the benchmark datasets almost in their original forms.
 In order to make entity matching algorithms that use prefix matching, we make a
 slight adjustment to the benchmark datasets and move the `id' column to the last
 position in each data set.
+We also use the ideal mapping provided with each data set to establish the
+ground truth in the probabilistic model representation.
 
 With our tiny custom dataset, the goal is to exert complete control over the entity
 resolution process.
@@ -105,8 +107,9 @@ process through data generation.
 The data sources each contain ten chosen items from the `Buy' subset of the
 `Abt-Buy' dataset.
 The chosen items exacerbate faults in data.
-There are many empty or missing attribute values and the data is full of
+There are many empty or missing attribute values and there are many
 near-duplicate entity references.
+Our intention was to have an unrealistically bad data set.
 
 The data generation procedure divides the ten-item subset into two distinct
 tables:
@@ -124,60 +127,46 @@ corresponds uniquely to a single real-world entity.
 Consequently, the ground truth consists of pairs, each pair representing a
 distinct real-world item.
 
-The experiment is set up so that in the data extraction phase that precedes the
-actual entity resolution process, the data undergoes uniform conversion to
-string format, emphasizing word extraction.
-This approach is consistent with both the benchmark and the generated data sets.
-The pipeline ensures a left-to-right, top-to-bottom arrangement of extracted
-words, with column and row order preservation, thus providing the entity
-resolution task references consisting of a single text attribute.
-This attribute amalgamates words from all attributes in the source data records
-into a cohesive text unit per record.
-We employ this process to effectively ensure sequence neutrality.
-
-Let us take the following record from the `Buy' subset as an example (see Table \ref{tab:buy-record}).
+Tables~\ref{tab:buy-record},~\ref{tab:dg1-record} and~\ref{tab:dg2-record} contain example
+records indicative of our data generation procedure.
 
 \begin{table}[ht]
     \setlength\tabcolsep{5pt}
-    \begin{tabular}{|l|l|l|l|l|}
-        \hline
+    \centering
+    \begin{tabular}{lllll}
+        \toprule
         id&name&description&manufacturer&price\\
-        \hline
+        \midrule
         205554724&Seiko SXDA04& & &\$138.00\\
-        \hline
+        \bottomrule
     \end{tabular}
-    \caption{An example record of the 'Buy' subset}
-    \label{tab:buy-record}
+    \caption{Example `Buy' record}\label{tab:buy-record}
 \end{table}
-
-The following entry corresponds to the record in Table \ref{tab:dg1-record}.
 
 \begin{table}[ht]
     \setlength\tabcolsep{6pt}
-    \begin{tabular}{|l|l|l|l|}
-        \hline
+    \centering
+    \begin{tabular}{llll}
+        \toprule
         name & manufacturer & price & id \\
-        \hline
+        \midrule
         Seiko SXDA04 & & \$138.00 & 205554724 \\
-        \hline
+        \bottomrule
     \end{tabular}
-    \caption{An example record of the `DG1' subset}
-    \label{tab:dg1-record}
+    \caption{Example `DG1' record}\label{tab:dg1-record}
 \end{table}
-
-The corresponding DG2 record would then look as follows (see Table \ref{tab:dg2-record}).
 
 \begin{table}[ht]
     \setlength\tabcolsep{5pt}
-    \begin{tabular}[b]{|l|l|l|}
-        \hline
+    \centering
+    \begin{tabular}[b]{lll}
+        \toprule
         description&name&id \\
-        \hline
+        \midrule
         &Seiko SXDA04&205554724 \\
-        \hline
+        \bottomrule
     \end{tabular}
-    \caption{An example record of the `DG2' subset}
-    \label{tab:dg2-record}
+    \caption{Example `DG2' record}\label{tab:dg2-record}
 \end{table}
 
 Using the extraction traits described before would yield us the
@@ -188,6 +177,16 @@ following entity references from DG1 and DG2, respectively:
 \end{enumerate}
 
 We will refer to our generated dataset with the `mini-buy' moniker.
+
+A consistent aspect with both the benchmark and the generated data sets is that
+the data undergoes uniform conversion to string format, emphasizing word
+extraction.
+The pipeline ensures a left-to-right, top-to-bottom arrangement of extracted
+words, with column and row order preservation, thus providing the entity
+resolution task references consisting of a single text attribute.
+This attribute amalgamates words from all attributes in the source data records
+into a cohesive text unit per record.
+We employ this process to effectively ensure sequence neutrality.
 
 \subsection{Entity Resolution Algorithm}\label{subsec:entity-resolution-algorithm}
 
