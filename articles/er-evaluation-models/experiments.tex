@@ -30,13 +30,16 @@ well~\cite{matchescu-er-metrics2023}.
 
 \subsection{Datasets}\label{subsec:data}
 
-For small scale experiments we are using our own control
-dataset~\cite{expdata2023} which we createdl from existing data 
-\textcolor{green}{I Would specify here the original dataset used for building the control dataset}
-. 
+
 To ensure we are working with standard data that simulates real data and which
 is widely used and therefore familiar, we use the Abt-Buy, DBLP-ACM and
-Amazon-GoogleProducts~\cite{vldb2010} benchmarked data sets. 
+Amazon-GoogleProducts~\cite{vldb2010} benchmark data sets.
+We did not use the DBLP-Scholar because of practical reasons concerning the
+run time of the experiment.
+
+For our initial small scale experiments we built our own control
+dataset~\cite{expdata2023} from the `Buy' component of the `Abt-Buy' data set.
+
 To ease experimentation, we use the original tabular representation
 which allows us to take advantage of Pandas~\cite{pandas2010,pandas2023}
 and also has the benefit of not requiring adaptation to an internal format.
@@ -158,7 +161,7 @@ The following entry corresponds to the record in Table \ref{tab:dg1-record}.
         Seiko SXDA04 & & \$138.00 & 205554724 \\
         \hline
     \end{tabular}
-    \caption{An example record of the \textcolor{green}{???} subset}
+    \caption{An example record of the `DG1' subset}
     \label{tab:dg1-record}
 \end{table}
 
@@ -173,7 +176,7 @@ The corresponding DG2 record would then look as follows (see Table \ref{tab:dg2-
         &Seiko SXDA04&205554724 \\
         \hline
     \end{tabular}
-    \caption{An example record of the \textcolor{green}{???} subset}
+    \caption{An example record of the `DG2' subset}
     \label{tab:dg2-record}
 \end{table}
 
@@ -227,41 +230,46 @@ Our experiment consists of the following steps:
           of the stored results.
 \end{itemize}
 
-Similar experiments were performed in the past~\cite{draisbach2013choosing}.
-Those experiments were looking at the relationship between the size of a dataset
-and a threshold used for configuring a similarity measure.
-A threshold that is a configuration of a similarity measure plays a different
-role than the role of the Jaccard threshold in the context of \texttt{ppjoin}
-even though both thresholds limit the amount of data being compared during the 
-match phase of the entity resolution process.
-The Jaccard threshold as used in \texttt{ppjoin} acts as an influence on the
-fundamental probabilities defined by the Fellegi-Sunter model, actively
-manipulating the number of attributes that take part in the matching phase of
-the entity resolution process.
-On the other hand, configuring a threshold for a similarity measure affects the
-comparison being performed at the level of each attribute value.
-The number of attributes that take part in the comparison remains unchanged.
-\textcolor{green}{to disscuss their conclusion!}
+Experiments that use multiple threshold values to determine whether the data
+set size influences duplicate detection performance were performed in the
+past~\cite{draisbach2013choosing}.
+Those experiments differ from our own in significant ways.
 
-In contrast, our experiment uses multiple benchmark datasets of similar size and
-different makeup.
-Our control dataset is, indeed, small but we are not interested in its size, but
-in its makeup.
-The purpose of our experiment is to find invariants (perhaps other than dataset
-size) which could prove useful in analysing entity resolution quality.
-To this end we want to examine the effect of simply changing the looking glass
-through which we inspect entity resolution results.
+First, the thresholds were used for tuning the similarity function and not to
+influence the entity resolution model.
+While tuning the similarity function acts as an interference at the attribute
+level, the Jaccard threshold is used by the \texttt{ppjoin} algorithm
+to manipulate the number of attributes that participate in a comparison, too.
+
+Second, these previous experiments were only concerned with evaluating how the
+F-measure varies according to data set size.
+In our experiments we attempt to find invariant conditions using multiple
+quality metrics.
+ 
+Lastly, we do not focus our experiments on input size except for one significant
+way.
+The conclusion of the referenced experiments is that the size of the data set
+does in fact influence F-measure results independently of other factors.
+We focus on finding predictors of entity resolution quality that do not depend
+on data set size, but on the entity resolution model itself.
+For this purpose, our three benchmark data sets are of similar size.
+Their size is two orders of magnitude above the size of our control data set.
+We look for the conditions that occur on the control set and in all benchmark
+data sets.
 
 The \texttt{ppjoin} algorithm treats entity resolution as a matching problem.
-Consequently, Fellegi-Sunter is the most fitting entity resolution model.
-Therefore, in order to evaluate the quality of the algorithm under the algebraic
-model, we have to convert a list of matches (the data structure output by the
- \texttt{ppjoin} algorithm) to a partition over a set.
+Consequently, Fellegi-Sunter is the natural entity resolution model for
+understanding the quality of its results.
+In order to evaluate the quality of the algorithm under the algebraic model, we
+have to convert a list of matches (the data structure output by the \texttt{ppjoin}
+algorithm) to a partition over a set.
 
 For our own generated data we are able to generate the ground truth partition
 for the algebraic model based on the input data.
-For the benchmark data sets we convert the ideal mapping to a partition over the
-input data using the algorithm presented in Subsection~\ref{subsec:fsm-alg}.
+In the case of the benchmark data sets, we need something different.
+
+\subsection{Between Probabilities and Algebra}\label{subsec:fsm-alg}
+\input{convert}
 
 \subsection{Outcomes from Control Data}\label{subsec:experiment-mini-buy}
 
@@ -405,13 +413,19 @@ we can not have any using the generated data set), pairwise recall requires all
 the result data to be partitioned and singleton clusters play an ever more
 important part in the computed recall score as their number increases.
 
-This situation leads to presenting our \textbf{first invariant condition candidate.
-Probabilistic recall seems to fail to adequately address situations where the
-volume of data returned at the end of the entity resolution process vastly
-exceeds the size of the ground truth, despite encompassing all true positives.}
-While in the context of a small control dataset it may not seem likely that this
+This situation leads to presenting our \textbf{first invariant condition
+candidate}.
+\textbf{Probabilistic recall seems to fail to adequately assess entity
+resolution quality when the volume of data returned at the end of the entity
+resolution process vastly exceeds the size of the ground truth}.
+Despite encompassing all true positives, we are left with a myriad of false
+positives to weed out.
+This is a real problem for systems that value a result that is both accurate and
+sensitive.
+
+While in the context of our control dataset it may not seem likely that this
 would raise concerns, consider that for practical applications the size of the
-ground truth is often several orders of magnitude smaller than the size of the
+ideal result is often several orders of magnitude smaller than the size of the
 input.
 Taking into account other factors (like data cleanliness, for example), we see
 that the odds of this situation occuring is not negligible at all.
@@ -419,13 +433,12 @@ Large entity resolution results are more likely to be obtained from large input
 data sets than from smaller data sets, after all.
 
 Therefore, while the input data set size certainly matters, the entity
-resolution model used to interpret result also matters in the case of
-probabilistic recall.
-Other algorithms may provide the conditions for this phenomenon using their own
-input configurations.
-
-In the end, pairwise metrics seem to be a more accurate way of interpreting
-results that is similar to the probabilistic metrics.
+resolution model also matters, as probabilistic recall clearly shows us.
+Note that this phenomenon is dependent solely on the entity resolution model and
+not on using a specific entity resolution solution to highlight it.
+For other algorithms the same phenomenon may be observed depending on their
+specific configuration.
+Pairwise metrics seem to provide a good treatment for this phenomenon.
 
 \subsubsection{Cluster Metrics}
 
@@ -462,9 +475,9 @@ naturally drops.
 In fact, we might say that \textbf{cluster precision behaves as a complement to the
 other precision metrics, having higher values when the other precision metrics
 have low values and lower values when the other precision metrics have high
-values.
+values}.
 This relationship between the three precision metrics looks like a good
-candidate for our second invariant condition.}
+candidate for our \textbf{second invariant condition}.
 
 \subsubsection{Clustering Indexes}
 
@@ -509,9 +522,10 @@ We might be able to extract a third invariant condition from the relationship
 between the Talburt-Wang Index, the ARI and cluster metrics.
 All of these metrics indicate the same neighbourhoods for favourable
 configurations of the entity resolution algorithm.
-The conjecture here is that \textbf{the best generic configuration balanced between
-precision and recall of an entity resolution algorithm will be found within the
-agreement area between ARI on one side and TWI or cluster metrics on the other.}
+The conjecture here is that \textbf{the best generic configuration balanced
+between precision and recall of an entity resolution algorithm will be found
+within the agreement area between ARI on one side and TWI or cluster metrics on
+the other}.
 The configuration obtained this way will be very good regardless of conditions
 related to the data.
 In our specific case, this means that we should expect to get the best results
@@ -652,4 +666,8 @@ pairwise precision are very low.
 The configuration $t=0.32$ which has the highest F1 score is still within the
 predicted interval.
 
-\textcolor{green}{add some words about the limitations (e.g. complexity)}
+Running the experiments has also proven to be a source of insights into the
+computational expenditure surrounding entity resolution itself and the
+calculation of entity resolution metrics.
+This prompts a closer look into finding a balance between high quality outcomes
+and the quantitative performance of the entity resolution solution.

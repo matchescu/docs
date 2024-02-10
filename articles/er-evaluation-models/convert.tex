@@ -1,8 +1,5 @@
 
-% \textcolor{green}{sub-sectiunea aceasta e f incitanta si cred ca reprezinta una din contributiile importante ale lucrarii; nu mi-e clar daca se poate prezenta ca o "aliniere" originala a celor 2 modele (adica daca s-a mai facut asa ceva in literatura pana acum in acelasi stil sau , daca s-a facut, dar s-a facut in alt fel) sau sub forma unor discutii/analize f revelatoare}
-\textcolor{green}{as muta subsectiunea la exeprimente, chiar inainte de subsectiunea Outcomes from control data}
-    
-As stated before, one of the misgivings of the Fellegi-Sunter model is that
+As stated in Subection~\ref{subsec:fsm}, one of the misgivings of the Fellegi-Sunter model is that
 it captures relatively well the matching aspect of entity resolution without
 doing as good a job for its clustering aspect.
 The algebraic model allows a more complete perspective over how entity
@@ -12,18 +9,16 @@ One of the questions we asked initially is whether we could transition from
 one model to the other to enjoy the more complete overview offered by the
 algebraic model.
 
-The answer to this question lies in the difference between how the two
-models represent entity profiles and entity resolution output in general.
-Intuitively, this becomes a question of whether we can automatically convert
+The answer to this question depends on whether we can automatically convert
 sequences of pairs of items to clusters.
 Then, if that is possible, the question becomes whether from a set of pairs
-of items from an input set we can obtain a partition over the input set
+of items from an input set we can obtain a partition over the $Ref$ domain
 itself.
 
 The idea is to consider pairs of items as being edges in a graph.
 Taking inspiration from Kruskal's algorithm~\cite{kruskal1956} to construct
-partitions using a slightly altered version of the first algorithm presented by
-Hopcroft and Ulman~\cite{hopcroft1973set}.
+partitions, we are using a slightly altered version of the first algorithm
+presented by Hopcroft and Ulman~\cite{hopcroft1973set}.
 The algorithm uses the Union-Find data structure~\cite{unionfind1964}.
 This data structure was originally used to keep track of a partition of a set,
 where partition classes could be merged.

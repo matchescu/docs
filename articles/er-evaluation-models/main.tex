@@ -204,15 +204,16 @@ T \kern-.1667em \lower.7ex \hbox{E} \kern-.125emX}}
     When measuring results using these metrics, a common experience is not being
     able to fully explain how the quality of the results output by a particular
     entity resolution process varies with the data sets the process operates on.
-    A common attitude towards this lack of understanding is to chalk things off
-    to the characteristics of the underlying data and the size of the dataset.
-    This paper attempts to find out if there aren't some things we might be able
-    to infer regardless of those two qualities of the underlying data.
+    A common attitude towards this phenomenon is to chalk it up to the
+    characteristics of the underlying data and the size of the dataset.
+    This paper attempts to find out if there are any conditions we might be able
+    to extract that have to do with the entity resolution model instead.
 
     The second model this paper looks into is the elegant algebraic model.
     The metrics we most strongly associate with this model should be very
     familiar to data clustering afficionados.
-    It seems to be a good complement for the Fellegi-Sunter model.
+    It seems to be a good complement for the Fellegi-Sunter model and we want to
+    explore how in our experiments.
 
     Additionally to presenting the two models, the question of whether they can
     be used in conjunction to analyse the same result needs an answer.
@@ -224,17 +225,15 @@ T \kern-.1667em \lower.7ex \hbox{E} \kern-.125emX}}
     conversation for the time being.
     This means that we won't go into the metrics that are more commonly linked
     to it either, such as the generalized merged distance, the basic merge
-    distance or variation of information~\cite{Men10}.
+    distance or variation of information~\cite{Men10}, even if some of them
+    might be applied (under certain circumstances) using the other two models.
 
-    \subsubsection[fsm]{Fellegi-Sunter Model}\label{subsec:fsm}
+    \subsection[fsm]{Fellegi-Sunter Model}\label{subsec:fsm}
     \input{fsm}
 
-    \subsubsection[algebraic]{Algebraic Model}\label{subsec:algebraic}
+    \subsection[algebraic]{Algebraic Model}\label{subsec:algebraic}
     \input{algebraic}
 
-    \subsubsection{From Probabilities to Algebra}\label{subsec:fsm-alg}
-    \input{convert}
-        
     \section{Experiments}\label{sec:experiments}
     \input{experiments}
 
@@ -248,8 +247,8 @@ T \kern-.1667em \lower.7ex \hbox{E} \kern-.125emX}}
     the way we interpret data.
 
     We set out on a journey to find out whether entity resolution models might
-    provide an answer.
-    Entity resolution models can be understood in many ways.
+    provide additional insights that we would use in our qualitative assessment
+    of entity resolution.
     Our own perception is that entity resolution models are simply theoretical
     perspectives over the practical act of determining whether two entity
     references refer to the same real-world entity.
@@ -262,8 +261,8 @@ T \kern-.1667em \lower.7ex \hbox{E} \kern-.125emX}}
     We posited that we can even change our point of view from one perspective to
     another without any data loss.
 
-    Lastly, our experiment setup was designed to find invariant conditions that
-    might help reduce the time of picking a good entity resolution algorithm
+    Our experiment setup was designed to find invariant conditions that might
+    help reduce the time of picking a good entity resolution algorithm
     configuration by leveraging entity resolution models.
     One such condition is that \textbf{probabilistic recall is always going to
     be distorted when the size of the entity resolution result is much greater
@@ -281,11 +280,12 @@ T \kern-.1667em \lower.7ex \hbox{E} \kern-.125emX}}
     This leads us to our third invariant: \textbf{the Talburt-Wang Index and the
     cluster metrics on one side and the Adjusted Rand Index on the other usually
     agree only when there is a good balance between precision and recall.}
-    That means that the configuration value intervals where these metrics agree
-    on a control data set provides us with a good estimation of the best
-    configuration options for running an entity resolution algorithm.
-    These configurations seem to hold true irrespective of the data we run
-    entity resolution on.
+    The configuration value intervals where these metrics agree on a control
+    data set provides us with a good estimation of the best configuration
+    options for running an entity resolution algorithm.
+    These configurations seem to be effective irrespective of the data we run
+    entity resolution on, even if that data is purposefully designed to skew the
+    results.
 
     % \section[future]{Future Work}\label{sec:future}
 
