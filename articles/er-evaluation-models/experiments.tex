@@ -58,17 +58,18 @@ outcome. All experiment datasets are available on GitHub\cite{expdata2023}.
         \cline{0-4}
         \textit{Domain} & \textit{Mapping Columns} & \textit{Sources} & \textit{Source 1} & \textit{Source 2} & \\
         \hline
-        Bibliographic & - title & DBLP-ACM & DBLP: 2616 & ACM: 2294 & 2224 \\
+        \multirow{4}{*}{Bibliographic} & - title & \multirow{4}{*}{DBLP-ACM} & \multirow{4}{*}{DBLP: 2616} & \multirow{4}{*}{ACM: 2294} & \multirow{4}{*}{2224} \\
         & - authors & & & &\\
         & - venue & & & &\\
         & - year & & & &\\
         \hline
-        \multirow{2}{*}{E-commerce} & - product name & Abt-Buy & Abt: 1081 & Buy: 1092 & 1097 \\
+        \multirow{4}{*}{E-commerce} & - product name & \multirow{2}{*}{Abt-Buy} & \multirow{2}{*}{Abt: 1081} & \multirow{2}{*}{Buy: 1092} & \multirow{2}{*}{1097} \\
         & - description & & & &\\
-        & - manufacturer & Amazon-GoogleProducts & Amazon: 1363 & GoogleProducts: 3226 & 1300\\
+        \cline{3-6}
+        & - manufacturer & \multirow{2}{*}{Amazon-GoogleProducts} & \multirow{2}{*}{Amazon: 1363} & \multirow{2}{*}{GoogleProducts: 3226} & \multirow{2}{*}{1300} \\
         & - price & & & &\\
         \hline
-        Control & - product name & mini-Buy & DG1: 10 & DG2: 10 & 10 \\
+        \multirow{4}{*}{Control} & - product name & \multirow{4}{*}{mini-Buy} & \multirow{4}{*}{DG1: 10} & \multirow{4}{*}{DG2: 10} & \multirow{4}{*}{10} \\
         & - description & & & &\\
         & - manufacturer & & & &\\
         & - price & & & &\\
@@ -277,7 +278,7 @@ lower values the recall should be higher.
 Figure~\ref{fig:mini-buy-fs} shows the \texttt{ppjoin} results at various
 values of the Jaccard threshold $t$.
 
-\begin{figure}[!hp]
+\begin{figure}[htbp]
     \centering
     \captionsetup{justification=centering}
     \includegraphics[width=\columnwidth]{mini-buy-fsm-main}
@@ -373,7 +374,7 @@ approximation of the statistical metrics\cite{Men10}.
 Figure~\ref{fig:mini-alg-pairwise} shows the computed pairwise metrics for
 various values of \textit{t}.
 
-\begin{figure}[!h]
+\begin{figure}[htbp]
     \centering
     \captionsetup{justification=centering}
     \includegraphics[width=\columnwidth]{mini-buy-algebraic-pairwise}
@@ -435,7 +436,7 @@ the aspects being measured are quite different.
 We see a plot of these cluster metrics over the `miny-buy' data set in
 Figure~\ref{fig:mini-alg-cluster}.
 
-\begin{figure}[!h]
+\begin{figure}[htbp]
     \centering
     \captionsetup{justification=centering}
     \includegraphics[width=\columnwidth]{mini-buy-algebraic-cluster}
@@ -472,7 +473,7 @@ Clustering indexes are, just like pairwise and cluster metrics, means to
 determine the similarity of two partitions over a set.
 The plots of the three indexes we want to study are in Figure~\ref{fig:mini-alg}.
 
-\begin{figure}[!h]
+\begin{figure}[htbp]
     \centering
     \captionsetup{justification=centering}
     \includegraphics[width=\columnwidth]{mini-buy-algebraic-main}
@@ -533,7 +534,7 @@ The plots with performance metrics for our experiment are available in Figures~\
 ~\ref{fig:abt-buy-algebraic-pairwise},~\ref{fig:abt-buy-algebraic-cluster}
 and~\ref{fig:abt-buy-algebraic-main}.
 
-\begin{figure*}[ht]
+\begin{figure*}[htbp]
     \begin{minipage}{0.24\textwidth}
         \centering
         \includegraphics[width=\textwidth]{abt-buy-fsm-main}
@@ -565,10 +566,9 @@ The probabilistic recall is still exceedingly high when the threshold is nearing
 pairwise metrics do a good job of showing that.
 Next, the cluster precision is complementary to the pairwise and probabilistic
 precision.
-Finally, the highest harmonic mean between precision and recall is well within
-the target interval we envisioned at the end of the
-Subsection~\ref{subsec:experiment-mini-buy}.
-Furthermore, the ARI, TWI and the cluster metrics correlate.
+Finally, we find the best balanced configuration between precision and recall of
+$t=0.28$ is well within the target interval we envisioned at the end of the
+Subsection~\ref{subsec:experiment-mini-buy} while the ARI, TWI and the cluster metrics correlate.
 
 We move on to the `Amazon-Google Products' data set~\cite{vldb2010} and observe
 the results in Figures~\ref{fig:amazon-googleproducts-fsm-main},
@@ -576,7 +576,7 @@ the results in Figures~\ref{fig:amazon-googleproducts-fsm-main},
 \ref{fig:amazon-googleproducts-algebraic-cluster} and
 \ref{fig:amazon-googleproducts-algebraic-main}.
 
-\begin{figure*}[h]
+\begin{figure*}[htbp]
     \begin{minipage}{0.24\textwidth}
         \centering
         \includegraphics[width=\textwidth]{amazon-googleproducts-fsm-main}
@@ -610,7 +610,8 @@ resolution result size and the ground truth size.
 The pairwise metrics are not prone to this evaluation fallacy and this is shown.
 Cluster precision complements pairwise and probabilistic precision very clearly.
 And, finally, the best score for entity resolution that is balanced between
-probabilistic precision and recall is well within the target interval.
+probabilistic precision and recall is obtained for $t=0.3$ which is well within
+the target interval.
 
 Finally, we look at the `DBLP-ACM' benchmark dataset.
 The plots we obtained after running the experiment on this dataset are available
@@ -651,10 +652,10 @@ they have the same plot.
 Cluster precision is again very high where probabilistic precision and
 pairwise precision are very low.
 The configuration $t=0.32$ which has the highest $F_1$ score is still within the
-predicted interval.
+interval predicted on our control data set.
 
-Running the experiments has also proven to be a source of insights into the
-computational expenditure surrounding entity resolution itself and the
+Running the experiments has also proven to be a source of insight into the
+computational expenditure surrounding entity resolution itself as well as the
 calculation of entity resolution metrics.
 This prompts a closer look into finding a balance between high quality outcomes
 and the quantitative performance of the entity resolution solution.
