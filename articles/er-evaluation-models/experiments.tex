@@ -50,48 +50,36 @@ rows containing records within which the fields are separated by comma.
 The data representation, however, is not important for the experiment's
 outcome. All experiment datasets are available on GitHub\cite{expdata2023}.
 
-\textcolor{green}{
-E nevoie si sa se precizeze dimensiunea aceastor seturi de date (cate exemple
-sunt, cate features sunt)
-}
-\textcolor{orange}{
-    Pare repetitiv sa adaug aici informatia care este publicata in tabelul
-    "Table 1. Overview of real-world evaluation match tasks"
-    din sursa citata.
-    Am facut mai clar lucrul ca informatia e acolo, dar nu stiu daca e ok.
-    Daca nu, pot face un tabel si aici.    
-}
-\textcolor{green}{eu zic ca prinde bine sa reiei si tabelul (partea stanga) - pe langa referinta - : baza de date (cele 3 si tiny-DS), ce atribute sunt, care e tipul lor (string/numeric/date) si cate entitati; mai mult, datasetul DBLP-Scholar nu a fost prins in experimentele tale - de ce?}
+\begin{table*}[htbp]
+    \centering
+    \begin{tabular}{|l|l|l|c|c|c|}
+        \bottomrule
+        \multicolumn{3}{|l|}{\textbf{General Information}} & \multicolumn{2}{|c|}{\textbf{Size}} & \multirow{2}{*}{\textbf{Ideal Mapping Size}}\\
+        \cline{0-4}
+        \textit{Domain} & \textit{Mapping Columns} & \textit{Sources} & \textit{Source 1} & \textit{Source 2} & \\
+        \hline
+        Bibliographic & - title & DBLP-ACM & DBLP: 2616 & ACM: 2294 & 2224 \\
+        & - authors & & & &\\
+        & - venue & & & &\\
+        & - year & & & &\\
+        \hline
+        \multirow{2}{*}{E-commerce} & - product name & Abt-Buy & Abt: 1081 & Buy: 1092 & 1097 \\
+        & - description & & & &\\
+        & - manufacturer & Amazon-GoogleProducts & Amazon: 1363 & GoogleProducts: 3226 & 1300\\
+        & - price & & & &\\
+        \hline
+        Control & - product name & mini-Buy & DG1: 10 & DG2: 10 & 10 \\
+        & - description & & & &\\
+        & - manufacturer & & & &\\
+        & - price & & & &\\
+        \hline
+    \end{tabular}
+    \caption{Experiment Data Characteristics}\label{tab:dsattrs}
+\end{table*}
 
-% The Abt-Buy dataset is an e-commerce data set which consists of two collections
-% of entity references: Abt and Buy.
-% Abt contains 1081 entity references from abt.com, each having the following
-% attributes: id, name, description, price.
-% Buy contains 1092 entities from buy.com with the same attributes as the entity
-% references in Abt plus one additional attribute: manufacturer.
-% The ground truth has 1097 matching pairs of entity references.
-
-% DBLP-ACM is a bibliographic dataset and comprises two entity reference
-% collections: DBLP2 and ACM.
-% DBLP2 contains 2616 entity references with the following attributes: id, title,
-% authors, venue and year.
-% ACM contains 2294 entity references, with the same attributes as the entity
-% references in DBLP2.
-% The ground truth contains 2224 matching pairs of entity references.
-
-% Another e-commerce dataset, Amazon-GoogleProducts holds two entity reference
-% collections: Amazon and GoogleProducts.
-% Amazon contains 1363 entity references with the following attributes: id, title,
-% description, manufacturer and price.
-% GoogleProducts contains 3226 entity references, with the same attributes as the
-% entity references in the Amazon subset.
-% The ground truth contains 1300 matching pairs of entity references.
-% The particularity of the Amazon-GoogleProducts dataset is the use of textual
-% values even for the id attribute values.
-
-The sizes, the attributes that might match as well as the information about the
-ideal pairing of entity references can be found in the original
-paper~\cite{vldb2010}.
+The characteristics of the experiment data sets are available in
+Table~\ref{tab:dsattrs}. Additional information concerning the benchmark
+data sets can be found in the original paper~\cite{vldb2010}.
 
 We use the benchmark datasets almost in their original forms.
 In order to make entity matching algorithms that use prefix matching, we make a
@@ -340,10 +328,10 @@ precision in an unexpected direction is not algorithm specific at all.
 Regardless of the algorithm that we use, given some circumstances specific for
 that algorithm, it should be possible to obtain the same effect we see here.
 This observation is interesting because most entity resolution users look at the
-F1 score thinking that it provides a good balance between precision and recall.
-These users rarely analyse the components of the F1 score.
+$F_1$ score thinking that it provides a good balance between precision and recall.
+These users rarely analyse the components of the $F_1$ score.
 This situation can lead to unexpected outcomes.
-For instance, there might be a substantial drop in F1 scores, which are
+For instance, there might be a substantial drop in $F_1$ scores, which are
 indicators of accuracy, when the input data for the entity resolution process is
 changed.
 The reason for this is that the precision or recall may be higher than expected
@@ -662,7 +650,7 @@ Probabilistic recall is almost twice as high as pairwise recall, even though
 they have the same plot.
 Cluster precision is again very high where probabilistic precision and
 pairwise precision are very low.
-The configuration $t=0.32$ which has the highest F1 score is still within the
+The configuration $t=0.32$ which has the highest $F_1$ score is still within the
 predicted interval.
 
 Running the experiments has also proven to be a source of insights into the
