@@ -3,12 +3,12 @@ Initially proposed as a model to discern information quality in entity
 resolution over large datasets\cite{tal2007algebraic}, the algebraic model
 for entity resolution was later refined to describe entity resolution
 itself\cite{Tal11}.
-While the Fellegi-Sunter model described in Subsection~\ref{subsec:fsm} is a
+While the Fellegi-Sunter model described in Subsection~\ref{subsec:Fellegi-Sunter Model} is a
 probabilistic model that partitions input in two data sources to compare,
 this model allows as many information sources as necessary.
 Another improvement is the support for transitive matching.
 
-\subsubsection[algdesc]{Description}\label{subsubsec:algdesc}
+\subsubsection{Description}\label{subsubsec:Algebraic Model Description}
 
 The core tenet of this model is that entity resolution is an \textit{
 equivalence relation}, in the sense defined in set theory.
@@ -108,7 +108,7 @@ processed is irrelevant are called \textit{sequence neutral}\cite{Tal11}.
 In this paper we are only interested in sequence neutral entity resolution
 tasks.
 
-\subsubsection[algrel]{Terminology Mapping}\label{subsubsec:algrel}
+\subsubsection{Terminology Mapping}\label{subsubsec:Algebraic Terminology Mapping}
 
 In writing this paper, we used a lot of notions that are specific to the
 algebraic model.
@@ -138,13 +138,13 @@ input set of entity references.
 $Res$, the output domain of the entity resolution is the domain of all
 partitions over $Ref$.
 Therefore, any item in $Res$ is a collection of profiles, as defined in
-Section~\ref{sec:entity-resolution}.
+Section~\ref{sec:Entity Resolution Formalization}.
 In the algebraic model the profiles that are grouped together in a result also
 constitute a partition over $Ref$.
 This implies that any entity reference in $Ref$ will be a part of one and only
 one entity profile that is part of an entity resolution result.
 
-\subsubsection[algeval]{Specific Metrics}\label{subsubsec:algeval}
+\subsubsection{Specific Metrics}\label{subsubsec:Algebraic Quality Metrics}
 
 Building on top of the notions we already know about ground truth and entity
 resolution results, we denote the ground truth with $G$.
@@ -173,7 +173,7 @@ then the Rand index is defined by the quantity
 $\frac{a+d}{a+b+c+d}$\cite{adjrand2001}.
 
 The Rand index, $RI : Res^2 \rightarrow \left[0, 1\right]$ is a quality metric
-in the sense defined in Section~\ref{sec:entity-resolution}.
+in the sense defined in Section~\ref{sec:Entity Resolution Formalization}.
 The higher the score, the better.
 It is usually used to rate the similarity of two partitions.
 $1 - Rand Index$ can be an effective measure for the distance between two
@@ -196,7 +196,7 @@ index by using the quantities we defined for the Rand index~\cite{Tal11}.
 
 Higher values of this index mean more similar partitions.
 The adjusted Rand Index, $ARI : Res^2 \rightarrow \left[0, 1\right]$, is a
-quality metric in the sense defined in Section~\ref{sec:entity-resolution}.
+quality metric in the sense defined in Section~\ref{sec:Entity Resolution Formalization}.
 It is bounded above by 1 and takes on the value 0 when the index equals its
 expected value, with values lower than zero having no substantive
 value~\cite{adjrand1985}.
@@ -211,7 +211,7 @@ much simpler to compute~\cite{Tal11}.
 where if $X$ is a set, then $|X|$ represents the numer of elements in $X$. 
 
 The $TWI: Res^2 \rightarrow \left[0, 1\right]$ is a quality metric as defined in
-Section~\ref{sec:entity-resolution}.
+Section~\ref{sec:Entity Resolution Formalization}.
 It uses the number of clusters that are found in both the ground truth and in
 the entity resolution task's output.
 It provides a good approximation of how many clusters are returned correctly

@@ -6,7 +6,7 @@ most popular formalization.
 In this mathematical model, entity resolution is a function that aids in 
 probabilistic decision making.
 
-\subsubsection[fsm-desc]{Description}\label{subsubsec:fsm-desc}
+\subsubsection{Description}\label{subsubsec:F-S Model Description}
 
 The original Fellegi-Sunter (F-S) model defines record linkage as an operation over two input
 sets, $A$ and $B$.
@@ -132,7 +132,7 @@ For these two reasons and to be able to focus on the essential tools provided to
 us by the probabilistic model of entity resolution, we will not pursue the
 derived probabilistic models that can handle more than two input data sources. 
 
-\subsubsection[fms-term]{Terminology Mapping}\label{subsubsec:fsm-term}
+\subsubsection{Terminology Mapping}\label{F-S Terminology Mapping}
 
 To link the Fellegi-Sunter model to our own terminology, let's start by talking
 about `$a \in A$' and `$b \in B$'.
@@ -173,7 +173,7 @@ non-matching pairs in $X$, respectively.
 
 The $X$ in the original model is equivalent to $Res$ in our terminology.
 Since $Res$ is always a collection of entity profiles according to
-Section~\ref{sec:entity-resolution}, we must simply formalize the definition
+Section~\ref{sec:Entity Resolution Formalization}, we must simply formalize the definition
 of the entity profile domain \textit{P} as a set of pairs of entity references:
 \begin{align}
     P = &\{(r_{{S_i}{k}}, r_{{S_j}{l}})\mid~1 \leq k \leq |S_i|,
@@ -211,14 +211,14 @@ There is evidence in literature that solutions under this model converge towards
 a unique solution when given the same input data\cite{winkler2014matching}.
 
 With the above definition for $Res$ and taking into account the limitations
-expressed in the previous paragraph~(\ref{subsubsec:fsm-desc}),
+expressed in the previous paragraph~(\ref{subsubsec:F-S Model Description}),
 we observe that this model explains matching well.
 Clustering entities only two at a time looks like a form of information loss.
 As stated before, not being able to describe the result in terms of how well the
 entity resolution task discovered transitive links between entity references
 seems like a shortcoming.
 
-\subsubsection[fsm-metrics]{Specific Metrics}\label{subsubsec:fsm-metrics}
+\subsubsection{Specific Metrics}\label{subsubsec:F-S Quality Metrics}
 
 Because we have a clear definition of the Type I and Type II errors, we also
 have clear definitions of true and false positives and true and false negatives.
@@ -258,7 +258,7 @@ Recall &= \frac{TP}{TP+FN}\nonumber \\
 F_1 &= 2 \cdot \frac{Precision \cdot Recall}{Precision+Recall}\nonumber
 \end{align}
 
-These metrics fit our quality metric definition from~\ref{sec:entity-resolution}
+These metrics fit our quality metric definition from~\ref{sec:Entity Resolution Formalization}
 and are defined on $Res^2$ with their result falling within the
 $\left[0, 1\right] \subset \mathbb{R}$ closed interval.
 Their input consists of two entity resolution results (represented as presented

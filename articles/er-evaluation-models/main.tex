@@ -61,7 +61,7 @@ T \kern-.1667em \lower.7ex \hbox{E} \kern-.125emX}}
         Entity Resolution, Fellegi-Sunter, Algebraic Model, Metrics, Evaluation
     \end{IEEEkeywords}
 
-    \section{Introduction}\label{sec:introduction}
+    \section{Introduction}\label{sec:Introduction}
     Entity resolution is the task of determining whether two information refer
     to the same real-world item or not.
     More restrictive definitions place entity resolution as the task of
@@ -113,11 +113,10 @@ T \kern-.1667em \lower.7ex \hbox{E} \kern-.125emX}}
     We discuss our observations, pointing out invariant conditions that do not
     seem to be related to the choice of data set.
 
-    \section[preliminaries-questions]{Preliminaries \& Research Questions}
-    \label{sec:preliminaries-questions}
+    \section{Preliminaries \& Research Questions}\label{sec:Preliminaries & Questions}
     \input{research-questions}
 
-    \section{Related Work}\label{sec:related}
+    \section{Related Work}\label{sec:Related Work}
     
     The topic addressed in this paper intersects with a significant body of
     existing research.
@@ -174,14 +173,14 @@ T \kern-.1667em \lower.7ex \hbox{E} \kern-.125emX}}
     to extract invariant conditions rooted in the model instead of simply using
     the metrics to evaluate the entity resolution result.
 
-    \section{Theoretical background}
-    \subsection[terminology]{Terminology pre-requisites}\label{sec:terminology}
+    \section{Theoretical Background}\label{sec:Theoretical Background}
+    \subsection{Terminology pre-requisites}\label{sec:Terminology}
     \input{terminology}
     
-    \subsection{Formalizing Entity Resolution}\label{sec:entity-resolution}
+    \subsection{Formalizing Entity Resolution}\label{sec:Entity Resolution Formalization}
     \input{formalization}
 
-    \subsection[models]{Entity Resolution Models}\label{sec:models}
+    \subsection{Entity Resolution Models}\label{subsec:Entity Resolution Models}
 
     The representation of entity resolution results depends upon the theoretical
     model we use.
@@ -229,16 +228,16 @@ T \kern-.1667em \lower.7ex \hbox{E} \kern-.125emX}}
     distance or variation of information~\cite{Men10}, even if some of them
     might be applied (under certain circumstances) using the other two models.
 
-    \subsection[fsm]{Fellegi-Sunter Model}\label{subsec:fsm}
+    \subsection{Fellegi-Sunter Model}\label{subsec:Fellegi-Sunter Model}
     \input{fsm}
 
-    \subsection[algebraic]{Algebraic Model}\label{subsec:algebraic}
+    \subsection{Algebraic Model}\label{subsec:Algebraic Model}
     \input{algebraic}
 
-    \section{Experiments}\label{sec:experiments}
+    \section{Experiments}\label{sec:Experiments}
     \input{experiments}
 
-    \section[conclusion]{Conclusions}\label{sec:conclusions}
+    \section{Conclusions}\label{sec:Conclusions}
 
     Entity resolution is a complex task that still holds many unknowns.
     When evaluating entity resolution results in practice it often happens that
@@ -313,9 +312,7 @@ T \kern-.1667em \lower.7ex \hbox{E} \kern-.125emX}}
     A solution that balances well the outcome quality with performance is
     desirable.
 
-
     \balance
-
     \bibliographystyle{ieeetr}
     \bibliography{er-general,er-related-work,er-additional-references,er-software}
 \end{document}

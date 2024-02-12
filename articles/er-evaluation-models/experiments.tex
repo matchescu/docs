@@ -28,7 +28,7 @@ data manipulation.
 All metrics are computed using an OpenSource library available on GitHub as
 well~\cite{matchescu-er-metrics2023}.
 
-\subsection{Datasets}\label{subsec:data}
+\subsection{Datasets}\label{subsec:Experiment Datasets}
 
 
 To ensure we are working with standard data that simulates real data and which
@@ -177,7 +177,7 @@ This attribute amalgamates words from all attributes in the source data records
 into a cohesive text unit per record.
 We employ this process to effectively ensure sequence neutrality.
 
-\subsection{Entity Resolution Algorithm}\label{subsec:entity-resolution-algorithm}
+\subsection{Entity Resolution Algorithm}\label{subsec:Entity Resolution Algorithm}
 
 In searching for invariant conditions that hold true regardless of the data set
 that we use for experimentation, it is tempting to say that the choice of entity
@@ -256,12 +256,12 @@ For our own generated data we are able to generate the ground truth partition
 for the algebraic model based on the input data.
 In the case of the benchmark data sets, we need something different.
 
-\subsection{Between Probabilities and Algebra}\label{subsec:fsm-alg}
+\subsection{Between Probabilities and Algebra}\label{subsec:Probabilities to Algebra}
 \input{convert}
 
-\subsection{Outcomes from Control Data}\label{subsec:experiment-mini-buy}
+\subsection{Outcomes from Control Data}\label{subsec:Control Data}
 
-\subsubsection{Fellegi-Sunter Model Results}
+\subsubsection{Fellegi-Sunter Model Results}\label{subsubsec:F-S Results}
 
 The ground truth and the results are represented as lists of pairs.
 The ground truth was built by iterating over both input data sources using
@@ -359,7 +359,7 @@ configuration values for our algorithm are:
     \item $0.76 \leq t \leq 0.95$ for the highest precision
 \end{itemize}
 
-\subsubsection{Pairwise Metrics}
+\subsubsection{Pairwise Metrics}\label{subsubsec:Pairwise Results}
 
 The ground truth and the result of the ER process are represented as partitions
 over an input set of data.
@@ -428,7 +428,7 @@ For other algorithms the same phenomenon may be observed depending on their
 specific configuration.
 Pairwise metrics seem to provide a good treatment for this phenomenon.
 
-\subsubsection{Cluster Metrics}
+\subsubsection{Cluster Metrics}\label{subsubsec:Cluster Results}
 
 Cluster metrics attempt to show how close two partitions over the same set are.
 This family of metrics borrows naming from probabilistic metrics even though
@@ -467,7 +467,7 @@ values}.
 This relationship between the three precision metrics looks like a good
 candidate for our \textbf{second invariant condition}.
 
-\subsubsection{Clustering Indexes}
+\subsubsection{Clustering Indexes}\label{subsubsec:Clustering Indexes}
 
 Clustering indexes are, just like pairwise and cluster metrics, means to
 determine the similarity of two partitions over a set.
@@ -519,7 +519,7 @@ related to the data.
 In our specific case, this means that we should expect to get the best results
 using our \texttt{ppjoin} algorithm with a configuration $0.18 \le t \le 0.38$.
 
-\subsection{Outcomes from Benchmark Datasets}\label{subsec:experiment-benchmark}
+\subsection{Outcomes from Benchmark Datasets}\label{subsec:Benchmark Datasets}
 
 So far we have seen evidence on the controlled miniature dataset that each
 theoretical model provides a lens through which we can interpret various aspects
@@ -568,7 +568,7 @@ Next, the cluster precision is complementary to the pairwise and probabilistic
 precision.
 Finally, we find the best balanced configuration between precision and recall of
 $t=0.28$ is well within the target interval we envisioned at the end of the
-Subsection~\ref{subsec:experiment-mini-buy} while the ARI, TWI and the cluster metrics correlate.
+Subsection~\ref{subsec:Control Data} while the ARI, TWI and the cluster metrics correlate.
 
 We move on to the `Amazon-Google Products' data set~\cite{vldb2010} and observe
 the results in Figures~\ref{fig:amazon-googleproducts-fsm-main},
