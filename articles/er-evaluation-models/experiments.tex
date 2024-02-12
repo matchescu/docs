@@ -52,28 +52,28 @@ outcome. All experiment datasets are available on GitHub\cite{expdata2023}.
 
 \begin{table*}[htbp]
     \centering
-    \begin{tabular}{|l|l|l|c|c|c|}
-        \bottomrule
-        \multicolumn{3}{|l|}{\textbf{General Information}} & \multicolumn{2}{|c|}{\textbf{Size}} & \multirow{2}{*}{\textbf{Ground Truth Size}}\\
+    \begin{tabular}{lllccc}
+        \toprule
+        \multicolumn{3}{c}{\textbf{General Information}} & \multicolumn{2}{c}{\textbf{Size}} & \multirow{2}{*}{\textbf{Ground Truth Size}}\\
         \cline{0-4}
         \textit{Domain} & \textit{Mapping Columns} & \textit{Sources} & \textit{Source 1} & \textit{Source 2} & \\
-        \hline
-        \multirow{4}{*}{Bibliographic} & - title & \multirow{4}{*}{DBLP-ACM} & \multirow{4}{*}{DBLP: 2616} & \multirow{4}{*}{ACM: 2294} & \multirow{4}{*}{2224} \\
-        & - authors & & & &\\
-        & - venue & & & &\\
-        & - year & & & &\\
-        \hline
-        \multirow{4}{*}{E-commerce} & - product name & \multirow{2}{*}{Abt-Buy} & \multirow{2}{*}{Abt: 1081} & \multirow{2}{*}{Buy: 1092} & \multirow{2}{*}{1097} \\
-        & - description & & & &\\
+        \toprule
+        \multirow{4}{*}{Bibliographic} & \tabitem~title & \multirow{4}{*}{DBLP-ACM} & \multirow{4}{*}{DBLP=2616} & \multirow{4}{*}{ACM=2294} & \multirow{4}{*}{2224} \\
+        & \tabitem~authors & & & &\\
+        & \tabitem~venue & & & &\\
+        & \tabitem~year & & & &\\
+        \midrule
+        \multirow{4}{*}{E-commerce} & \tabitem~product name & \multirow{2}{*}{Abt-Buy} & \multirow{2}{*}{Abt=1081} & \multirow{2}{*}{Buy=1092} & \multirow{2}{*}{1097} \\
+        & \tabitem~description & & & &\\
         \cline{3-6}
-        & - manufacturer & \multirow{2}{*}{Amazon-GoogleProducts} & \multirow{2}{*}{Amazon: 1363} & \multirow{2}{*}{GoogleProducts: 3226} & \multirow{2}{*}{1300} \\
-        & - price & & & &\\
-        \hline
-        \multirow{4}{*}{Control} & - product name & \multirow{4}{*}{mini-Buy} & \multirow{4}{*}{DG1: 10} & \multirow{4}{*}{DG2: 10} & \multirow{4}{*}{10} \\
-        & - description & & & &\\
-        & - manufacturer & & & &\\
-        & - price & & & &\\
-        \hline
+        & \tabitem~manufacturer & \multirow{2}{*}{Amazon-GoogleProducts} & \multirow{2}{*}{Amazon=1363} & \multirow{2}{*}{GoogleProducts=3226} & \multirow{2}{*}{1300} \\
+        & \tabitem~price & & & &\\
+        \midrule
+        \multirow{4}{*}{Control} & \tabitem~product name & \multirow{4}{*}{mini-Buy} & \multirow{4}{*}{DG1=10} & \multirow{4}{*}{DG2=10} & \multirow{4}{*}{10} \\
+        & \tabitem~description & & & &\\
+        & \tabitem~manufacturer & & & &\\
+        & \tabitem~price & & & &\\
+        \bottomrule
     \end{tabular}
     \caption{Experiment Data Characteristics}\label{tab:dsattrs}
 \end{table*}
@@ -120,7 +120,7 @@ Tables~\ref{tab:buy-record},~\ref{tab:dg1-record} and~\ref{tab:dg2-record} conta
 records indicative of our data generation procedure.
 
 \begin{table}[ht]
-    \setlength\tabcolsep{5pt}
+    \setlength\tabcolsep{6pt}
     \centering
     \begin{tabular}{lllll}
         \toprule
@@ -133,7 +133,7 @@ records indicative of our data generation procedure.
 \end{table}
 
 \begin{table}[ht]
-    \setlength\tabcolsep{6pt}
+    \setlength\tabcolsep{12pt}
     \centering
     \begin{tabular}{llll}
         \toprule
@@ -146,7 +146,7 @@ records indicative of our data generation procedure.
 \end{table}
 
 \begin{table}[ht]
-    \setlength\tabcolsep{5pt}
+    \setlength\tabcolsep{12pt}
     \centering
     \begin{tabular}[b]{lll}
         \toprule
@@ -282,8 +282,7 @@ values of the Jaccard threshold $t$.
     \centering
     \captionsetup{justification=centering}
     \includegraphics[width=\columnwidth]{mini-buy-fsm-main}
-    \caption{Statistical metrics on `mini-buy' dataset for results of F-S model}
-    \label{fig:mini-buy-fs}
+    \caption{Statistical metrics on `mini-buy' dataset for results of F-S model}\label{fig:mini-buy-fs}
 \end{figure}
 
 We can make some observations based on Figure~\ref{fig:mini-buy-fs}.
@@ -477,8 +476,7 @@ The plots of the three indexes we want to study are in Figure~\ref{fig:mini-alg}
     \centering
     \captionsetup{justification=centering}
     \includegraphics[width=\columnwidth]{mini-buy-algebraic-main}
-    \caption{Clustering indexes on `mini-buy' dataset}
-    \label{fig:mini-alg}
+    \caption{Clustering indexes on `mini-buy' dataset}\label{fig:mini-alg}
 \end{figure}
 
 We observe that the plot of the Adjusted Rand Index indicates both the desirable
@@ -538,26 +536,22 @@ and~\ref{fig:abt-buy-algebraic-main}.
     \begin{minipage}{0.24\textwidth}
         \centering
         \includegraphics[width=\textwidth]{abt-buy-fsm-main}
-        \caption{Abt-Buy statistical metrics.}
-        \label{fig:abt-buy-fsm-main}
+        \caption{Abt-Buy statistical metrics.}\label{fig:abt-buy-fsm-main}
     \end{minipage}
     \begin{minipage}{0.24\textwidth}
         \centering
         \includegraphics[width=\textwidth]{abt-buy-algebraic-pairwise}
-        \caption{Abt-Buy pairwise metrics.}
-        \label{fig:abt-buy-algebraic-pairwise}
+        \caption{Abt-Buy pairwise metrics.}\label{fig:abt-buy-algebraic-pairwise}
     \end{minipage}
     \begin{minipage}{0.24\textwidth}
         \centering
         \includegraphics[width=\textwidth]{abt-buy-algebraic-cluster}
-        \caption{Abt-Buy cluster metrics.}
-        \label{fig:abt-buy-algebraic-cluster}
+        \caption{Abt-Buy cluster metrics.}\label{fig:abt-buy-algebraic-cluster}
     \end{minipage}
     \begin{minipage}{0.24\textwidth}
         \centering
         \includegraphics[width=\textwidth]{abt-buy-algebraic-main}
-        \caption{Abt-Buy clustering indexes.}
-        \label{fig:abt-buy-algebraic-main}
+        \caption{Abt-Buy clustering indexes.}\label{fig:abt-buy-algebraic-main}
     \end{minipage}
 \end{figure*}\label{abt-buy}
 
@@ -571,35 +565,28 @@ $t=0.28$ is well within the target interval we envisioned at the end of the
 Subsection~\ref{subsec:Control Data} while the ARI, TWI and the cluster metrics correlate.
 
 We move on to the `Amazon-Google Products' data set~\cite{vldb2010} and observe
-the results in Figures~\ref{fig:amazon-googleproducts-fsm-main},
-\ref{fig:amazon-googleproducts-algebraic-pairwise},
-\ref{fig:amazon-googleproducts-algebraic-cluster} and
-\ref{fig:amazon-googleproducts-algebraic-main}.
+the results in Figures~\ref{fig:amazon-googleproducts-fsm-main},~\ref{fig:amazon-googleproducts-algebraic-pairwise},~\ref{fig:amazon-googleproducts-algebraic-cluster} and~\ref{fig:amazon-googleproducts-algebraic-main}.
 
 \begin{figure*}[htbp]
     \begin{minipage}{0.24\textwidth}
         \centering
         \includegraphics[width=\textwidth]{amazon-googleproducts-fsm-main}
-        \caption{Amazon-Google statistical metrics.}
-        \label{fig:amazon-googleproducts-fsm-main}
+        \caption{Amazon-Google statistical metrics.}\label{fig:amazon-googleproducts-fsm-main}
     \end{minipage}
     \begin{minipage}{0.24\textwidth}
         \centering
         \includegraphics[width=\textwidth]{amazon-googleproducts-algebraic-pairwise}
-        \caption{Amazon-Google pairwise metrics.}
-        \label{fig:amazon-googleproducts-algebraic-pairwise}
+        \caption{Amazon-Google pairwise metrics.}\label{fig:amazon-googleproducts-algebraic-pairwise}
     \end{minipage}
     \begin{minipage}{0.24\textwidth}
         \centering
         \includegraphics[width=\textwidth]{amazon-googleproducts-algebraic-cluster}
-        \caption{Amazon-Google cluster metrics.}
-        \label{fig:amazon-googleproducts-algebraic-cluster}
+        \caption{Amazon-Google cluster metrics.}\label{fig:amazon-googleproducts-algebraic-cluster}
     \end{minipage}
     \begin{minipage}{0.24\textwidth}
         \centering
         \includegraphics[width=\textwidth]{abt-buy-algebraic-main}
-        \caption{Amazon-Google clustering indexes.}
-        \label{fig:amazon-googleproducts-algebraic-main}
+        \caption{Amazon-Google clustering indexes.}\label{fig:amazon-googleproducts-algebraic-main}
     \end{minipage}
 \end{figure*}\label{amazon-google}
 
@@ -615,29 +602,23 @@ the target interval.
 
 Finally, we look at the `DBLP-ACM' benchmark dataset.
 The plots we obtained after running the experiment on this dataset are available
-in Figures~\ref{fig:dblp2-acm-fsm-main},
-\ref{fig:dblp2-acm-algebraic-pairwise},
-\ref{fig:dblp2-acm-algebraic-cluster} and
-\ref{fig:dblp2-acm-algebraic-main}.
+in Figures~\ref{fig:dblp2-acm-fsm-main},~\ref{fig:dblp2-acm-algebraic-pairwise},~\ref{fig:dblp2-acm-algebraic-cluster} and~\ref{fig:dblp2-acm-algebraic-main}.
 
-\begin{figure*}[h]
+\begin{figure*}[htbp]
     \begin{minipage}{0.24\textwidth}
         \centering
         \includegraphics[width=\textwidth]{dblp2-acm-fsm-main}
-        \caption{DBLP-ACM statistical metrics.}
-        \label{fig:dblp2-acm-fsm-main}
+        \caption{DBLP-ACM statistical metrics.}\label{fig:dblp2-acm-fsm-main}
     \end{minipage}
     \begin{minipage}{0.24\textwidth}
         \centering
         \includegraphics[width=\textwidth]{dblp2-acm-algebraic-pairwise}
-        \caption{DBLP-ACM pairwise metrics.}
-        \label{fig:dblp2-acm-algebraic-pairwise}
+        \caption{DBLP-ACM pairwise metrics.}\label{fig:dblp2-acm-algebraic-pairwise}
     \end{minipage}
     \begin{minipage}{0.24\textwidth}
         \centering
         \includegraphics[width=\textwidth]{dblp2-acm-algebraic-cluster}
-        \caption{DBLP-ACM cluster metrics.}
-        \label{fig:dblp2-acm-algebraic-cluster}
+        \caption{DBLP-ACM cluster metrics.}\label{fig:dblp2-acm-algebraic-cluster}
     \end{minipage}
     \begin{minipage}{0.24\textwidth}
         \centering
