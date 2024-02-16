@@ -30,9 +30,10 @@
 % Document
 \begin{document}
     \title{PyResolveMetrics: A Standards-Compliant and Efficient Approach to Entity Resolution Metrics}
-    \author{\authorname{Andrei Olar\sup{1}\orcidAuthor{0009`-0006`-7913`-9276}}
-    \affiliation{\sup{1}Faculty of Computer Science, Babes-Bolyai University}
-    \email{\{andrei.olar\}@ubbcluj.ro}
+    \author{
+        \authorname{Andrei Olar\sup{1}\orcidAuthor{0009`-0006`-7913`-9276}}
+        \affiliation{\sup{1}Faculty of Computer Science, Babes-Bolyai University}
+        \email{\{andrei.olar\}@ubbcluj.ro}
     }
     \keywords{Entity Resolution,Metrics,Library,Open Source,Standards-Compliant,Theoretical Model,Efficiency}
 
@@ -49,7 +50,7 @@
     This library not only facilitates precise evaluation but also aligns with
     contemporary research and application trends, making it a significant tool
     for practitioners and researchers in the field.}
-    \onecolumn \maketitle \normalsize \setcounter{footnote}{0} \vfill
+    \onecolumn\maketitle\normalsize\setcounter{footnote}{0}\vfill
     \section{Introduction}\label{sec:introduction}
     The field of entity resolution, integral to natural language processing and
     emerging technologies in education, is pivotal in understanding and linking
@@ -75,15 +76,49 @@
     learning and is important for AI literacy for that reason,
     too\cite{deepm2020}.
     
-    Lastly, the applications of entity resolution for a sustainable development
-    of education cannot be stressed enough.
+    We recognize the importance of accurate and efficient entity resolution in
+    both individual learning outcomes and broader societal impacts.
     Enhancing research integrity through plagiarism detection or enabling
     personalized learning by tracking a student's preferences across learning
     domains might qualify as fields of study in their own right.
 
-    Recognizing the importance of accurate and efficient entity resolution in
-    both individual learning outcomes and broader societal impacts, it is
-    crucial to assess the effectiveness of these methods.
+    
+    For example,~\cite{chen2021careerexploration} points out the importance of
+    University and professional information for career exploration.
+    Their survey highlights that matching the educational offering to fit
+    student goals leads to a higher chance of students developing successful
+    careers.
+    One can envision systems that automatically create educational offerings
+    based on the profiles of students.
+    Entity resolution has the role of automatically building the student profile
+    from heterogeneous information sources.
+    These profiles can be built for students and teachers alike and they carry
+    intrinsic value, too.
+    Another use case for automatically generated profiles might be career choice
+    recommender systems, for example.
+    The ideal outcome from using the information stored in these profiles would
+    be finding the best possible match between educational offering and student
+    aspirations.
+    This would propell us all to a future with intrinsically motivated people.
+
+    What if entity resolution provides us with a misleading profile?
+    At best, we realize this is the case, stop trusting the entity resolution
+    system and revert to a state where we don't benefit from the information
+    stored in the profiles generated through entity resolution.
+    At worst, we do not realize the system error and proceed career exploration
+    based on misleading profiles.
+    This leads to bad career choice recommendation and more severe risks related
+    to wasted time, financial misfortune, professional dissatisfaction,
+    stagnation in personal development or even health and relationship concerns.
+    In the worst possible case where all of the choices we make are wrong, our
+    collective future looks bleak.
+
+    Adopting the right entity resolution system is desirable for obtaining the
+    initial benefits of making more informed decisions faster.
+    Maintaining highly qualitative entity resolution is necessary in order to
+    avoid the presence of misleading information in decision processes.
+    Entity resolution system adoption and maintenance cannot be performed
+    without measuring entity resolution quality.
     
     In this context, the paper introduces a new Open Source library that is
     hosted in a \href{https://github.com/matchescu/py-resolve-metrics}{Git
@@ -279,7 +314,7 @@
     The challenge of seamlessly integrating entity resolution evaluation
     routines into a custom built project becomes even more pronounced when
     attempting to use the ones packaged with established entity resolution
-    systems\cite{oyster2012,jedai2017,deepm2020,magellan2020}.
+    systems~\cite{oyster2012},~\cite{jedai2017},~\cite{deepm2020},~\cite{magellan2020}.
     
     Conversely, when specifically searching for libraries that only offer entity
     resolution metrics, it becomes evident that some crucial metrics essential
@@ -729,7 +764,7 @@
     The flame graph in Figure~\ref{fig:fs-cpu-perf}
     shows that the Fellegi-Sunter metrics take up less CPU than the validation
     of the input and output of data.
-    The main consumers are shown in Table~\ref{table:fs-cpu-perf}
+    The main consumers are shown in Table~\ref{table:fs-cpu-perf}.
     
     \begin{table*}[ht!]
         \centering
@@ -836,12 +871,12 @@
 
     The entity resolution models we have touched upon so far support many more
     metrics that the library does not currently implement.
-    Hitesh et al provide an insightful overview\cite{hitesh2012}.
+    The work by~\cite{hitesh2012} provides an insightful overview.
     For well-rounded support of the models mentioned so far, the library would
     need to implement at least:
     \begin{itemize}
         \item additional cluster comparisons, such as the Closest Cluster $F_1$, the
-        MUC $F_1$, $B^3 F_1$ and the $CEAF F_1$\cite{hitesh2012}
+        MUC $F_1$, $B^3 F_1$ and the $CEAF F_1$~\cite{hitesh2012}
         \item additional Rand-like indexes\cite{warrens2022understanding}
     \end{itemize}
 
