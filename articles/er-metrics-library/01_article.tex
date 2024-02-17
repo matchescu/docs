@@ -18,20 +18,24 @@
 \usepackage{pslatex}
 \usepackage{algorithm2e}
 \usepackage{xcolor}
+\usepackage{interval}
 
 \usepackage[font=scriptsize]{caption}
 \usepackage[bottom]{footmisc}
 
-\usepackage{SCITEPRESS}     % Please add other packages that you may need BEFORE the SCITEPRESS.sty package.
+\usepackage{SCITEPRESS}
 
 
 \graphicspath{ {./img/} }
+\intervalconfig{
+    soft open fences,
+}
 
 % Document
 \begin{document}
     \title{PyResolveMetrics: A Standards-Compliant and Efficient Approach to Entity Resolution Metrics}
     \author{
-        \authorname{Andrei Olar\sup{1}\orcidAuthor{0009-0006-7913-9276}}
+        \authorname{Andrei Olar\sup{1}\orcidAuthor{0009-{}0006-{}7913-{}9276}}
         \affiliation{\sup{1}Faculty of Computer Science, Babes-Bolyai University}
         \email{\{andrei.olar\}@ubbcluj.ro}
     }
@@ -455,22 +459,22 @@
         elements.
     \end{itemize}
     
-    The Rand index always takes values in the $\left[0, 1\right)$ interval.
+    The Rand index always takes values in the $\rinterval{0}{1}$ interval.
 
     A variation on the Rand Index is the Adjusted Rand Index for chance grouping
     of elements.
     It accounts for agreements between data clusterings that occur due to
-    chance\cite{adjrand2001}.
+    chance~\cite{adjrand2001}.
     The Adjusted Rand Index is calculated by using the following formula:
     
     \[ ARI = \frac{RandIndex - E}{\max(RandIndex) - E}, \]
 
     where $E$ is the expected value of the RandIndex.
-    The Adjusted Rand index is valued in the interval $\left[-1, 1\right]$.
+    The Adjusted Rand index is valued in the interval $\interval{-1}{1}$.
     For a comprehensive understanding of the Adjusted Rand Index and its
     calculation, we recommend consulting the detailed and informative work
     presented in the study by Warrens and van der Hoef (2022) on the
-    subject\cite{warrens2022understanding}.
+    subject~\cite{warrens2022understanding}.
 
     For both of these indexes, higher scores indicate a closer alignment between
     the compared partitions.
@@ -480,12 +484,12 @@
     Assuming $A$ and $B$ are two partitions over the same input set of elements,
     the Talburt-Wang Index is given by the formula:
 
-    \[ \varDelta(A, B) = \frac{|A|\cdot|B|}{\varPhi{\left(A, B\right)}^2}\textrm{, where}\]
+    \[ \varDelta(A, B) = \frac{|A|\cdot|B|}{\varPhi{\ointerval{A}{B}}^2}\textrm{, where}\]
     \[ \varPhi(A, B) = \sum_{i=1}^{|A|}\{B_j \in B | B_j \cap A_i \neq \emptyset \} \]
 
     This metric approximates the Rand Index without requiring the expensive
     counting of true positives, false positives, true negatives or false
-    negatives\cite{tal2007algebraic}.
+    negatives~\cite{tal2007algebraic}.
     It is valued within the same interval as the Rand Index.
     
     Besides the Rand Index, other popular metrics that can be used for comparing
@@ -642,7 +646,7 @@
 
     All that's left is to apply the PPJoin algorithm on DG1 and DG2 and plot the
     values of the metrics provided by the library for values of $t$ in the
-    interval $\left[0, 1\right)$ at increments of $0.01$.
+    interval $\rinterval{0}{1}$ at increments of $0.01$.
 
     \begin{figure*}
         \begin{minipage}{0.32\textwidth}
@@ -874,9 +878,9 @@
     For well-rounded support of the models mentioned so far, the library would
     need to implement at least:
     \begin{itemize}
-        \item additional cluster comparisons, such as the Closest Cluster $F_1$, the
-        MUC $F_1$, $B^3 F_1$ and the $CEAF F_1$~\cite{hitesh2012}
-        \item additional Rand-like indexes\cite{warrens2022understanding}
+        \item additional cluster comparisons, such as the Closest Cluster $F_1$,
+        the MUC $F_1$, $B^3 F_1$ and the $CEAF F_1$~\cite{hitesh2012}, and
+        \item additional Rand-like indexes~\cite{warrens2022understanding}.
     \end{itemize}
 
     \subsection{Missing Models}
@@ -900,6 +904,6 @@
     \bibliographystyle{apalike}
     {
         \small
-        \bibliography{er-general,er-related-work,er-additional-references,er-software}
+        \bibliography{02_references}
     }
 \end{document}
