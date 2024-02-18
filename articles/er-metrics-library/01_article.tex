@@ -1,5 +1,6 @@
 \documentclass[a4paper,twoside]{article}
 
+\usepackage{balance}
 \usepackage{epsfig}
 \usepackage{subcaption}
 \usepackage{calc}
@@ -36,8 +37,8 @@
     \title{PyResolveMetrics: A Standards-Compliant and Efficient Approach to Entity Resolution Metrics}
     \author{
         \authorname{Andrei Olar\sup{1}\orcidAuthor{0009-{}0006-{}7913-{}9276}}
-        \affiliation{\sup{1}Faculty of Computer Science, Babes-Bolyai University}
-        \email{\{andrei.olar\}@ubbcluj.ro}
+        \affiliation{\sup{1}Faculty of Mathematics and Computer Science, Babes-Bolyai University}
+        \email{andrei.olar@ubbcluj.ro}
     }
     \keywords{Entity Resolution,Metrics,Library,Open Source,Standards-Compliant,Theoretical Model,Efficiency}
 
@@ -55,8 +56,9 @@
     contemporary research and application trends, making it a significant tool
     for practitioners and researchers in the field.}
     \onecolumn\maketitle\normalsize\setcounter{footnote}{0}\vfill
+
     \section{Introduction}\label{sec:introduction}
-    The field of entity resolution, integral to natural language processing and
+    The field of entity resolution (ER), integral to natural language processing and
     emerging technologies in education, is pivotal in understanding and linking
     data across multiple sources.
     Some definitions view it as identifying and linking data from multiple
@@ -64,28 +66,25 @@
     However, it's argued that this identification and linking is a more
     specialized process\cite{Tal11}.
 
-    Entity resolution, also known as record linkage, data deduplication,
+    ER, also known as record linkage, data deduplication,
     merge-purge, named entity recognition, entity alignment, and entity
     matching, plays a significant role in educational communication and
     collaboration tools, facilitating the information exchange between parents,
     teachers and students.
     It can also be useful to track the progression of alumni, by linking various
     data sources to provide meaningful insights on the career trajectories of
-    graduates.
-    
+    graduates.     
     It is a key component in AI literacy, particularly in those machine learning
     tasks that involve identifying how disparate pieces of information correlate
     to the same real-world entity.
-    Entity resolution itself has numerous implementations that rely on machine
+    ER itself has numerous implementations that rely on machine
     learning and is important for AI literacy for that reason,
-    too\cite{deepm2020}.
-    
-    We recognize the importance of accurate and efficient entity resolution in
+    too\cite{deepm2020}. 
+    We recognize the importance of accurate and efficient ER in
     both individual learning outcomes and broader societal impacts.
     Enhancing research integrity through plagiarism detection or enabling
     personalized learning by tracking a student's preferences across learning
-    domains might qualify as fields of study in their own right.
-    
+    domains might qualify as fields of study in their own right.     
     For example, the work of~\cite{chen2021careerexploration} points out the
     importance of University and professional information for career exploration.
     Their survey highlights that matching the educational offering to fit
@@ -93,7 +92,7 @@
     careers.
     One can envision systems that automatically create educational offerings
     based on the profiles of students.
-    Entity resolution has the role of automatically building the student profile
+    ER has the role of automatically building the student profile
     from heterogeneous information sources.
     These profiles can be built for students and teachers alike and they carry
     intrinsic value, too.
@@ -104,78 +103,76 @@
     aspirations.
     This would propell us all to a future with intrinsically motivated people.
 
-    What if entity resolution provides us with a misleading profile?
-    At best, we realize this is the case, stop trusting the entity resolution
-    system and revert to a state where we don't benefit from the information
-    stored in the profiles generated through entity resolution.
+    What if ER provides us with a misleading profile?
+    At best, we realize this is the case, stop trusting the ER system and revert 
+    to a state where we don't benefit from the information
+    stored in the profiles generated through ER.
     At worst, we do not realize the system error and proceed career exploration
     based on misleading profiles.
     This leads to bad career choice recommendation and more severe risks related
     to wasted time, financial misfortune, professional dissatisfaction,
     stagnation in personal development or even health and relationship concerns.
     In the worst possible case where all of the choices we make are wrong, our
-    collective future looks bleak.
-
-    Adopting the right entity resolution system is desirable for obtaining the
+    collective future looks bleak. 
+    Adopting the right ER system is desirable for obtaining the
     initial benefits of making more informed decisions faster.
-    Maintaining highly qualitative entity resolution is necessary in order to
+    Maintaining highly qualitative ER is necessary in order to
     avoid the presence of misleading information in decision processes.
-    Entity resolution system adoption and maintenance cannot be performed
-    without measuring entity resolution quality.
+    ER system adoption and maintenance cannot be performed
+    without measuring ER quality.
     
     In this context, the paper introduces a new Open Source library that is
     hosted in a \href{https://github.com/matchescu/py-resolve-metrics}{Git
     repository on GitHub}\cite{matchescu-er-metrics2023}.
     The library offers implementations of well known metrics for evaluating
-    entity resolution, contributing significantly to metrics and evaluation in
+    ER, contributing significantly to metrics and evaluation in
     educational technologies.
     Thus, this library could have a role in advancing tools and methodologies in
     the realm of education and technology by allowing a more informed process
-    for developing tools that make use of entity resolution.
-
-    The book ``Introduction to Information Retrieval'' studies various methods
+    for developing tools that make use of ER. 
+    The book \cite{manning2008} studies various methods
     for evaluating the performance of information retrieval
-    systems\cite{manning2008}.
+    systems.
     These methods help in assessing how effectively these systems can search,
     identify, and retrieve relevant information from large datasets.
     The metrics presented in this book revolve around the notion of relevant and
     irrelevant information that is retrieved by the system.
     The book also clarifies that the judgement around what is relevant or not is
     stipulated in a golden standard or a ground truth.
-    Furthermore, this golden standard is dependant upon an information need.
-
-    Entity resolution systems partly function as information retrieval systems,
+    Furthermore, this golden standard is dependant upon an information need. 
+    ER systems partly function as information retrieval systems,
     as they determine whether multiple data points refer to the same real-world
     entity.
     This capability to discern data identity within a context is the fundamental
-    information need of any entity resolution system.
+    information need of any ER system.
     Is it therefore fitting to use information retrieval metrics for entity
     resolution?
     This seems to be the consensus drawn in the scientific literature as we
     shall see in the next section.
 
     The library we are introducing implements various information retrieval
-    metrics adapted for entity resolution.
+    metrics adapted for ER.
     It's also important to acknowledge the distinct mathematical models
-    underlying entity resolution compared to information retrieval.
+    underlying ER compared to information retrieval.
     The library sets itself apart by organizing metrics based on their
-    compatibility with entity resolution models, influenced by the underlying
+    compatibility with ER models, influenced by the underlying
     differences in data structures that are characteristic to each model.
     Special attention is given to interoperability and the seamless integration
-    of the library into the Python programming language ecosystem.
-
-    In short, we present a library that has the following key features:
-
-    \begin{enumerate}
-        \item embracing an OpenSource licensing model,
-        \item efficient implementation using state of the art libraries under
+    of the library into the Python programming language ecosystem. 
+    In short, we present a library that has the following key features: 
+    % \begin{enumerate}
+        % \item 
+        embracing an OpenSource licensing model,
+        % \item 
+        efficient implementation using state of the art libraries under
         a very popular platform, and
-        \item a design that is agnostic to the entity resolution implementation.
-    \end{enumerate} 
+        % \item 
+        a design that is agnostic to the ER implementation.
+    % \end{enumerate} 
 
-    The outline of this article is as follows.
+    % The outline of this article is as follows.
     After this introduction, we overview two existing mathematical models for
-    entity resolution which, in spite of their age, are still widely used and
+    ER which, in spite of their age, are still widely used and
     still represent the state of the art.
     Then we go through other work that relates to this paper.
     Subsequently, we present the new library and pay special attention to the
@@ -190,13 +187,13 @@
     \subsection{Fellegi-Sunter Model}
     In the late 1960s Ivan Fellegi and Alan Sunter wrote the seminal
     paper\cite{fs1969} for what they called record linkage and what would later
-    become known as entity resolution.
+    become known as ER.
     To this day, their mathematical model based on probability theory is the
-    most popular way of formalizing the entity resolution problem.
-    In this mathematical model, entity resolution is a function that aids in 
+    most popular way of formalizing the ER problem.
+    In this mathematical model, ER is a function that aids in 
     probabilistic decision making.
     
-    In this model of entity resolution, the process primarily involves comparing
+    In this model of ER, the process primarily involves comparing
     data from two sources.
     The essential step is matching two items --- one from each source, after
     which a decision is made to categorize the match as a `link', `non-link', or
@@ -205,52 +202,49 @@
     pairs of items from the original data sources, each tagged as one of these
     categories.
     However, in practical applications today, this process is often simplified
-    to just returning a list of pairs labeled as `links'.
-
+    to just returning a list of pairs labeled as `links'. 
     This intuitive explanation gives us the structure of the input we can expect
-    when we use the Fellegi-Sunter entity resolution model: an iterable sequence
-    of pairs.
-
+    when we use the Fellegi-Sunter ER model: an iterable sequence
+    of pairs. 
     The metrics that are implemented with the Fellegi-Sunter model of entity
     resolution in mind will accept iterable sequences of pairs as input where
-    the ground truth and the result of the entity resolution task are concerned.
+    the ground truth and the result of the ER task are concerned.
 
     \subsection{Algebraic Model}
-    The algebraic model for entity resolution, initially conceived for assessing
+    The algebraic model for ER, initially conceived for assessing
     information quality in large datasets\cite{tal2007algebraic}, was later
-    refined to describe the entity resolution process itself\cite{Tal11}.
-    This model treats entity resolution as an algebraic equivalence relation
+    refined to describe the ER process itself\cite{Tal11}.
+    This model treats ER as an algebraic equivalence relation
     over a given input set, which can include data from as many original sources
-    as necessary.
-    
+    as necessary.     
     The unique aspect of this model lies in the characteristics of equivalence
     relations\cite{halmos1960naive}.
     These relations create partitions over the input set, with each partition
     component equivalent to an equivalence class of the relation\cite{Tal11}.
     Conversely, a partition over a set can also induce an equivalence relation.
 
-    With this in mind, evaluating the outcome of an entity resolution task
+    With this in mind, evaluating the outcome of an ER task
     becomes as easy as comparing two partitions: the partition that induces the
     ideal equivalence relation (the gold standard or ground truth) to the
-    partition that is produced by the entity resolution task.
+    partition that is produced by the ER task.
     The library supports a few metrics for comparing partitions, all of which
     expect that a partition is represented as a list of sets.
 
     \section{Related Work}\label{sec:related}
 
-    Measuring entity resolution quality was a subject of interest ever since the
+    Measuring ER quality was a subject of interest ever since the
     first paper on the subject surfaced\cite{newcombe1959}.
     The paper speaks about accuracy and contamination similarly to the current
     notions of true and false positives.
     The fundamental theory of record linkage\cite{fs1969} offers a probabilistic
-    approach to evaluating the success of an entity resolution task.
+    approach to evaluating the success of an ER task.
     It suggests methods to affect the results through the selection of suitable
     thresholds for defining success and failure.
     It also provides mechanisms for properly weighting for independent
     probability variables.
     The literature expands on these techniques in subsequent
     papers\cite{winkler1990}.
-    Some of the entity resolution evaluation metrics that are a direct result of
+    Some of the ER evaluation metrics that are a direct result of
     this theoretical foundation include match accuracy, match
     rate\cite{jaro1989advances}, error rate estimation, rate of clerical
     disambiguation\cite{winkler1990} or relative distinguishing
@@ -258,13 +252,13 @@
     A good amount of effort is spent on estimating and measuring the
     effectiveness of blocking techniques to reduce the input size of the data
     set used for evaluation purposes\cite{winkler1990,jaro1989advances}.
-    Measuring entity resolution performance was and remains a computationally
+    Measuring ER performance was and remains a computationally
     intensive task.
     
     Concerns about using accuracy and match rate are also voiced\cite{Goga2015}.
     Thus we see a shift towards metrics used in the related field of information
     retrieval.
-    The probabilistic model for entity resolution aligns well with concepts such
+    The probabilistic model for ER aligns well with concepts such
     as true/false positives/negatives.
     Given the extensive history of using ground truths to assess entity
     resolution quality, there is a natural fit for using information retrieval
@@ -273,36 +267,36 @@
     where the order in which results are retrieved is not
     relevant\cite{manning2008}.
 
-    Besides the original statistical model for entity resolution, other models
+    Besides the original statistical model for ER, other models
     have evolved from it or alongside it.
-    The work of the InfoLab at Stanford on their Stanford Entity Resolution
-    Framework\cite{Ben2009Swoosh} and that of the Center for Entity Resolution
+    The work of the InfoLab at Stanford on their Stanford ER
+    Framework\cite{Ben2009Swoosh} and that of the Center for ER
     and Information Quality at the University of Arkansas in Little
     Rock\cite{tal2007algebraic} stand out.
-    These models of entity resolution also propose new metrics for evaluating
-    entity resolution quality\cite{Men10,Tal11}.
+    These models of ER also propose new metrics for evaluating
+    ER quality\cite{Men10,Tal11}.
 
     Also related to this paper, there is ample coverage of the metrics used for
-    entity resolution in syntheses on the subject\cite{vldb2010,hitesh2012,Tal11}.
+    ER in syntheses on the subject\cite{vldb2010,hitesh2012,Tal11}.
     Metrics that measure aspects of clustering seem to be used more frequently
-    to measure entity resolution quality as time passes.
+    to measure ER quality as time passes.
     For example, pairwise and cluster metrics\cite{Men10, huang2006efficient} or
     the Rand index\cite{tal2007algebraic} come up regularly in this context.
 
-    Lastly, there are numerous systems that perform entity resolution available.
+    Lastly, there are numerous systems that perform ER available.
     Some of these systems include modules to evaluate the performance of a
-    particular entity resolution solution\cite{fever2009,magellan2020,oyster2012}.
+    particular ER solution\cite{fever2009,magellan2020,oyster2012}.
     There are also other Python packages that implement some or all of the
     metrics provided by our library\cite{nmeth2020scipy,ereval}.
 
     \section{PyResolveMetrics}\label{sec:library}
 
     In this context, the necessity for yet another specialized library dedicated
-    to evaluating entity resolution metrics might seem redundant.
+    to evaluating ER metrics might seem redundant.
     This skepticism is rooted in the expectation that Python, being a highly
     popular programming platform, should already offer high-quality, reusable
     tools available for a wide range of applications --- including evaluating
-    entity resolution results.
+    ER results.
     
     Upon closer examination of the tools available for evaluating entity
     resolution tasks, certain limitations in the existing assumptions become
@@ -314,18 +308,18 @@
     This is particularly relevant when the sole requirement is to compute entity
     resolution metrics, and the additional features of a comprehensive library
     are unnecessary.
-    The challenge of seamlessly integrating entity resolution evaluation
+    The challenge of seamlessly integrating ER evaluation
     routines into a custom built project becomes even more pronounced when
-    attempting to use the ones packaged with established entity resolution
+    attempting to use the ones packaged with established ER
     systems~\cite{oyster2012},~\cite{jedai2017},~\cite{deepm2020},~\cite{magellan2020}.
     
     Conversely, when specifically searching for libraries that only offer entity
     resolution metrics, it becomes evident that some crucial metrics essential
-    for effectively evaluating entity resolution tasks may be absent\cite{ereval}.
+    for effectively evaluating ER tasks may be absent\cite{ereval}.
 
     Approaching the issue from a different angle, using metrics from a
     general-purpose algorithmic library like Scipy (specifically
-    \texttt{scipy.metrics}) for entity resolution evaluation requires strict
+    \texttt{scipy.metrics}) for ER evaluation requires strict
     adherence to certain design choices imposed by the library.
     For example, to calculate the Rand index, data clusters must be mapped with
     labels, and these labels must be provided as input.
@@ -345,30 +339,29 @@
     This approach avoids the biases and dependencies of general-purpose
     libraries like SciPy, which can complicate integration into our
     custom-designed software.
-    \item Historically, entity resolution has adapted evaluation techniques from
+    \item Historically, ER has adapted evaluation techniques from
     statistics, information retrieval, and graph theory, tailoring these methods
     to suit its specific needs.
     It seems desirable to standardize these methods into forms specific to
-    entity resolution.
+    ER.
     \item Currently, there appears to be no implementation that consolidates all
-    the metrics useful for entity resolution evaluation, as identified in
+    the metrics useful for ER evaluation, as identified in
     scientific literature, into a single, cohesive unit.
-    \item Our work has a significant component of evaluating entity resolution
+    \item Our work has a significant component of evaluating ER
     outcomes.
     \end{itemize}
 
-    Our opinion is that using mathematical models specific to entity resolution
+    Our opinion is that using mathematical models specific to ER
     is the best approach for guiding the library's design.
     Since each model significantly impacts the data structures used in
     evaluation, the library's functions are categorized based on the type of
     input they support and, implicitly, by the mathematical model they align
-    with.
-
+    with. 
     There are a couple of important assumptions that the library makes,
-    regardless of the entity resolution model.
-    One such assumption is that the quality of the entity resolution output is
+    regardless of the ER model.
+    One such assumption is that the quality of the ER output is
     always measured against a ground truth\cite{manning2008}.
-    The other assumption is that the ground truth and the entity resolution
+    The other assumption is that the ground truth and the ER
     result are both structured under the same mathematical model.
 
     \subsection{Supported Metrics}\label{sec:metrics}
@@ -376,9 +369,9 @@
     \subsubsection{Statistical Metrics}
     Statistical quality metrics, extensively detailed in the
     literature\cite{manning2008,hitesh2012}, are the most common method for
-    measuring entity resolution performance as evidentiated by their almost
+    measuring ER performance as evidentiated by their almost
     ubiquitous usage\cite{fever2009,Goga2015,deepm2020,eager2021}.
-    These metrics are linked to the Fellegi-Sunter model for entity resolution
+    These metrics are linked to the Fellegi-Sunter model for ER
     which provides clear definitions of Type I and Type II
     errors\cite{winkler1990}.
     Type I and Type II errors clarify the concepts of true positives, true
@@ -439,25 +432,31 @@
     \end{itemize}
 
     The other reason we categorize these metrics as algebraic is because of
-    their close relationship with the algebraic model for entity resolution.
+    their close relationship with the algebraic model for ER.
     All of these metrics expect input arguments that are partitions over a set.
-    Moreover, the ground truth and the entity resolution result must be
+    Moreover, the ground truth and the ER result must be
     partitions over the \textit{same} set.
     
     The Rand index is one of the first metrics used to compare the similarity
     between two different data clusterings.
     It quantifies the agreement or disagreement between these clusterings by
     considering pairs of elements.
-        \[ Rand Index = \frac{(a + b)}{{\binom{n}{2}}} \]
+        % \[ Rand Index = \frac{(a + b)}{{\binom{n}{2}}} \]
+    \begin{equation}
+        Rand Index = \frac{(a + b)}{{\binom{n}{2}}}
+    \end{equation}
     The main components of the Rand index are as follows:
-    \begin{itemize}
-    \item a: Represents the number of times a pair of elements belongs to the
-        same cluster across both clustering methods.
-    \item b: Represents the number of times a pair of elements belongs to
-        different clusters across both clustering methods.
-    \item $\binom{n}{2}$: Denotes the number of unordered pairs in a set of n
+    % \begin{itemize}
+    % \item 
+    a: Represents the number of times a pair of elements belongs to the
+        same cluster across both clustering methods, 
+    % \item 
+    b: Represents the number of times a pair of elements belongs to
+        different clusters across both clustering methods,
+    % \item 
+    $\binom{n}{2}$: denotes the number of unordered pairs in a set of n
         elements.
-    \end{itemize}
+    % \end{itemize}
     
     The Rand index always takes values in the $\rinterval{0}{1}$ interval.
 
@@ -466,16 +465,17 @@
     It accounts for agreements between data clusterings that occur due to
     chance~\cite{adjrand2001}.
     The Adjusted Rand Index is calculated by using the following formula:
-    
-    \[ ARI = \frac{RandIndex - E}{\max(RandIndex) - E}, \]
-
+        % \[ ARI = \frac{RandIndex - E}{\max(RandIndex) - E}, \]
+    \begin{equation}
+        ARI = \frac{RandIndex - E}{\max(RandIndex) - E},
+    \end{equation}
+    \noindent
     where $E$ is the expected value of the RandIndex.
     The Adjusted Rand index is valued in the interval $\interval{-1}{1}$.
     For a comprehensive understanding of the Adjusted Rand Index and its
     calculation, we recommend consulting the detailed and informative work
     presented in the study by Warrens and van der Hoef (2022) on the
-    subject~\cite{warrens2022understanding}.
-
+    subject~\cite{warrens2022understanding}. 
     For both of these indexes, higher scores indicate a closer alignment between
     the compared partitions.
 
@@ -483,9 +483,14 @@
     the number of overlapping subsets of two partitions over the same input set.
     Assuming $A$ and $B$ are two partitions over the same input set of elements,
     the Talburt-Wang Index is given by the formula:
+    % \[ \varDelta(A, B) = \frac{|A|\cdot|B|}{\varPhi{\ointerval{A}{B}}^2}\textrm{, where}\]
+    % \[ \varPhi(A, B) = \sum_{i=1}^{|A|}\{B_j \in B | B_j \cap A_i \neq \emptyset \} \]
+    \begin{equation}
+        \varDelta(A, B) = \frac{|A|\cdot|B|}{\varPhi{\ointerval{A}{B}}^2}
+    \end{equation}
+    \noindent 
+    where $\varPhi(A, B) = \sum_{i=1}^{|A|}\{B_j \in B | B_j \cap A_i \neq \emptyset \}$.
 
-    \[ \varDelta(A, B) = \frac{|A|\cdot|B|}{\varPhi{\ointerval{A}{B}}^2}\textrm{, where}\]
-    \[ \varPhi(A, B) = \sum_{i=1}^{|A|}\{B_j \in B | B_j \cap A_i \neq \emptyset \} \]
 
     This metric approximates the Rand Index without requiring the expensive
     counting of true positives, false positives, true negatives or false
@@ -499,21 +504,26 @@
     If we have two sets $X$ and $Y$, the pairwise precision is given by the
     ratio of pairs that are in both sets to the total amount of pairs of the
     reference set.
-
-    \[ PP(X, Y) = \frac{|{Pairs(X)}\cap{Pairs(Y)}|}{|Pairs(X)|} \]
-    
+    % \[ PP(X, Y) = \frac{|{Pairs(X)}\cap{Pairs(Y)}|}{|Pairs(X)|} \]
+    \begin{equation}
+        PP(X, Y) = \frac{|{Pairs(X)}\cap{Pairs(Y)}|}{|Pairs(X)|}
+    \end{equation}    
     The pairwise recall is given by the ratio of pairs that are in both sets
     to the number of pairs in the comparison set\cite{hitesh2012}.
-
-    \[ PR(X, Y) = \frac{|{Pairs(X)}\cap{Pairs(Y)}|}{|Pairs(Y)|} \]
+    % \[ PR(X, Y) = \frac{|{Pairs(X)}\cap{Pairs(Y)}|}{|Pairs(Y)|} \]
+    \begin{equation}
+        PR(X, Y) = \frac{|{Pairs(X)}\cap{Pairs(Y)}|}{|Pairs(Y)|}
+    \end{equation}
 
     The pairwise F-measure is given by the harmonic mean of the pairwise
     precision and pairwise recall.
-
-    \[ PF = \frac{2 \cdot PP \cdot PR}{PP + PR} \]
+    % \[ PF = \frac{2 \cdot PP \cdot PR}{PP + PR} \]
+    \begin{equation}
+        PF = \frac{2 \cdot PP \cdot PR}{PP + PR}
+    \end{equation}
 
     The library computes these metrics on partitions by iterating through the
-    equivalence classes of each partition generated by the entity resolution
+    equivalence classes of each partition generated by the ER
     equivalence relation and extracting pairs of elements from each subset.
     
     Finally, the library supports computing `cluster measures'\cite{hitesh2012}.
@@ -528,11 +538,11 @@
     Given two partitions $A$ and $B$, the cluster measures are given by the
     following formulae:
 
-    \begin{align*}
+    \begin{align}
         CP(A, Y) &= \frac{|{A}\cap{B}|}{|A|}\\
         CR(A, Y) &= \frac{|{A}\cap{B}|}{|B|}\\
         CF &= \frac{2\cdot{CP}\cdot{CR}}{CP + CR}
-    \end{align*}
+    \end{align}
 
     \subsection{Technology}\label{sec:tech}
 
@@ -556,8 +566,8 @@
     protocols, such as \texttt{Iterable} and \texttt{Hashable}.
 
     All our library functions expect \texttt{Iterable} sequences as their input.
-    In fact, the ground truth and entity resolution result can be any
-    \texttt{Iterable} data structure that complies with the entity resolution
+    In fact, the ground truth and ER result can be any
+    \texttt{Iterable} data structure that complies with the ER
     model of choice.
     For the statistical model, the library accepts \texttt{Iterable[tuple]}
     input arguments, where the inner tuple must contain only two items.
@@ -585,11 +595,12 @@
     imposes on the design.
     Normally, a partition $P$ over a set $X$ is defined as a set of
     non-overlapping subsets containing all the elements from $X$, that is:
-
-    \[
+    % \[
+    %     P(X) = \{ C_1, C_2, \ldots, C_n | \bigcap\limits^n_{i=1}C_i=\emptyset \land \bigcup\limits^n_{i=1}C_i=X \}
+    % \]
+    \begin{equation}
         P(X) = \{ C_1, C_2, \ldots, C_n | \bigcap\limits^n_{i=1}C_i=\emptyset \land \bigcup\limits^n_{i=1}C_i=X \}
-    \]
-
+    \end{equation}
     The library implements metrics that compare partitions, but it requires the
     partition to be specified as an \texttt{Iterable[set]} instead of a set of
     sets.
@@ -623,7 +634,7 @@
 
     To provide a visual outlook over the metrics provided by our library we are
     using a toy data set\cite{expdata2023} containing near duplicates and the
-    PPJoin\cite{ppjoin} entity matching algorithm to perform entity resolution.
+    PPJoin\cite{ppjoin} entity matching algorithm to perform ER.
     The PPJoin algorithm matches items by using prefix lengths determined using
     a Jaccard coefficient $t$.
     
@@ -646,8 +657,8 @@
 
     All that's left is to apply the PPJoin algorithm on DG1 and DG2 and plot the
     values of the metrics provided by the library for values of $t$ in the
-    interval $\rinterval{0}{1}$ at increments of $0.01$.
-    The plots of the outcome are available
+    interval $\rinterval{0}{1}$ at increments of $0.01$ (ass we show in Figures \ref{fig:results1}-\ref{fig:results3}).
+    All the plots of the outcome available
     \href{https://github.com/matchescu/py-resolve-metrics}{on GitHub}.
 
     \begin{figure*}
@@ -655,69 +666,72 @@
             \centering
             \includegraphics[width=\textwidth]{sample-usage/mini-fs-precision}
             \caption{F-S Precision}
+            \label{fig:results1}
         \end{minipage}    
         \begin{minipage}{0.32\textwidth}
             \centering
             \includegraphics[width=\textwidth]{sample-usage/mini-fs-recall}
             \caption{F-S Recall}
+            \label{fig:results2}
         \end{minipage}    
         \begin{minipage}{0.32\textwidth}
             \centering
             \includegraphics[width=\textwidth]{sample-usage/mini-fs-f1}
             \caption{F-S F1}
+            \label{fig:results3}
         \end{minipage}
     \end{figure*}
-    \begin{figure*}
-        \begin{minipage}{0.32\textwidth}
-            \centering
-            \includegraphics[width=\textwidth]{sample-usage/mini-alg-pp}
-            \caption{Pairwise Precision}
-        \end{minipage}    
-        \begin{minipage}{0.32\textwidth}
-            \centering
-            \includegraphics[width=\textwidth]{sample-usage/mini-alg-pr}
-            \caption{Pairwise Recall}
-        \end{minipage}    
-        \begin{minipage}{0.32\textwidth}
-            \centering
-            \includegraphics[width=\textwidth]{sample-usage/mini-alg-pf}
-            \caption{Pairwise F Measure}
-        \end{minipage}
-    \end{figure*}
-    \begin{figure*}
-        \begin{minipage}{0.32\textwidth}
-            \centering
-            \includegraphics[width=\textwidth]{sample-usage/mini-alg-cp}
-            \caption{Cluster Precision}
-        \end{minipage}    
-        \begin{minipage}{0.32\textwidth}
-            \centering
-            \includegraphics[width=\textwidth]{sample-usage/mini-alg-cr}
-            \caption{Cluster Recall}
-        \end{minipage}    
-        \begin{minipage}{0.32\textwidth}
-            \centering
-            \includegraphics[width=\textwidth]{sample-usage/mini-alg-cf}
-            \caption{Cluster F Measure}
-        \end{minipage}
-    \end{figure*}
-    \begin{figure*}[!ht]
-        \begin{minipage}{0.32\textwidth}
-            \centering
-            \includegraphics[width=\textwidth]{sample-usage/mini-alg-twi}
-            \caption{Talburt-Wang Index}
-        \end{minipage}    
-        \begin{minipage}{0.32\textwidth}
-            \centering
-            \includegraphics[width=\textwidth]{sample-usage/mini-alg-ri}
-            \caption{Rand Index}
-        \end{minipage}    
-        \begin{minipage}{0.32\textwidth}
-            \centering
-            \includegraphics[width=\textwidth]{sample-usage/mini-alg-ari}
-            \caption{Adjusted Rand Index}
-        \end{minipage}
-    \end{figure*}
+    % \begin{figure*}
+    %     \begin{minipage}{0.32\textwidth}
+    %         \centering
+    %         \includegraphics[width=\textwidth]{sample-usage/mini-alg-pp}
+    %         \caption{Pairwise Precision}
+    %     \end{minipage}    
+    %     \begin{minipage}{0.32\textwidth}
+    %         \centering
+    %         \includegraphics[width=\textwidth]{sample-usage/mini-alg-pr}
+    %         \caption{Pairwise Recall}
+    %     \end{minipage}    
+    %     \begin{minipage}{0.32\textwidth}
+    %         \centering
+    %         \includegraphics[width=\textwidth]{sample-usage/mini-alg-pf}
+    %         \caption{Pairwise F Measure}
+    %     \end{minipage}
+    % \end{figure*}
+    % \begin{figure*}
+    %     \begin{minipage}{0.32\textwidth}
+    %         \centering
+    %         \includegraphics[width=\textwidth]{sample-usage/mini-alg-cp}
+    %         \caption{Cluster Precision}
+    %     \end{minipage}    
+    %     \begin{minipage}{0.32\textwidth}
+    %         \centering
+    %         \includegraphics[width=\textwidth]{sample-usage/mini-alg-cr}
+    %         \caption{Cluster Recall}
+    %     \end{minipage}    
+    %     \begin{minipage}{0.32\textwidth}
+    %         \centering
+    %         \includegraphics[width=\textwidth]{sample-usage/mini-alg-cf}
+    %         \caption{Cluster F Measure}
+    %     \end{minipage}
+    % \end{figure*}
+    % \begin{figure*}[!ht]
+    %     \begin{minipage}{0.32\textwidth}
+    %         \centering
+    %         \includegraphics[width=\textwidth]{sample-usage/mini-alg-twi}
+    %         \caption{Talburt-Wang Index}
+    %     \end{minipage}    
+    %     \begin{minipage}{0.32\textwidth}
+    %         \centering
+    %         \includegraphics[width=\textwidth]{sample-usage/mini-alg-ri}
+    %         \caption{Rand Index}
+    %     \end{minipage}    
+    %     \begin{minipage}{0.32\textwidth}
+    %         \centering
+    %         \includegraphics[width=\textwidth]{sample-usage/mini-alg-ari}
+    %         \caption{Adjusted Rand Index}
+    %     \end{minipage}
+    % \end{figure*}
 
     \subsection{Performance}
 
@@ -752,25 +766,22 @@
     ground truth from the file and run all of the Fellegi-Sunter and algebraic
     metrics while profiling the CPU usage.
     We have broken down the experiment into two steps to prevent running the
-    entity resolution task from interefering with collecting the CPU profiling
+    ER task from interefering with collecting the CPU profiling
     data.
 
     We use flamegraphs\cite{flamegraphs2013} to represent the CPU usage
     patterns in the library and the \texttt{cProfile} package from the Python
     standard library to trace the execution of the functions that compute
     metrics.
-
     \begin{figure*}[!ht]
         \centering
         \includegraphics[width=\textwidth]{performance/fs-flamegraph}
         \caption{Fellegi-Sunter CPU Performance}\label{fig:fs-cpu-perf}
     \end{figure*}
-
-    The flame graph in Figure~\ref{fig:fs-cpu-perf}
+    The flame graph in Figure~\ref{fig:fs-cpu-perf}  
     shows that the Fellegi-Sunter metrics take up less CPU than the validation
-    of the input and output of data.
-    The main consumers are shown in Table~\ref{table:fs-cpu-perf}.
-    
+    of the input and output of data. 
+    The main consumers are shown in Table~\ref{table:fs-cpu-perf}.  
     \begin{table*}[ht!]
         \centering
         \begin{tabular}{c c c c}
@@ -786,9 +797,8 @@
         \end{tabular}
         \caption{Fellegi-Sunter Metrics}\label{table:fs-cpu-perf}
     \end{table*}
-
     The best lesson we can learn here is that computing the statistical metrics
-    is not resource-intensive at all.
+    is not resource-intensive at all. 
 
     \begin{figure*}[!ht]
         \includegraphics[width=\textwidth]{performance/algebraic-flamegraph}
@@ -796,9 +806,8 @@
     \end{figure*}
     
     The same cannot be said about the metrics that work with partitions over an
-    input set.
-    Table~\ref{table:alg-cpu-perf} presents how the algebraic metrics perform.
-
+    input set. 
+    Table~\ref{table:alg-cpu-perf} presents how the algebraic metrics perform. 
     \begin{table*}[ht!]
         \centering
         \begin{tabular}{c c c c}
@@ -826,13 +835,11 @@
         \end{tabular}
         \caption{Algebraic Metrics}\label{table:alg-cpu-perf}
     \end{table*}
-
     The pairwise and cluster metrics still perform well as indicated in
-    Figure~\ref{fig:alg-cpu-perf}.
+    Figure~\ref{fig:alg-cpu-perf}. 
     However, when we move on to consider the performance of the three supported
     indices, we see that computing the Rand Index and the Adjusted Rand Index
-    prove to be the most onerous operations by far.
-
+    prove to be the most onerous operations by far. 
     We take note that the \texttt{\char`_convert\char`_to\char`_algebraic}
     function that checks whether the metrics are applied to two partitions over
     the same set is also a large consumer of CPU time.
@@ -847,19 +854,20 @@
     are an order of magnitude more expensive to compute than the other metrics.
     Therefore, because the Talburt-Wang index seems to approximate the Rand
     index well enough, it might be a preferable choice to measure how well an
-    entity resolution algorithm performs clustering.
+    ER algorithm performs clustering.
 
+    \balance
     \section{Conclusions and Future Work}\label{sec:conclusions_and_future}
 
-    \subsection{Conclusions}
+    % \subsection{Conclusions}
 
-    We have introduced a library for evaluating entity resolution results that
+    We have introduced a library for evaluating ER results that
     is based on standards and Python protocols, making it highly interoperable.
     The application programming interface exposed by this library is deeply
-    rooted in the mathematical models fundamental to entity resolution.
+    rooted in the mathematical models fundamental to ER.
     By doing so the library ensures that data is represented in a way that is
-    specific to entity resolution and not specific to another scientific problem
-    or to a particular entity resolution system or task.
+    specific to ER and not specific to another scientific problem
+    or to a particular ER system or task.
     Working with pairs or groups of entity references instead of labeling
     data should provide a much more user-friendly experience.
 
@@ -870,35 +878,38 @@
 
     These attributes render the library not only highly beneficial but also low
     maintenance, making it an invaluable asset for all those passionate about
-    entity resolution.
+    ER.
 
-    \subsection{Missing Metrics}
+    % \subsection{Missing Metrics}
 
-    The entity resolution models we have touched upon so far support many more
+    \textbf{Missing metrics:} 
+    The ER models we have touched upon so far support many more
     metrics that the library does not currently implement.
     The work by~\cite{hitesh2012} provides an insightful overview.
     For well-rounded support of the models mentioned so far, the library would
     need to implement at least:
-    \begin{itemize}
-        \item additional cluster comparisons, such as the Closest Cluster $F_1$,
+    % \begin{itemize}
+        % \item 
+        additional cluster comparisons, such as the Closest Cluster $F_1$,
         the MUC $F_1$, $B^3 F_1$ and the $CEAF F_1$~\cite{hitesh2012}, and
-        \item additional Rand-like indexes~\cite{warrens2022understanding}.
-    \end{itemize}
+        % \item 
+        additional Rand-like indexes~\cite{warrens2022understanding}.
+    % \end{itemize}
 
-    \subsection{Missing Models}
+    % \subsection{Missing Models}
 
-    Besides the models we have covered herein, entity resolution has been
+    \textbf{Missing models:} 
+    Besides the models we have covered herein, ER has been
     theorized to be a graph problem\cite{eager2021} or an exercise in lattice
     theory with an ordering relation based on
     ``merge dominance''\cite{Ben2009Swoosh}.
-    The mathematical model foundational to entity resolution significantly
+    The mathematical model foundational to ER significantly
     influences the data structures employed in implementing metrics that
-    evaluate the quality of an entity resolution task within that model.
+    evaluate the quality of an ER task within that model.
     More work is required to distil the data structures and the metrics we can
-    use to evaluate entity resolution tasks using those models.
-
+    use to evaluate ER tasks using those models. 
     New models might also bring to light new interesting metrics to
-    measure the performance of entity resolution tasks.
+    measure the performance of ER tasks.
     Variation of information\cite{meila2007vi} and the generalized merge
     distance\cite{Men10} are two such examples.
 
