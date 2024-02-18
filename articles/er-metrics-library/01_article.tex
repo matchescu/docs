@@ -648,76 +648,7 @@
     values of the metrics provided by the library for values of $t$ in the
     interval $\rinterval{0}{1}$ at increments of $0.01$.
     The plots of the outcome are available
-    \href{https://github.com/matchescu/py-resolve-metrics}{on GitHub}.
-
-    \begin{figure*}
-        \begin{minipage}{0.32\textwidth}
-            \centering
-            \includegraphics[width=\textwidth]{sample-usage/mini-fs-precision}
-            \caption{F-S Precision}
-        \end{minipage}    
-        \begin{minipage}{0.32\textwidth}
-            \centering
-            \includegraphics[width=\textwidth]{sample-usage/mini-fs-recall}
-            \caption{F-S Recall}
-        \end{minipage}    
-        \begin{minipage}{0.32\textwidth}
-            \centering
-            \includegraphics[width=\textwidth]{sample-usage/mini-fs-f1}
-            \caption{F-S F1}
-        \end{minipage}
-    \end{figure*}
-    \begin{figure*}
-        \begin{minipage}{0.32\textwidth}
-            \centering
-            \includegraphics[width=\textwidth]{sample-usage/mini-alg-pp}
-            \caption{Pairwise Precision}
-        \end{minipage}    
-        \begin{minipage}{0.32\textwidth}
-            \centering
-            \includegraphics[width=\textwidth]{sample-usage/mini-alg-pr}
-            \caption{Pairwise Recall}
-        \end{minipage}    
-        \begin{minipage}{0.32\textwidth}
-            \centering
-            \includegraphics[width=\textwidth]{sample-usage/mini-alg-pf}
-            \caption{Pairwise F Measure}
-        \end{minipage}
-    \end{figure*}
-    \begin{figure*}
-        \begin{minipage}{0.32\textwidth}
-            \centering
-            \includegraphics[width=\textwidth]{sample-usage/mini-alg-cp}
-            \caption{Cluster Precision}
-        \end{minipage}    
-        \begin{minipage}{0.32\textwidth}
-            \centering
-            \includegraphics[width=\textwidth]{sample-usage/mini-alg-cr}
-            \caption{Cluster Recall}
-        \end{minipage}    
-        \begin{minipage}{0.32\textwidth}
-            \centering
-            \includegraphics[width=\textwidth]{sample-usage/mini-alg-cf}
-            \caption{Cluster F Measure}
-        \end{minipage}
-    \end{figure*}
-    \begin{figure*}[!ht]
-        \begin{minipage}{0.32\textwidth}
-            \centering
-            \includegraphics[width=\textwidth]{sample-usage/mini-alg-twi}
-            \caption{Talburt-Wang Index}
-        \end{minipage}    
-        \begin{minipage}{0.32\textwidth}
-            \centering
-            \includegraphics[width=\textwidth]{sample-usage/mini-alg-ri}
-            \caption{Rand Index}
-        \end{minipage}    
-        \begin{minipage}{0.32\textwidth}
-            \centering
-            \includegraphics[width=\textwidth]{sample-usage/mini-alg-ari}
-            \caption{Adjusted Rand Index}
-        \end{minipage}
-    \end{figure*}
+    \href{https://www.cs.ubbcluj.ro/~andrei.olar/article-data/er-metrics-library/#sample-data-metrics}{online}(\cite{sampleplots2024}).
 
     \subsection{Performance}
 
@@ -759,76 +690,22 @@
     patterns in the library and the \texttt{cProfile} package from the Python
     standard library to trace the execution of the functions that compute
     metrics.
+    The performance graphs and call tables are available
+    \href{https://www.cs.ubbcluj.ro/~andrei.olar/article-data/er-metrics-library/#performance-data}{online}~(\cite{perfgraphs2024}).
 
-    \begin{figure*}[!ht]
-        \centering
-        \includegraphics[width=\textwidth]{performance/fs-flamegraph}
-        \caption{Fellegi-Sunter CPU Performance}\label{fig:fs-cpu-perf}
-    \end{figure*}
+    We note that according to the `Fellegi-Sunter Flamegraph', computing the
+    Fellegi-Sunter metrics takes up less CPU than validating the input data.
+    The `Fellegi-Sunter Metrics CPU Stats' table provides more details into how
+    inexpensive the probabilistic metrics really are.
 
-    The flame graph in Figure~\ref{fig:fs-cpu-perf}
-    shows that the Fellegi-Sunter metrics take up less CPU than the validation
-    of the input and output of data.
-    The main consumers are shown in Table~\ref{table:fs-cpu-perf}.
-    
-    \begin{table*}[ht!]
-        \centering
-        \begin{tabular}{c c c c}
-            \toprule
-            Metric & Cumulative Time & Number of Calls & Time per Call \\ [0.5ex]
-            \toprule
-            \texttt{recall} & 7.208e-06 & 2 & 3.604e-06 \\
-            \midrule
-            \texttt{f1} & 5.291e-06 & 1 & 5.291e-06 \\
-            \midrule
-            \texttt{precision} & 4.75e-06 & 2 & 2.375e-06 \\
-            \bottomrule
-        \end{tabular}
-        \caption{Fellegi-Sunter Metrics}\label{table:fs-cpu-perf}
-    \end{table*}
-
-    The best lesson we can learn here is that computing the statistical metrics
-    is not resource-intensive at all.
-
-    \begin{figure*}[!ht]
-        \includegraphics[width=\textwidth]{performance/algebraic-flamegraph}
-        \caption{Algebraic CPU Performance}\label{fig:alg-cpu-perf}
-    \end{figure*}
-    
     The same cannot be said about the metrics that work with partitions over an
     input set.
-    Table~\ref{table:alg-cpu-perf} presents how the algebraic metrics perform.
+    Computing the algebraic metrics clearly dominates the `Algebraic Model
+    Flamegraph'.
 
-    \begin{table*}[ht!]
-        \centering
-        \begin{tabular}{c c c c}
-            \toprule
-            Metric & Cumulative Time & Number of Calls & Time per Call \\ [0.5ex]
-            \toprule
-            \texttt{rand\char`_index} & 0.0004027 & 1 & 0.0004027 \\
-            \midrule
-            \texttt{adjusted\char`_rand\char`_index} & 0.0001944 & 1 & 0.0001944 \\
-            \midrule
-            \texttt{twi} & 9.146e-05 & 1 & 9.146e-05 \\
-            \midrule
-            \texttt{cluster\char`_comparison\char`_measure} & 5.35e-05 & 1 & 5.35e-05 \\
-            \midrule
-            \texttt{cluster\char`_recall} & 5.154e-05 & 2 & 2.577e-05 \\
-            \midrule
-            \texttt{cluster\char`_precision} & 4.271e-05 & 2 & 2.135e-05 \\
-            \midrule
-            \texttt{pair\char`_precision} & 2.971e-05 & 2 & 1.485e-05 \\
-            \midrule
-            \texttt{pair\char`_recall} & 2.613e-05 & 2 & 1.306e-05 \\
-            \midrule
-            \texttt{pair\char`_comparison\char`_measure} & 2.596e-05 & 1 & 2.596e-05 \\
-            \bottomrule
-        \end{tabular}
-        \caption{Algebraic Metrics}\label{table:alg-cpu-perf}
-    \end{table*}
-
-    The pairwise and cluster metrics still perform well as indicated in
-    Figure~\ref{fig:alg-cpu-perf}.
+    In the `Algebraic Metrics' table we can see a breakdown of the most
+    computationally intensive tasks.
+    The pairwise and cluster metrics are not computationally intensive.
     However, when we move on to consider the performance of the three supported
     indices, we see that computing the Rand Index and the Adjusted Rand Index
     prove to be the most onerous operations by far.
@@ -836,9 +713,9 @@
     We take note that the \texttt{\char`_convert\char`_to\char`_algebraic}
     function that checks whether the metrics are applied to two partitions over
     the same set is also a large consumer of CPU time.
-    However, since that function is executed nine times (once for computing each
-    metric) we declare ourselves content to file a note to improve the
-    performance of that function at a later time.
+    This is due to the function being executed nine times (once for computing each
+    metric).
+    We take note to improve the performance of the function.
 
     Perhaps the most important lesson to learn here is that algebraic metrics
     are an order of magnitude more expensive to compute than statistical
@@ -853,7 +730,7 @@
 
     \subsection{Conclusions}
 
-    We have introduced a library for evaluating entity resolution results that
+    This paper introduced a library for evaluating entity resolution results that
     is based on standards and Python protocols, making it highly interoperable.
     The application programming interface exposed by this library is deeply
     rooted in the mathematical models fundamental to entity resolution.
