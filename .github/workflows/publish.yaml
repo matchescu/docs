@@ -9,7 +9,7 @@ jobs:
       - name: Compile LaTeX document
         uses: xu-cheng/latex-action@v3
         with:
-          root_file: articles/er-metrics-library/01_article.tex
+          root_file: 01_article.tex
           working_directory: articles/er-metrics-library
       - name: Upload PDF
         uses: actions/upload-artifact@v3
