@@ -9,10 +9,12 @@ jobs:
       - name: Compile LaTeX document
         uses: xu-cheng/latex-action@v3
         with:
-          root_file: 01_article.tex
+          root_file: |
+            01_article.tex
+            02_appendix.tex
           working_directory: articles/er-metrics-library
       - name: Upload PDF
         uses: actions/upload-artifact@v3
         with:
           name: PDF
-          path: 01_article.pdf
+          path: *.pdf
