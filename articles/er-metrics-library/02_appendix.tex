@@ -226,30 +226,13 @@
     The flame graph from Figure~\ref{appendix:fig:fs-cpu-perf}
     shows that the Fellegi-Sunter metrics take up less CPU than the validation
     of the input and output of data. 
-    The main consumers are shown in Table~\ref{appendix:table:fs-cpu-perf}.  
-    The best lesson we can learn here is that computing the statistical metrics
-    is not resource-intensive at all. 
-
-    The same cannot be said about the metrics that work with partitions over an
-    input set. 
-    Table~\ref{appendix:table:alg-cpu-perf} presents how the algebraic metrics perform. 
-    The pairwise and cluster metrics still perform well as indicated in
-    Figure~\ref{appendix:fig:alg-cpu-perf}. 
-    However, when we move on to consider the performance of the three supported
-    indices, we see that computing the Rand Index and the Adjusted Rand Index
-    prove to be the most onerous operations by far. 
-    We take note that the \texttt{\char`_convert\char`_to\char`_algebraic}
-    function that checks whether the metrics are applied to two partitions over
-    the same set is also a large consumer of CPU time.
-    However, since that function is executed nine times (once for computing each
-    metric) we declare ourselves content to file a note to improve the
-    performance of that function at a later time.
-
     \begin{figure*}[htbp]
         \centering
         \includegraphics[width=\textwidth]{performance/fs-flamegraph}
         \caption{Fellegi-Sunter CPU Performance}\label{appendix:fig:fs-cpu-perf}
     \end{figure*}
+
+    The main consumers are shown in Table~\ref{appendix:table:fs-cpu-perf}.  
 
     \begin{table*}[htbp]
         \centering
@@ -267,12 +250,14 @@
         \caption{Fellegi-Sunter Metrics}\label{appendix:table:fs-cpu-perf}
     \end{table*}
 
-    \begin{figure*}[htbp]
-        \includegraphics[width=\textwidth]{performance/algebraic-flamegraph}
-        \caption{Algebraic CPU Performance}\label{appendix:fig:alg-cpu-perf}
-    \end{figure*}
+    The best lesson we can learn here is that computing the statistical metrics
+    is not resource-intensive at all. 
 
-    \begin{table*}[ht!]
+    The same cannot be said about the metrics that work with partitions over an
+    input set. 
+    Table~\ref{appendix:table:alg-cpu-perf} presents how the algebraic metrics perform.
+
+    \begin{table*}[htbp]
         \centering
         \begin{tabular}{c c c c}
             \toprule
@@ -300,6 +285,25 @@
         \caption{Algebraic Metrics}\label{appendix:table:alg-cpu-perf}
     \end{table*}
 
+    The pairwise and cluster metrics still perform well as indicated in
+    Figure~\ref{appendix:fig:alg-cpu-perf}, but the algebraic model indexes are
+    a lot more computationally intensive, dominating the flamegraph.
+
+    \begin{figure*}[htbp]
+        \includegraphics[width=\textwidth]{performance/algebraic-flamegraph}
+        \caption{Algebraic CPU Performance}\label{appendix:fig:alg-cpu-perf}
+    \end{figure*}
+
+    Notice that computing the Rand Index and the Adjusted Rand Index are the
+    most onerous operations by far.
+
+    We also take note that the \texttt{\char`_convert\char`_to\char`_algebraic}
+    function is also a large CPU time consumer.
+    This function checks whether the metrics are computed on two partitions over
+    the same set.
+    Since this function is executed nine times (once for computing each metric)
+    we declare ourselves content to file a note to improve its performance at a
+    later time.
 
 \bibliographystyle{apalike}
 {
