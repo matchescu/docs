@@ -74,18 +74,14 @@ T \kern-.1667em \lower.7ex \hbox{E} \kern-.125emX}}
     sources~\cite{Qia17}.
     However, we share the opinion that identifying and linking data constitutes
     a more specialized process~\cite{Tal11}.
-    The task of gathering information about a generic pound of potatoes across
-    various marketplaces is still an entity resolution task, in our view.
-    Whether the information about marketplaces and the potatoes that find
-    themselves passing through there is available in one or more places strikes
-    us as non-consequential, too.
-    Besides not talking about identity problems, we also leave aside any
-    classification of entity resolution algorithms based on number of sources.
+    Besides leaving discussions concerning identity out of scope, we will not
+    cover entity resolution classification on various well established criteria
+    such as the number of sources and the technological choice underlying the
+    solution.
     
-    Precisely because it is a fundamental problem, entity resolution goes by
-    many names: record linkage, data de-duplication, merge-purge, named entity
-    recognition and disambiguation (or NERD), entity alignment or entity
-    matching~\cite{Tal11,fever2009,alhelbawy2014}.
+    Because of its fundamental nature, entity resolution goes by many names:
+    record linkage, data de-duplication, merge-purge, named entity recognition
+    and disambiguation (or NERD), entity alignment or entity matching~\cite{Tal11,fever2009,alhelbawy2014}.
     The number of names is matched by the number of practical applications for
     entity resolution, ranging from linking medical records to assisting in
     medical diagnostics, to translation, to doing background checks for
@@ -93,30 +89,30 @@ T \kern-.1667em \lower.7ex \hbox{E} \kern-.125emX}}
     Combining information from different media (sound, images, motion, smell,
     etc.) can also be regarded as a form of entity resolution when the purpose
     is to gather more information about the same real-world object.
-    With such a wide array of past, present and future applications for entity
-    resolution, evaluating its quality seems important.
+    In this context, evaluating the quality of entity resolution using some well
+    established criteria that don't vary based on application domain or solution
+    seems interesting.
 
     With the current paper, our goal is to introspect how entity resolution
-    theoretical models influence our perception over entity resolution results.
-    The discussion is around choosing entity resolution solutions that are
-    more or less suitable based on how we perceive their outcomes.
-    In this context, we are interested in how entity resolution quality metrics
-    complement one another.
-    Partly in order to answer this last question, we are looking into the
-    diversity of the insights provided by different entity resolution models
-    regarding the same entity resolution result.
+    models influence our perception over entity resolution results.
+    The discussion is around judging the suitability of an entity resolution
+    solution through the lens of two different models.
+    We are interested in linking entity resolution quality metrics to models
+    in particular because this shows us how we might tune an entity resolution
+    solution in a way that does not vary with the application domain or choice
+    of algorithmic approach (rule-based, machine learning and so on).
     
     We begin with a preliminary description focused on further detailing the
     goals of this paper.
     After briefly summarizing the work that relates to our paper, we introduce
-    terminology and a mental model that we use throughout the remaining
-    sections.
-    Afterwards, we revisit the two theoretical models for entity resolution
-    chosen for our analysis.
-    The text describing theoretical models is accompanied by experiments using
-    an entity resolution solution of choice for which we present our findings.
-    We discuss our observations, pointing out invariant conditions that do not
-    seem to be related to the choice of data set.
+    our own terminology that we use throughout the remaining sections.
+    
+    After finally revisiting our two chosen models for entity resolution, we
+    delve into some findings from experiments made using a particular rule-based
+    entity resolution algorithm.
+    The chosen algorithm is merely an example. It may be replaced with any other
+    as we take aim at what we may learn from the underlying entity resolution
+    models, not from a particular application of those models.
 
     \section{Preliminaries \& Research Questions}\label{sec:Preliminaries & Questions}
     \input{research-questions}
