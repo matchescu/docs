@@ -183,51 +183,49 @@ T \kern-.1667em \lower.7ex \hbox{E} \kern-.125emX}}
 
     \subsection{Entity Resolution Models}\label{subsec:Entity Resolution Models}
 
-    The representation of entity resolution results depends upon the theoretical
-    model we use.
-    There are multiple theoretical models available for entity resolution and
-    they range from ones based on complex networks and graph theory\cite{Li2020}
-    to ones based on probabilities\cite{fs1969} or
-    algebra\cite{Tal11,Ben2009Swoosh}.
+    There are multiple entity resolution models and they range from ones based
+    on complex networks and graph theory\cite{Li2020} to ones based on
+    probabilities\cite{fs1969} or algebra\cite{Tal11,Ben2009Swoosh}.
+    Broadly speaking, entity resolution models make up two large families:
+    \textit{matching} and \textit{clustering} models.
+    We are interested in the interplay between two model, one from each family.
 
-    John R. Talburt provides an overview of these models in his book ``Entity
-    Resolution and Information Quality''\cite{Tal11}.
+    John R. Talburt provides an overview of entity resolution models in his book
+    ``Entity Resolution and Information Quality''\cite{Tal11}.
     The main models presented there are the Fellegi-Sunter~\cite{fs1969} model,
     the Stanford Entity Resolution Framework~\cite{Ben2009Swoosh} model and the
     algebraic\cite{tal2007algebraic} model.
-    This paper aims to analyse two of the models described in that book with an
-    aim to understand how they influence our ability to measure the quality of
-    entity resolution.
+    Even though multiple entity matching models were published over time, the
+    Fellegi-Sunter model still serves as the archetype for entity matching.
+    The algebraic entity resolution model is the easiest to work with from the
+    family of clustering models.
 
-    The Fellegi-Sunter model is the best known model for entity resolution.
-    Most of quality evaluations in the entity resolution space are made using
-    probabilistic metrics defined by this model.
+    The Fellegi-Sunter model is the archetypal model for entity matching.
+    Although other significant entity matching models were developed in the
+    meantime (from rule-based ones to deep learning enabled ones) entity
+    resolution quality evaluation is highly influenced by the probabilistic
+    approach used with this model.
     When measuring results using these metrics, a common experience is not being
     able to fully explain how the quality of the results output by a particular
     entity resolution process varies with the data sets the process operates on.
     A common attitude towards this phenomenon is to chalk it up to the
     characteristics of the underlying data and the size of the dataset.
-    This paper attempts to find out if there are any conditions we might be able
-    to extract that have to do with the entity resolution model instead.
+    This paper attempts to find out if there are any conditions that pertain to
+    the entity resolution model itself.
 
-    The second model this paper looks into is the elegant algebraic model.
-    The metrics we most strongly associate with this model should be very
-    familiar to data clustering afficionados.
-    It seems to be a good complement for the Fellegi-Sunter model and we want to
-    explore how in our experiments.
+    The second model we look into is the elegant algebraic model.
+    The metrics most strongly associated with this model should be very familiar
+    to data clustering afficionados.
+    Other clustering models, including a particular version of the Stanford
+    Entity Resolution Framework model, use the same metrics.
+    Clustering models describe entity resolution at a deeper level than matching
+    models if only due to them capturing all four steps of the entity resolution
+    process.
 
-    Additionally to presenting the two models, the question of whether they can
-    be used in conjunction to analyse the same result needs an answer.
-    The paper describes how an observer can switch from a probabilistic
-    perspective on entity resolution to an algebraic one.
-
-    The complexity of the discussion and the presentational space required,
-    force us to leave the Stanford Entity Resolution Framework model out of the
-    conversation for the time being.
-    This means that we won't go into the metrics that are more commonly linked
-    to it either, such as the generalized merged distance, the basic merge
-    distance or variation of information~\cite{Men10}, even if some of them
-    might be applied (under certain circumstances) using the other two models.
+    Additionally to presenting the two models we want to answer whether they can
+    be used in conjunction to analyse the same result.
+    An observer may switch from a matching perspective to a more comprehensive
+    one that leverages the clustering aspect of entity resolution.
 
     \subsection{Fellegi-Sunter Model}\label{subsec:Fellegi-Sunter Model}
     \input{fsm}
