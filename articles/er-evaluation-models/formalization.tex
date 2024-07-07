@@ -1,5 +1,4 @@
-In a broad sense, the entity resolution process is usually comprised of four
-different steps~\cite{Pap19,Tal11}:
+The entity resolution process is usually comprised of four different steps~\cite{Pap19,Tal11}:
 
 \begin{itemize}
     \item \textit{entity reference extraction} --- the first phase of entity
@@ -17,9 +16,8 @@ different steps~\cite{Pap19,Tal11}:
     activity which collects matching references in entity profiles.
 \end{itemize}
 
-We start our journey into the formalization of entity resolution with
-formalizing entity reference extraction using the notions from
-Section~\ref{sec:Terminology}.
+Using the definitions from Subsection~\ref{sec:Terminology}, we first formalize
+entity reference extraction.
 
 Given:
 \begin{itemize}
@@ -36,9 +34,8 @@ $S_i$, $1 \leq i \leq n$, $1 \leq j \leq m_i$, in order to extract
 $r_{{S_i}k}$ entity references where
 $0 \leq k \leq n_i \cdot \sum^{m_i}_{j=1}a_{ij}$.
 
-Next, we denote with $A$ the domain of all possible attributes that can be
+Let us denote with $A$ the domain of all possible attributes that can be
 used by $ER$.
-
 In this context, let $r_{{S_i}{k_j}}$ denote the $k_j$th, $1 \leq j \leq k$
 entity reference extracted from the source $S_i$.
 Then $r_{{S_i}{k_j}}$ is a tuple
