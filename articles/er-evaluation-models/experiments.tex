@@ -1,26 +1,22 @@
-So far we have shown how entity resolution models influence data structures
-that are part of the application programming interface of an entity resolution
-computer algorithm.
-In the introduction we were asking whether there might be invariant conditions
-that are not dependent on the data on which we perform entity resolution.
-The experiments we have designed are meant to find some invariant conditions
-that depend on a particular entity resolution model.
+So far we have discussed entity resolution models and their influence on the
+data structures that are in play during entity resolution.
+In this section we revisit an example calibration process that highlights
+invariant conditions originating in entity resolution models.
 
-Secondly, we want to determine which metrics (if any) are more reliable in the
+Moreover, we want to determine which metrics (if any) are more reliable in the
 face of changes in underlying data.
-To do that, we use the same entity resolution algorithm across multiple data
-sets and manipulate its configuration in ways that would result in predictable
-outcomes.
+To achieve our goal, we use the same entity resolution algorithm with various
+parameter configurations across multiple data sets of different sizes and from
+different domains.
 
-Third, we have stated an interest in switching from one entity resolution model
-to another to gather more information using the same ground truth.
-In our experiment we want show both the similarity and the complementarity of
-some of the metrics from an entity resolution model with respect to metrics from
-another entity resolution model.
+We have also stated an interest in switching from one entity resolution model
+to another.
+In our experiment we want show how similar or complementary matching metrics are
+in relation to clustering metrics.
 This train of thought leads to a comparative analysis of the metrics we obtain
-by running one entity resolution algorithm on different data sets.
+during our calibration example.
 
-The code for running the experiments is available on GitHub~\cite{matchescu}.
+The experiment code is available on GitHub~\cite{matchescu}.
 Running the experiment does not require any specific hardware.
 We use the Python~\cite{python} programming language (version 3.11) and the
 Numpy~\cite{numpy} and Pandas~\cite{pandas2023} libraries for efficient
@@ -30,16 +26,15 @@ well~\cite{matchescu-er-metrics2023}.
 
 \subsection{Datasets}\label{subsec:Experiment Datasets}
 
-
-To ensure we are working with standard data that simulates real data and which
-is widely used and therefore familiar, we use the Abt-Buy, DBLP-ACM and
-Amazon-GoogleProducts~\cite{vldb2010} benchmark data sets.
+We use the well established Abt-Buy, DBLP-ACM and Amazon-GoogleProducts~\cite{vldb2010}
+benchmark data sets in our experimental setup.
 We did not use the DBLP-Scholar data set from the same source because of
 practical reasons concerning the run time of the experiment on the available
 hardware.
 
-For our initial small scale experiments we built our own control
-dataset~\cite{expdata2023} from the `Buy' component of the `Abt-Buy' data set.
+The calibration starts with initial, small scale experiments.
+We built our own control dataset~\cite{expdata2023} from the `Buy' component of
+the `Abt-Buy' data set.
 
 To ease experimentation, we use the original tabular representation
 which allows us to take advantage of Pandas~\cite{pandas2010,pandas2023}
@@ -183,10 +178,11 @@ We can more easily exemplify conditions that are invariant along with the kind
 and size of the input data by showcasing how to calibrate an entity resolution
 algorithm for obtaining the best possible outcome.
 The evaluated algorithm is not important in practice.
-In fact, the calibration process described here would work for any other entity
-resolution algorithm.
-However, writing a paper presents us with some limiting factors that influence
-our choice.
+The calibration process described here would work for any other entity
+resolution algorithm and could be used to train machine learning entity
+resolution solutions automatically.
+The output format of a research paper presents us with some limiting factors
+that influence our choice.
 
 Firstly, the algorithm should perform reasonably well without losing the ability
 to easily explain its outcome.
@@ -279,13 +275,14 @@ The ground truth was built by iterating over both input data sources using
 the same cursor and outputting pairs of records.
 Note that there are duplicate CSV records that only differ on the `id' column.
 
-Intuition tells us that for values of the Jaccard similarity threshold
-\textit{t}\footnote[1]{the Jaccard similarity coefficient is used to determine
-    the length of the prefix which should be used to compare two entity references
-    to determine whether they refer to the same entity or not} that are either too
-low or too high we should have lower precision.
-For higher thresholds we should also have lower recall values, whereas for
-lower values the recall should be higher.
+Intuition tells us that for extreme values of the Jaccard similarity threshold
+\textit{t}\footnote[1]{
+    the Jaccard similarity coefficient is used to determine the length of the
+    prefix which should be used to compare two entity references to determine
+    whether they refer to the same entity or not
+} we should obtain lower precision.
+For high values of \textit{t} we should also have lower recall values and for
+low values of \textit{t} the recall should be higher.
 Figure~\ref{fig:mini-buy-fs} shows the \texttt{ppjoin} results at various
 values of the Jaccard threshold $t$.
 
@@ -313,16 +310,14 @@ will also be captured by \texttt{ppjoin}.
 
 Compared to the previous interval, for values of $0.36 \leq t \le 0.6$, both
 precision and recall increase compared to the previous interval.
-As the prefix drops, more and more items from the ground truth are matched.
+More and more true positives are found as the prefix length drops.
 The number of false negatives decreases while the number of false positives
 does not increase as fast as the number of true positives.
+With $t$ nearing zero, there is an expected increase in recall due to fewer
+true negatives.
 
-When $t$ is nearing zero there is an expected increase in recall due to fewer
-and fewer overall negatives.
-Precision, expectedly decreases due to an ever higher false positive rate.
-
-We need to make a small note on near-identical items in the control data set,
-such as \texttt{208114672} and \texttt{208114673}.
+Let us note the near-identical items in the control data set, such as
+\texttt{208114672} and \texttt{208114673}.
 For lower values of \textit{t}, the algorithm produces two true positives and
 two false positives.
 By itself, the increase in false positives intuitively lowers precision.
@@ -333,36 +328,38 @@ By having new items to compare, we also increase the amount of true positives.
 This dynamic ends up increasing precision as we lower values of \textit{t} so
 long as we are not operating on the full input set.
 
-Note that while we do describe the dynamic specifically for the \texttt{ppjoin}
-algorithm, the dynamic of having an increased number of true positives offset
-precision in an unexpected direction is not algorithm specific at all.
-Regardless of the algorithm that we use, given some circumstances specific for
-that algorithm, it should be possible to obtain the same effect we see here.
-This observation is interesting because most entity resolution users look at the
-$F_1$ score thinking that it provides a good balance between precision and recall.
-These users rarely analyse the components of the $F_1$ score.
-This situation can lead to unexpected outcomes.
-For instance, there might be a substantial drop in $F_1$ scores, which are
-indicators of accuracy, when the input data for the entity resolution process is
-changed.
-The reason for this is that the precision or recall may be higher than expected
-for the ideal configuration determined in the controlled scenario.
+This observation of a specific quirk in data hints at the type of observations
+we are looking for.
+They should be independent of implementation.
+In our case, other algorithms (regardless of implementation technology) would
+display similar dynamics of the precision metric under similar conditions.
+The precision metric is one of the components of the $F_1$ score.
+It is the most widely used metric for assessing entity resolution quality,
+in particular because of its balancing nature.
 
-On the other hand, a balanced trade-off between precision and recall might not
-be a requirement.
-For instance, a core legal principle applicable in many jurisdictions across the
-world states that is far more favourable to let 100 guilty people escape than to
+A balanced trade-off between precision and recall might not be a requirement,
+though.
+A core legal principle applicable in many jurisdictions across the world states
+that is far more favourable to let 100 guilty people escape than to
 put one innocent behind bars.
 By that logic, we only care about precision.
-Perfect recall while still retaining some precision might be useful during
-research (e.g~finding papers on the same topic) or medical diagnosis (other
-cases with the same symptoms).
+
+There are situations when perfect recall is important, too.
+One could make such a case for plagiarism detection or medical diagnostics.
 In these cases, sifting through false positives might be preferable to missing
 out on important information because of a false negative that is due to a
 suboptimal input configuration.
+We should note that perfect recall is easily obtained under the Fellegi-Sunter
+(and other matching models) by simply returning the carthesian product of
+entity references across all input data sources.
+And this presents us with a weakness of the model itself: we wouldn't be able to
+efficiently process all the false positives if the entity resolution result
+would be too large.
+Today we rarely have the luxury of dealing with small collections of data.
 
-Our control dataset (which is purposefully flawed) instructs us that the ideal
-configuration values for our algorithm are:
+Our purposefully flawed control dataset instructs us that the ideal configuration
+values for our algorithm are:
+
 \begin{itemize}
     \item $0.15 \leq t \leq 0.38$ for the best balanced outcome
     \item $t \leq 0.38$ for the most sensitive system
@@ -377,10 +374,9 @@ Because we include the IDs in both DG1 and DG2, the input data set will
 contain 20 items.
 The ground truth contains 10 pairs of items.
 
-Measuring the similarity of two partitions can be accomplished in more ways than
-measuring the statistical success of a matching process.
-Among these metrics, the pairwise comparison of two partitions is the best
-approximation of the statistical metrics\cite{Men10}.
+Among the ways in which we can measure the similarity of two partitions,
+pairwise comparison yields the results that are most similar to what we obtain
+using a matching model over the same data~\cite{Men10}.
 Figure~\ref{fig:mini-alg-pairwise} shows the computed pairwise metrics for
 various values of \textit{t}.
 
@@ -391,56 +387,54 @@ various values of \textit{t}.
     \caption{Algebraic pairwise metrics on `mini-buy' dataset}\label{fig:mini-alg-pairwise}
 \end{figure}
 
-Because pairwise metrics do not support transitivity~\cite{Men10,hitesh2012},
-they should be closely related to probabilistic metrics.
-Indeed, we see a plot similar to the one in Figure~\ref{fig:mini-buy-fs} for statistical metrics.
-The optimal configuration for a balanced entity resolution in terms of pairwise
-equivalence of the result to the ground truth is very similar to the range we
-observed based on probabilistic measures.
-The pairwise precision plot's shape is almost identical, too.
-All of these signs convince us of a successful conversion of the probabilistic
-ground truth to an algebraic ground truth.
+As expected, Figure~\ref{fig:mini-buy-fs} shows us a similar plot to the one we
+saw for probabilistic metrics.
+This is at least in part due to the inability of pairwise metrics to represent
+entity resolution transitivity~\cite{Men10,hitesh2012}.
+Unsurprisingly then, the suggested \texttt{ppjoin} configuration gleaned by
+inspecting pairwise metrics is very similar to the optimal configuration
+suggested by the probabilistic metrics.
+In terms of precision, the pairwise and probabilistic precision plot shapes are
+near identical.
+Based on these results we can assume a successful conversion from the entity
+matching specific data structure returned by \texttt{ppjoin} to a partition over
+an input set, which is expected in the algebraic model of entity resolution.
 
-The only outlier we see is the pairwise recall plot
-For $t \le 0.12$ pairwise recall drops significantly whereas statistical recall
-stays at the maximum value.
-The reason behind this variation lies in the difference between the two models
-of entity resolution.
-Whereas the standard recall formula only accounts for false negatives (of which
-we can not have any using the generated data set), pairwise recall requires all
-the result data to be partitioned and singleton clusters play an ever more
-important part in the computed recall score as their number increases.
+The only significant difference seems to occur in the case of recall.
+For $t \le 0.12$ pairwise recall drops significantly whereas probabilistic
+recall stays at the maximum value.
+This difference stems directly from the entity resolution model being employed.
+The standard recall formula only accounts for false negatives --- which are
+impossible to obtain with our control data set. 
+Pairwise recall requires all the result data to be partitioned and singleton
+clusters play a part in the evaluation.
+As the number of singleton clusters increases, pairwise recall decreases.
+This adequately compensates the inaccuracy of the probabilistic model.
 
-This situation leads to presenting our \textbf{first invariant condition
-    candidate}.
-\textbf{Probabilistic recall seems to fail to adequately assess entity
-    resolution quality when the volume of data returned at the end of the entity
-    resolution process vastly exceeds the size of the ground truth}.
+And so we seem to have stumbled upon our \textbf{first insight} which is
+invariant on implementation or data.
+\textbf{
+    Probabilistic recall fails to adequately assess entity resolution quality
+    when entity resolution result size greatly exceeds the size of the ground
+    truth.
+}
 Despite encompassing all true positives, we are left with a myriad of false
 positives to weed out.
-This is a real problem for systems that value a result that is both accurate and
-sensitive.
+When we desire an entity resolution solution that is both precise and sensitive,
+this problem seems insurmountable in today's world that values ever larger data
+sets.
 
-While in the context of our control dataset it may not seem likely that this
-would raise concerns, consider that for practical applications the size of the
-ideal result is often several orders of magnitude smaller than the size of the
-input.
-Taking into account other factors (like data cleanliness, for example), we see
-that the odds of this situation occuring is not negligible at all.
-Large entity resolution results are more likely to be obtained from large input
-data sets than from smaller data sets, after all.
-
-Therefore, while the input data set size certainly matters, the entity
-resolution model also matters, as probabilistic recall clearly shows us.
-Note that this phenomenon is dependent solely on the entity resolution model and
-not on using a specific entity resolution solution to highlight it.
-For other algorithms the same phenomenon may be observed depending on their
-specific configuration.
-Pairwise metrics seem to provide a good treatment for this phenomenon.
+In the context of our control dataset the scenario where entity resolution ends
+with a far larger result than the ground truth may seem far fetched.
+However, consider that for practical applications of entity resolution the size
+of the ground truth is routinely several orders of magnitude smaller than the
+size of the input.
+Taking into account other factors (like data cleanliness, for example), we can
+see the odds of these circumstances occuring rising.
 
 \subsubsection{Cluster Metrics}\label{subsubsec:Cluster Results}
 
-Cluster metrics attempt to show how close two partitions over the same set are.
+Cluster metrics attempt to show how similar the shapes of two partitions are.
 This family of metrics borrows naming from probabilistic metrics even though
 the aspects being measured are quite different.
 We see a plot of these cluster metrics over the `miny-buy' data set in
@@ -453,29 +447,32 @@ Figure~\ref{fig:mini-alg-cluster}.
     \caption{Algebraic cluster metrics on `mini-buy' dataset}\label{fig:mini-alg-cluster}
 \end{figure}
 
-The optimal configuration of the algorithm when balance between precision and
-recall is required still consists of $0.15 \le t \le 0.38$.
-We also notice that cluster metrics point out the lack of recall when \textit{t}
-nears zero even more than the pairwise metrics.
-This is due to singletons having a larger influence over this metric when the
-sizes of the partition classes are larger (such as when duplicates abound).
+The optimal balanced \texttt{ppjoin} configuration is still $0.15 \le t \le 0.38$.
 Cluster recall also decreases for $0.38 \le t \le 0.58$ much more pronouncedly
 than probabilistic recall or pairwise recall when partition classes are larger.
 
+We notice that cluster metrics point out the lack of useful recall when
+\textit{t} nears zero even more than the pairwise metrics.
+This is completely model related and stems from singletons playing a much larger
+part in the comparison between partition shapes than in the pairwise comparison
+of partitions.
+
 Cluster precision also has an interesting relationship with the other precision
 metrics.
-Take, for example, the similarity between the curves of the probabilistic and
-pairwise precision and notice that the cluster precision curve is quite
-different even on our control data set show in Figure~\ref{fig:mini-alg-cluster}.
+Take, for example, the very similar probabilistic and pairwise precisions and
+juxtapose their plots with the cluster precision from
+Figure~\ref{fig:mini-alg-cluster}.
 As the number of singletons increases when we get fewer and fewer true positives
 in the matching phase of the entity resolution process, the cluster precision
 naturally drops.
-In fact, we might say that \textbf{cluster precision behaves as a complement to the
-    other precision metrics, having higher values when the other precision metrics
-    have low values and lower values when the other precision metrics have high
-    values}.
+
+We might say that \textbf{
+    cluster precision behaves as a complement to the other precision metrics,
+    having higher values when the other precision metrics have low values and
+    lower values when the other precision metrics have high values
+}.
 This relationship between the three precision metrics looks like a good
-candidate for our \textbf{second invariant condition}.
+candidate for our \textbf{second invariant insight}.
 
 \subsubsection{Clustering Indexes}\label{subsubsec:Clustering Indexes}
 

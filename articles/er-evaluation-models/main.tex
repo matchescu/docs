@@ -67,59 +67,73 @@ T \kern-.1667em \lower.7ex \hbox{E} \kern-.125emX}}
     \end{IEEEkeywords}
 
     \section{Introduction}\label{sec:Introduction}
-    Entity resolution is the task of determining whether two information refer
-    to the same real-world item or not.
+    Entity resolution is the task of determining whether multiple information
+    refer to the same real-world item or not.
     More restrictive definitions place entity resolution as the task of
     identifying and linking representations of data from two or more
     sources~\cite{Qia17}.
-    However, we share the opinion that identifying and linking data constitutes
-    a more specialized process~\cite{Tal11}.
+    We share the opinion that identifying and linking data constitutes a more
+    specialized process~\cite{Tal11}.
+    It is broadly known that entity resolution goes by many names: data
+    deduplication, merge-purge, named entity recognition and disambiguation,
+    entity alignment, entity matching, and so on.
+    Our paper uses a broader, deliberately vague definition in order to allow
+    encompassing all of the above variants of entity resolution.
     
-    Entity resolution has been classified according to the number of sources and
-    the technological choice underlying the solution.
-    Whether entity resolution solutions are implemented using machine learning
-    or are rule based is not of particular interest in this paper.
-    The more interesting classification in our opinion concerns whether entity
-    resolution algorithms are matching algorithms or clustering ones.
-    The family which an entity resolution solution belongs to is interesting on
-    multiple levels.
+    Entity resolution solutions have been classified according to many criteria.
+    The number of sources or the technological choice for the implementation are
+    two example classification criteria.
+    In this paper we examine another way of differentiating between entity
+    resolution solutions.
+    While it's undeniably interesting to study entity resolution implementations
+    that use deep learning versus simple rule-based algorithms, the models that
+    underlie the implementations appeal to us more.
+    In general, models describe something using the theoretical tools at our
+    disposal (usually mathematics).
+    If we accept the previous statement, it's reasonable to say that multiple
+    models describing the same thing provide us with varied perspectives over
+    the described artifact.
+    Models are ideally generic, allowing for the existence of varied practical
+    manifestations of their described artifact.
     
-    Firstly, there are theoretical models that deal with entity matching and
-    there are clustering models.
-    Matching is more related to information retrieval whereas clustering is a
-    problem domain with many ramifications including, but not limited to,
-    knowledge management, complex networks or computer vision.
-    So finding a terminology that applies to both potentially opens up a bridge
-    between entity resolution and findings in those fields.
-    This is especially true because of entity resolution's fundamental nature:
-    there are very few things more fundamental to humans than identifying real
-    world objects.
+    Entity resolution models describe entity resolution in two broad ways: as a
+    matching task or as a clustering process.
+    It is our hope to derive key insights that don't depend on data, purpose or
+    implementation, relying instead on the entity resolution models themselves.
+    In other words, the mere way we describe entity resolution (as matching or
+    clustering) should point us toward the insights.
 
-    Secondly, theoretical models are merely ways of describing something with
-    some theoretical tools (usually mathematical in nature):an idea, an
-    occurence or an entire phenomenon.
-    They influence our perception over that which they describe because of how
-    they describe it.
-    Entity resolution models are no different.
-    They can describe entity resolution as a matching problem confining us to
-    think about what is happening in the entity resolution process as a matching
-    operation.
-    Or they can describe entity resolution as a clustering problem only allowing
-    interpretations that focus on the composition and size of clusters.
-    
-    In this paper we want to discuss broadly the suitability of an entity
-    resolution solution through the lens of two different models.
-    We chose one model from the matching family and another from the clustering
-    family of entity resolution models for this discussion.
-    In order for the discussion to take place, we require some common terms that
-    describe things which are specific to entity resolution and how they apply\
-    to the broader notions of matching and clustering.
-    That entails introducing a framework where we define these notions.
-    This framework also helps highlighting the differences between matching and
-    clustering models of entity resolution.
+    When viewed as a matching problem, entity resolution is closely related to
+    information retrieval.
+    Perhaps as a hint to the validity of the matching perspective, entity
+    resolution is performed most conveniently using competent information
+    retrieval systems such as search engines or vector databases.
+    On the other hand, we can see entity resolution as a task that clusters data
+    which refers to the same real world entity.
+    Using this lens, entity resolution becomes interesting for more abstract
+    concerns such as knowledge management, computer vision or named entity
+    recognition and disambiguation.
+    One can intuit that even if we do have models for entity resolution that
+    belong to these families, the terminologies they use to describe it are
+    quite different with respect to one another.
 
-    We are also interested in linking entity resolution quality metrics to
-    model families.
+    Finding terminology that applies to entity resolution in general (both for
+    matching and clustering) allows us to pinpoint differences between entity
+    resolution models more easily and more clearly.
+    This leads to allowing finding insights that derive from models directly.
+    To this end, we define model agnostic terms that describe entity resolution.
+    
+    To highlight insights derived from entity resolution models (consequently
+    invariant with regard to other conditions), we will showcase the
+    calibration process of an entity resolution solution using perspectives from
+    two different models.
+    One model will be a matching model, while the other will be a clustering
+    model.
+    The perspectives conferred by the two models are applied in the calibration
+    process to reveal the insights we're after.
+
+    To this end, we are interested in linking entity resolution quality metrics
+    to model families (matching or clustering).
     This has two benefits in our opinion.
     The data structures used in the matching view over entity resolution differ
     from the ones used in a clustering context.
@@ -172,8 +186,9 @@ T \kern-.1667em \lower.7ex \hbox{E} \kern-.125emX}}
     Later on, systems like `Papers with Code'~\cite{papwithcode2019} brought in
     a social dimension to how we compare the qualitative performance of entity
     resolution tasks.
-    The systems that came after, resemble frameworks more than they resemble
-    applications~\cite{magellan2020,jedai2017}.
+    The systems that came after, such as JedAI~\cite{jedai2017} or Magellan
+    \cite{magellan2020} resemble frameworks more than they do
+    applications.
     Almost all systems are open-source and encourage social collaboration around
     entity resolution, too.
     
@@ -218,7 +233,7 @@ T \kern-.1667em \lower.7ex \hbox{E} \kern-.125emX}}
     probabilities\cite{fs1969} or algebra\cite{Tal11,Ben2009Swoosh}.
     Broadly speaking, entity resolution models make up two large families:
     \textit{matching} and \textit{clustering} models.
-    We are interested in the interplay between two model, one from each family.
+    We are interested in the interplay between two models, one from each family.
 
     John R. Talburt provides an overview of entity resolution models in his book
     ``Entity Resolution and Information Quality''\cite{Tal11}.
@@ -230,24 +245,23 @@ T \kern-.1667em \lower.7ex \hbox{E} \kern-.125emX}}
     The algebraic entity resolution model is the easiest to work with from the
     family of clustering models.
 
-    The Fellegi-Sunter model is the archetypal model for entity matching.
+    The Fellegi-Sunter model is the main entity matching model.
     Although other significant entity matching models were developed in the
     meantime (from rule-based ones to deep learning enabled ones) entity
-    resolution quality evaluation is highly influenced by the probabilistic
-    approach used with this model.
+    resolution quality evaluation is still largely founded in the probabilistic
+    approach described in the Fellegi-Sunter model.
     When measuring results using these metrics, a common experience is not being
     able to fully explain how the quality of the results output by a particular
     entity resolution process varies with the data sets the process operates on.
     A common attitude towards this phenomenon is to chalk it up to the
     characteristics of the underlying data and the size of the dataset.
-    This paper attempts to find out if there are any conditions that pertain to
-    the entity resolution model itself.
-
+    
     The second model we look into is the elegant algebraic model.
     The metrics most strongly associated with this model should be very familiar
-    to data clustering afficionados.
-    Other clustering models, including a particular version of the Stanford
-    Entity Resolution Framework model, use the same metrics.
+    to all clustering afficionados.
+    Other clustering models, including a particular projection of the more
+    generic Stanford Entity Resolution Framework model, can use the same
+    metrics.
     Clustering models describe entity resolution at a deeper level than matching
     models if only due to them capturing all four steps of the entity resolution
     process.
