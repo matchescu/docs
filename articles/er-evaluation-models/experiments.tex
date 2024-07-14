@@ -487,53 +487,49 @@ The plots of the three indexes we want to study are in Figure~\ref{fig:mini-alg}
     \caption{Clustering indexes on `mini-buy' dataset}\label{fig:mini-alg}
 \end{figure}
 
-We observe that the plot of the Adjusted Rand Index indicates both the desirable
-and the undesirable values of \textit{t}.
+We observe that the plot of the Adjusted Rand Index (ARI) indicates both the
+desirable and the undesirable \texttt{ppjoin} configurations that we have found
+thus far using the other metrics.
 We note that this index rates the configuration $0.76 \le t \le 0.81$ almost as
-good as our running leader, $0.15 \le t \le 0.38$.
-By following its plot, we should stay clear of values of \textit{t} from other
-intervals.
-It does a good job at identifying many of the problems spotted by precision and
-cluster metrics.
+high as our top configuration so far ($0.15 \le t \le 0.38$).
 
-By comparison with the ARI, the Rand Index is not very informative.
+Albeit easier to compute, the Rand Index (RI) is not as informative as the ARI.
 It signals that recall is not perfect for values of \textit{t} nearing zero and
-gives its highest score for a configuration of $0.76 \le t \le 0.81$.
-However, it also gives high scores for values of \textit{t} where all the other
-metrics do not.
+places the best configuration of \texttt{ppjoin} as $0.76 \le t \le 0.81$.
+It records high scores for configurations where none of the other metrics do.
+Note that even though both the RI and ARI version are pairwise metrics, they
+agree that no good can come of configuring \texttt{ppjoin} with a small Jaccard
+threshold.
 
-Note that even though both the Rand Index and its adjusted version are pairwise
-metrics, they display plots that are more similar to the plot of the cluster
-metrics.
+The Talburt-Wang index's plot is a cluster-based indicator that closely follows
+the ARI.
+It is less computationally expensive than the ARI and seemingly equally reliable
+in predicting good and bad configurations for \texttt{ppjoin}.
 
-The Talburt-Wang index's plot is a cluster-based indicator and it exhibits a
-plot that has a similar shape to the ARI and the cluster metrics, albeit less
-pronounced.
-Compared to the ARI, it does not reveal $0.76 \le t \le 0.81$ as an interesting
-configuration.
+Looking at these indexes we can make plenty of observations that have nothing to
+do with the entity resolution solution and everything to do with the shape of
+the entity resolution result.
+For example, we see that the Cluster $F_1$ score, the TWI and the ARI actually
+agree on the best configuration that is balanced in terms of both pairwise and
+probabilistic precision and recall.
+In general it seems that \textbf{
+    the optimal configuration for precision and recall will be found within the
+    agreement area between the ARI on one side and the TWI or the Cluster $F_1$
+    score on the other
+}.
+This area of agreement simply signals the configurations for which we obtain
+the most similarly shaped partitions and at the same time the best pairwise
+matching partitions.
 
-We might be able to extract a third invariant condition from the relationship
-between the Talburt-Wang Index, the ARI and cluster metrics.
-All of these metrics indicate the same neighbourhoods for favourable
-configurations of the entity resolution algorithm.
-The conjecture here is that \textbf{the best generic configuration balanced
-    between precision and recall of an entity resolution algorithm will be found
-    within the agreement area between ARI on one side and TWI or cluster metrics on
-    the other}.
-The configuration obtained this way will be very good regardless of conditions
-related to the data.
-In our specific case, this means that we should expect to get the best results
-using our \texttt{ppjoin} algorithm with a configuration $0.18 \le t \le 0.38$.
+For calibrating \texttt{ppjoin}, this means that we should expect to get the
+best results using a configuration of $0.18 \le t \le 0.38$.
+Let us now verify the performance of our calibration on a ten item control data
+set.
 
 \subsection{Outcomes from Benchmark Datasets}\label{subsec:Benchmark Datasets}
 
-So far we have seen evidence on the controlled miniature dataset that each
-theoretical model provides a lens through which we can interpret various aspects
-of an entity resolution task's qualitative performance.
-We have stated a few potential invariant conditions that seem to be related to
-the entity resolution model more than to anything else.
-By running the experiment on benchmark data we want to verify whether these
-conditions are related to some attributes of the data in our control data set.
+To verify whether we've calibrated the \texttt{ppjoin} algorithm correctly,
+we are running the experiment again on the benchmark datasets.
 
 The first setup we try uses the `Abt-Buy' data set.
 The plots with performance metrics for our experiment are available in Figures~\ref{fig:abt-buy-fsm-main},
@@ -563,10 +559,10 @@ and~\ref{fig:abt-buy-algebraic-main}.
     \end{minipage}
 \end{figure*}\label{abt-buy}
 
-The invariant conditions proposed so far all hold true.
-The probabilistic recall is still exceedingly high when the threshold is nearing zero and the
-pairwise metrics do a good job of showing that.
-Next, the cluster precision is complementary to the pairwise and probabilistic
+We note that our insights seem to hold.
+The probabilistic recall is still exceedingly high as $t\to0$ and the pairwise
+metrics still show us this shouldn't be the case.
+The cluster precision is complementary to the pairwise and probabilistic
 precision.
 Finally, we find the best balanced configuration between precision and recall of
 $t=0.28$ is well within the target interval we envisioned at the end of the
@@ -643,8 +639,15 @@ pairwise precision are very low.
 The configuration $t=0.32$ which has the highest $F_1$ score is still within the
 interval predicted on our control data set.
 
+This makes us say that the inexpensive \texttt{ppjoin} calibration using a very
+small data set would have been successful.
+Even though we haven't formally proven that our insights are invariant on entity
+resolution implementation and data, empirically they were observed in all the
+experiments we conducted.
+
 Running the experiments has also proven to be a source of insight into the
 computational expenditure surrounding entity resolution itself as well as the
 calculation of entity resolution metrics.
 This prompts a closer look into finding a balance between high quality outcomes
-and the quantitative performance of the entity resolution solution.
+and the quantitative performance of entity resolution through solution
+calibration or automated training.
