@@ -56,7 +56,7 @@ model itself rather than in reality, the data provided to the computer or the
 entity resolution solution.
 These conditions might be abstract, but they might also provide valuable
 insight to the human observer that analyses an entity resolution outcome.
-Our \textbf{first goal is to find out whether such invariant conditions might
+Our \textbf{main goal is to find out whether such invariant conditions might
 actually exist}.
 
 Next, another gap presents itself between the generic solutions provided by
@@ -71,58 +71,41 @@ using popular metrics borrowed from these fields (such as the $F_1$ score) we
 end up overlooking some essential aspect.
 For example, in anomaly detection problems we are primarily interested in
 sensitivity, not the balanced outlook the $F_1$ score provides.
-Given that anomaly detection represents a whole class of solutions, one might
-argue that the need of highly sensitive systems is not that specific.
-Which makes this point all the more relevant.
 
-In scientific literature and programming, generic solutions are preferred to
-specific ones.
-This bias towards generic solutions makes it hard for practitioners to rank
-entity resolution solutions by their usefulness in the context of the task
-at hand (e.g anomaly detection).
-Choosing an entity resolution solution remains a necessary step in
-implementing an entity resolution system.
+Choosing an entity resolution solution remains a necessary step in adopting an
+entity resolution system.
 The longer it takes to find one, the higher the implementation costs.
-Also, choosing a complex system is often a decision that's difficult to
-change later and this contributes to the risk of making a poor choice.
 
 Papers have been published on the biases inherent in certain metrics
 and how they influence judging entity resolution outcomes in a specific
 context~\cite{Goga2015}.
+Most entity resolution systems do not provide easy means of verifying entity
+resolution quality~\cite{fever2009,oyster2012,jedai2017,magellan2020}.
 The few systems out there that do provide some form of ranking entity
-resolution solutions tend to use balanced metrics~\cite{papwithcode2019}.
-Our previous example shows that being balanced is actually just another bias
-which may or may not be useful, depending on context.
+resolution solutions tend to use very few metrics~\cite{papwithcode2019}.
+Projects to bridge this gap are emerging~\cite{matchescu-er-metrics2023}.
 
-All this goes to show that the myriad ways~\cite{hitesh2012} in which we
-evaluate entity resolution quality suggests that we haven't found the ideal
-perspective for the entity resolution problem.
-It might also show that it will take us a long time to find it.
-From this point of view, it seems logical to look at \textbf{how some of the
-existing metrics might complement one another to enhance our view over an entity
-resolution result}.
+On the other hand, the myriad ways~\cite{hitesh2012} in which we can evaluate
+entity resolution quality suggests that we haven't found the ideal perspective
+for the entity resolution problem.
+If we were to calibrate an entity resolution solution today, we might not have 
+the necessary insight readily available.
+From this point of view, it seems logical to look at \textbf{how we might use
+existing metrics more effectively, by finding complementary metrics that enhance
+our understanding of the results produced by entity resolution solutions}.
 
-As previously stated, entity resolution quality evaluation owes much to
-information retrieval and to probability theory.
-Additionally, metrics originally designed to aid in graph theory problems have
-become useful, too~\cite{hitesh2012,Kon19}.
-Nevertheless, a cursory review of what is usually being measured in lieu of
-judging entity resolution quality~\cite{fever2009,Men10,Goga2015} shows an
-important interest for evaluating the quality of entity matching.
-At this point we refer to entity matching as simply finding out how similar two
-data are by using various comparison techniques.
-This may be due to a lingering confusion between entity matching and entity
-resolution~\cite{Tal11}.
+Quality metrics for entity matching (used here to signify `basic comparison
+between two information') dominate entity resolution quality
+evaluation~\cite{fever2009,Men10,Goga2015}.
+Their origin in information retrieval and probability theory makes them easier
+to understand and more convenient to work with.
+Metrics originally designed to aid in graph theory problems have become useful,
+too~\cite{hitesh2012,Kon19}.
+In describing entity resolution as a clustering problem~\cite{Tal11}, quality
+metrics that go beyond matching~\cite{Men10,tal2007algebraic} are revealed.
 
-Literature~\cite{Tal11} describes other perspectives available to us regarding
-entity resolution, besides seeing it as a matching problem.
-The entity resolution quality metrics that measure aspects which go beyond
-matching~\cite{Men10,tal2007algebraic} provide us with the pragmatic means to
-see these alternate views.
-On the other hand, entity resolution models\cite{Ben2009Swoosh,Tal11,fs1969}
-provide us with the abstract perspective.
-We interpret this to mean that certain metrics are linked to certain entity
-resolution models.
-With this view in mind, our final question is \textbf{whether it's possible to
-interpret the same entity resolution result using two different entity
-resolution models}.
+If entity resolution models describe entity resolution itself, metrics evaluate
+evaluate entity resolution results.
+Assuming certain metrics linked to certain models, our final research question
+is \textbf{whether it's possible to interpret the same entity resolution task
+using different entity resolution models}.

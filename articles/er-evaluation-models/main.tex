@@ -85,73 +85,72 @@ T \kern-.1667em \lower.7ex \hbox{E} \kern-.125emX}}
     two example classification criteria.
     In this paper we examine another way of differentiating between entity
     resolution solutions.
-    While it's undeniably interesting to study entity resolution implementations
-    that use deep learning versus simple rule-based algorithms, the models that
-    underlie the implementations appeal to us more.
+    While it's undeniably interesting to compare entity resolution solutions
+    which use deep learning with ones using simple rule-based algorithms, the
+    models that underlie the implementations appeal to us more.
     In general, models describe something using the theoretical tools at our
     disposal (usually mathematics).
     If we accept the previous statement, it's reasonable to say that multiple
     models describing the same thing provide us with varied perspectives over
     the described artifact.
-    Models are ideally generic, allowing for the existence of varied practical
-    manifestations of their described artifact.
+    In our opinion, good models are generic, allowing for the existence of
+    varied practical manifestations of their described artifact.
     
-    Entity resolution models describe entity resolution in two broad ways: as a
-    matching task or as a clustering process.
-    It is our hope to derive key insights that don't depend on data, purpose or
-    implementation, relying instead on the entity resolution models themselves.
+    The most widely adopted entity resolution models today describe entity
+    resolution in one of two broad ways: as a matching task or as a clustering
+    process.
+    It is our hope to derive key insights that don't depend on the data, the
+    purpose or implementation details of the entity resolution solution, relying
+    instead on the entity resolution models themselves.
     In other words, the mere way we describe entity resolution (as matching or
     clustering) should point us toward the insights.
 
     When viewed as a matching problem, entity resolution is closely related to
     information retrieval.
     Perhaps as a hint to the validity of the matching perspective, entity
-    resolution is performed most conveniently using competent information
+    resolution is performed most conveniently when using competent information
     retrieval systems such as search engines or vector databases.
     On the other hand, we can see entity resolution as a task that clusters data
-    which refers to the same real world entity.
+    referencing the same real world entity.
     Using this lens, entity resolution becomes interesting for more abstract
     concerns such as knowledge management, computer vision or named entity
     recognition and disambiguation.
-    One can intuit that even if we do have models for entity resolution that
-    belong to these families, the terminologies they use to describe it are
-    quite different with respect to one another.
+    One can intuit that the matching and clustering models for entity resolution
+    don't use the same terminology.
 
-    Finding terminology that applies to entity resolution in general (both for
-    matching and clustering) allows us to pinpoint differences between entity
-    resolution models more easily and more clearly.
-    This leads to allowing finding insights that derive from models directly.
-    To this end, we define model agnostic terms that describe entity resolution.
+    Finding generic entity resolution terminology should allow us to pinpoint
+    the differences between entity resolution models more easily and more
+    clearly.
+    It should also allow us to point out how the model influences the evaluation
+    of the practical task itself by doing away with abstract concepts that are
+    not directly relevant in practice.
+    It is on this path that we might find insights that derive from models
+    directly.
     
-    To highlight insights derived from entity resolution models (consequently
-    invariant with regard to other conditions), we will showcase the
-    calibration process of an entity resolution solution using perspectives from
-    two different models.
-    One model will be a matching model, while the other will be a clustering
-    model.
-    The perspectives conferred by the two models are applied in the calibration
-    process to reveal the insights we're after.
+    To highlight the process of deriving insights from entity resolution models,
+    we intend to showcase a calibration process for a specific entity resolution
+    solution using the perspectives provided by two different models: an entity
+    matching model and a clustering model.
+    At the end of the calibration we should have our insights.
+    The main point of this article is to tell this story.
 
-    To this end, we are interested in linking entity resolution quality metrics
-    to model families (matching or clustering).
-    This has two benefits in our opinion.
-    The data structures used in the matching view over entity resolution differ
-    from the ones used in a clustering context.
-    This fact reveals an advantage when comparing entity resolution models,
-    making it much easier to judge the usefulness of a given model for one
-    application or another.
-    Being able to compare models like this also facilitates finding conditions
-    that are invariant with respect to the data or the purpose of the entity
-    resolution task.
-    Such conditions can then be used to easily optimize rule-based or machine
-    learning entity resolution systems alike.
+    A secondary, yet important task helps us reach our main goal.
+    Linking entity resolution quality metrics to model families (matching or
+    clustering) allows us to reason about the influence of models in practical,
+    daily usage of entity resolution solutions.
+    The data structures used in entity matching necessarily differ from the ones
+    used in a clustering context.
+    This observation provides the basic building block to achieve our secondary
+    goal.
+    Linking metrics to models also allows us to recognize the model we should
+    use to deepen our understanding of a particular application of entity
+    resolution.
     
-    We begin with a preliminary description focused on further detailing the
-    goals of this paper.
+    We follow this introduction with a preliminary description focused on
+    clarifying the goals and research questions of this paper.
     After briefly summarizing the work that relates to our paper, we introduce
     our own terminology that we use throughout the remaining sections.
-    
-    After finally revisiting our two chosen models for entity resolution, we
+    Having finally revisited our two chosen models for entity resolution, we
     delve into some findings from experiments made using a particular rule-based
     entity resolution algorithm.
     The chosen algorithm is merely an example. It may be replaced with any other
@@ -286,58 +285,72 @@ T \kern-.1667em \lower.7ex \hbox{E} \kern-.125emX}}
     When evaluating entity resolution results in practice it often happens that
     the results on control data sets are not the same as the results obtained
     on `real-world' data.
-    In the end, those results speak about certain expectations that stem from
-    the way we interpret data.
-
+    
     We set out on a journey to find out whether entity resolution models might
     provide additional insights that we would use in our qualitative assessment
     of entity resolution.
-    Our own perception is that entity resolution models are simply theoretical
-    perspectives over the practical act of determining whether two entity
-    references refer to the same real-world entity.
+    Our opinion is that entity resolution models are simply theoretical
+    perspectives over the practical act of determining whether entity references
+    refer to the same real-world entity.
+    We surmised that there are matching models and clustering models and that
+    introducing a common terminology would be beneficial.
+    Through the step by step elimination of ambiguity, it turns out that the
+    abstract data type used for representing entity profiles is one of the most
+    practical consequences of choosing an entity resolution model over another.
 
     Depending on the entity resolution model, we saw that we may have different
     data structures to take into account when running an entity resolution
     process: from lists of pairs to partitions over a set.
-    Depending on the perspective and the data structures we choose, we can say
-    different things about the data we analyse.
-    We posited that we can even change our point of view from one perspective to
-    another without any data loss.
+    Depending on the abstract data type we are encouraged to use certain quality
+    evaluation metrics over others.
+    In an effort to allow comprehensive qualitative evaluation, we have shown
+    how we can switch from a matching model to a clustering model.
+    Thus we have shown how to use both probabilistic and clustering metrics on
+    the same data using the same ground truth.
 
-    Our experiment setup was designed to find invariant conditions that might
-    help reduce the time of picking a good entity resolution algorithm
-    configuration by leveraging entity resolution models.
-    One such condition is that \textbf{probabilistic recall is always going to
+    In an effort to make things more palpable, we have set up an experiment to
+    show how we might look for insights that are invariant on the implementation
+    choice and the data.
+    The experiment is a step by step description of the calibration of an entity
+    resolution solution.
+    
+    One such invariant was that \textbf{probabilistic recall is always going to
     be distorted when the size of the entity resolution result is much greater
     than the size of the ground truth.}
-    Luckily, pairwise recall is the perfect antidote for this distortion.
-    Probabilistic metrics might be cheap and easy to use, but use pairwise
-    metrics when in doubt.
+    We have shown that cluster metrics such as pairwise recall and cluster
+    recall provide a more realistic view to counteract this shortcoming of
+    probabilistic recall.
 
-    Another invariant is that \textbf{cluster precision is a good counterweight
-    to probabilistic and pairwise precision.}
-    This leads to cluster metrics forming a harmonious complement to
-    probabilistic metrics, pairwise metrics and to the Adjusted Rand Index (ARI)
-    which is also pair-based.
+    Another invariant is that \textbf{cluster precision is complementary to
+    probabilistic and pairwise precision.}
+    This leads to metrics that evaluate cluster shapes and sizes to form a
+    harmonious complement to probabilistic metrics, pairwise metrics and to the
+    Adjusted Rand Index (ARI) which is also pair-based.
     
     This leads us to our third invariant: \textbf{the Talburt-Wang Index and the
     cluster metrics on one side and the Adjusted Rand Index on the other usually
-    agree only when there is a good balance between precision and recall.}
-    The configuration value intervals where these metrics agree on a control
-    data set provides us with a good estimation of the best configuration
-    options for running an entity resolution algorithm.
+    agree only when there is a good balance between probabilistic precision and
+    recall.}
+    The configurations where these metrics agree on a control data set should be
+    used on real datasets with some confidence.
     These configurations seem to be effective irrespective of the data we run
     entity resolution on, even if that data is purposefully designed to skew the
     results.
 
     % \section[future]{Future Work}\label{sec:future}
 
-    The current paper covers only two models and there are more to cover.
+    From a theoretical perspective, the current paper covers only two entity
+    resolution models.
+    Now that the link between the abstract data type used to represent an entity
+    profile and the entity resolution model has been made, we should be looking
+    for more entity profile representations.
+
     Existing models such as the one proposed by the Stanford Entity Resolution
     Framework\cite{Ben2009Swoosh} or graph theoretical models used frequently in
-    entity alignment tasks are prime candidates.
-    On the other hand, we can also propose new models based on recent
-    developments in the field of machine learning and artificial intelligence.
+    entity alignment tasks are prime candidates for further exploration.
+    On the other hand, the calibration process can prove inspirational in
+    creating new automatically trained machine learning models for matching or
+    clustering.
 
     From an experimental perspective, we can expand our experiment base using
     more and more algorithms to find out whether the conjectures outlined in
