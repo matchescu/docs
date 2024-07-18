@@ -10,9 +10,8 @@ jobs:
         uses: xu-cheng/latex-action@v3
         with:
           root_file: |
-            01_article.tex
-            02_appendix.tex
-          working_directory: articles/er-metrics-library
+            main.tex
+          working_directory: ./articles/er-evaluation-models
       - name: Upload PDF
         uses: actions/upload-artifact@v3
         with:
