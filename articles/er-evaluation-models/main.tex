@@ -119,16 +119,20 @@ T \kern-.1667em \lower.7ex \hbox{E} \kern-.125emX}}
     Using this lens, entity resolution becomes interesting for more abstract
     problems such as knowledge management, computer vision or named entity
     recognition and disambiguation.
-    It's a shame that the matching and clustering models for entity resolution
-    don't currently use the same terminology.
-
+    Unfortunately, aligning the terminology for matching and clustering models
+    for entity resolution is done scarcely in
+    literature~\cite{jedai2017,Ben2009Swoosh} and focusing on other objectives
+    than ours.
+    
     Finding generic entity resolution terminology would allow us to pinpoint
-    the differences between entity resolution models more easily and more
-    clearly.
+    the particularities of each entity resolution model more easily and more
+    clearly. 
     It should also allow us to point out how the model influences the evaluation
-    of the practical task itself by doing away with abstract concepts that are
-    not directly relevant in practice.
-    It is by following this train of thought that we might find our invariants.
+    of an implementation by doing away with abstract concepts that are not
+    directly relevant in practice.
+    For example, the data structures behind the entity resolution output (often
+    referred to as entity profiles~\cite{jedai2017}) necessarily differ between
+    matching and clustering.
     
     To highlight the process of deriving the invariants from entity resolution
     models, we intend to showcase the calibration of a specific entity
@@ -142,8 +146,8 @@ T \kern-.1667em \lower.7ex \hbox{E} \kern-.125emX}}
     dataset and we will then verify our findings on well known benchmark data
     two orders of magnitude larger than the control.
     The story of distilling the invariants by inspecting the insights derived
-    from the two entity resolution models is the inspiration for this paper's
-    title and its primary narrative.
+    from the two entity resolution models is a deduction: it is both the
+    inspiration for this paper's title and its primary narrative.
     
     A secondary, yet important task helps us reach our main goal.
     Linking entity resolution quality metrics to model families (matching or
@@ -156,9 +160,9 @@ T \kern-.1667em \lower.7ex \hbox{E} \kern-.125emX}}
     Linking metrics to models also allows us to recognize the model we should
     use to deepen our understanding of a particular application of entity
     resolution.
-    Finally, associating models with abstract data types allows us to seamlessly
-    shift our perspective from one model to another for the same data and entity
-    resolution solution.
+    Finally, associating models with the abstract data types which back entity
+    profiles allows us to seamlessly shift our perspective from one model to
+    another for the same data and entity resolution solution.
     
     We follow this introduction with a preliminary description focused on
     clarifying the goals and research questions of this paper.
@@ -301,17 +305,19 @@ T \kern-.1667em \lower.7ex \hbox{E} \kern-.125emX}}
     on `real-world' data.
     
     We set out on a journey to find out whether entity resolution models might
-    provide additional insights that we would use in our qualitative assessment
-    of entity resolution.
+    provide additional insights (that we call invariants) to be used in our
+    qualitative assessment of entity resolution implementations.
     Our opinion is that entity resolution models are simply theoretical
     perspectives over the practical act of determining whether entity references
     refer to the same real-world entity.
-    We surmised that there are matching models and clustering models and that
-    introducing a common terminology would be beneficial.
-    Through the step by step elimination of ambiguity, it turns out that the
-    abstract data type used for representing entity profiles is one of the most
-    practical consequences of choosing an entity resolution model over another.
-
+    We surmised that introducing a common terminology applicable to both
+    matching and clustering model families would be beneficial.
+    It turns out that the abstract data type used for representing entity
+    profiles is one of the most practical consequences of choosing an entity
+    resolution model over another.
+    By knowing the abstract data type of the entity profile we empower the
+    quality metric selection and application.
+    
     Depending on the entity resolution model, we saw that we may have different
     data structures to take into account when running an entity resolution
     process: from lists of pairs to partitions over a set.
@@ -325,8 +331,11 @@ T \kern-.1667em \lower.7ex \hbox{E} \kern-.125emX}}
     In an effort to make things more palpable, we have set up an experiment to
     show how we might look for insights that are invariant on the implementation
     choice and the data.
-    The experiment is a step by step description of the calibration of an entity
-    resolution solution.
+    The experiment is two-folded.
+    On one hand, it is a step by step description of the calibration process of
+    an entity resolution solution with the goal of deducing invariants.
+    On the other hand, it confirms that the calibration process using the
+    invariants is valid and successful on much larger and diverse data sets.
     
     One such invariant was that \textbf{probabilistic recall is always going to
     be distorted when the size of the entity resolution result is much greater
@@ -355,13 +364,16 @@ T \kern-.1667em \lower.7ex \hbox{E} \kern-.125emX}}
 
     From a theoretical perspective, the current paper covers only two entity
     resolution models.
+    The findings can be transferred to studying other models and even other
+    model families.
     Now that the link between the abstract data type used to represent an entity
-    profile and the entity resolution model has been made, we should be looking
-    for more entity profile representations.
+    profile and the entity resolution model has been made, \textbf{we should be
+    looking for more entity profile representations}.
 
     Existing models such as the one proposed by the Stanford Entity Resolution
-    Framework\cite{Ben2009Swoosh} or graph theoretical models used frequently in
-    entity alignment tasks are prime candidates for further exploration.
+    Framework\cite{Ben2009Swoosh} or graph theoretical
+    models~\cite{veletsianos2009-enali,Kon19,Li2020} used frequently in entity
+    alignment tasks are prime candidates for further exploration.
     On the other hand, the calibration process can prove inspirational in
     creating new automatically trained machine learning models for matching or
     clustering.
@@ -373,14 +385,14 @@ T \kern-.1667em \lower.7ex \hbox{E} \kern-.125emX}}
     recall provides a distorted interpretation over the entity resolution result
     when the result size is significantly larger than the ground truth.
     Albeit challenging, experiments to verify this claim can and should be
-    designed.
+    designed since ML algorithms are trained and can presumably automatically
+    improve this component.
 
     Lastly, another significant dimension of entity resolution refers to the
     quantitative measurement of performance.
-    Entity resolution is usually an expensive process in terms of computational
-    resources.
-    A solution that balances well the outcome quality with performance is
-    desirable.
+    This also expands to entity resolution quality metrics.
+    The existing findings~\cite{matchescu-er-metrics2023} can be augmented for
+    other metrics and model families.
 
     \balance
     \bibliographystyle{ieeetr}
