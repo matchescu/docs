@@ -1,0 +1,6 @@
+notebooks/ditto.ipynb filter=lfs diff=lfs merge=lfs -text
+notebooks/fellegi_sunter.ipynb filter=lfs diff=lfs merge=lfs -text
+notebooks/logistic_regression.ipynb filter=lfs diff=lfs merge=lfs -text
+notebooks/logistic_regression_patterns.ipynb filter=lfs diff=lfs merge=lfs -text
+notebooks/naive_bayes.ipynb filter=lfs diff=lfs merge=lfs -text
+notebooks/use_distance_features.ipynb filter=lfs diff=lfs merge=lfs -text
