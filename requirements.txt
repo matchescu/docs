@@ -96,6 +96,7 @@ prompt_toolkit==3.0.50
 psutil==7.0.0
 ptyprocess==0.7.0
 pure_eval==0.2.3
+pyarrow==20.0.0
 pycparser==2.22
 Pygments==2.19.1
 pyparsing==3.2.3
@@ -146,6 +147,7 @@ webcolors==24.11.1
 webencodings==0.5.1
 websocket-client==1.8.0
 widgetsnbextension==4.0.13
+xxhash==3.5.0
 matchescu-base @ file:../base
 matchescu-comparison-space-generation @ file:../comparison-space-generation
 matchescu-reference-extraction @ file:../reference-extraction
