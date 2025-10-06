@@ -1,3 +1,4 @@
+notebooks/algebraic.ipynb filter=lfs diff=lfs merge=lfs -text
 notebooks/ditto.ipynb filter=lfs diff=lfs merge=lfs -text
 notebooks/fellegi_sunter.ipynb filter=lfs diff=lfs merge=lfs -text
 notebooks/logistic_regression.ipynb filter=lfs diff=lfs merge=lfs -text
