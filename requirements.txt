@@ -63,12 +63,6 @@ kaleido==0.2.1
 kiwisolver==1.4.8
 markov-clustering==0.0.6.dev0
 MarkupSafe==3.0.2
-matchescu-base @ file:../base
-matchescu-clustering @ file:../clustering
-matchescu-comparison-space-generation @ file:../comparison-space-generation
-matchescu-matching @ file:../matching
-matchescu-reference-extraction @ file:../reference-extraction
-matchescu-reference-store @ file:../reference-store
 matplotlib==3.10.1
 matplotlib-inline==0.1.7
 mistune==3.1.3
