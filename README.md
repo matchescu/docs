@@ -16,7 +16,7 @@ repo:
 
 ```shell
 $ pip install --upgrade pip wheel setuptools
-$ pip install -r requirements.txt
+$ pip install -r requirements.txt -r requirements-local.txt
 ```
 
 Verify the installation was successful by running `jupyter-notebook`, then pick

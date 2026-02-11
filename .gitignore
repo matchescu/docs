@@ -1,4 +1,5 @@
 notebooks/figures
+notebooks/*.csv
 notebooks/*.png
 .DS_Store
 *.pdf
