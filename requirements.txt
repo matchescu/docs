@@ -101,10 +101,11 @@ polars-runtime-32==1.37.1
 ppjoin @ git+https://github.com/usc-isi-i2/ppjoin@3362da97afb60aedaddf36bacaeb8d214ffcf7b9
 prometheus_client==0.24.1
 prompt_toolkit==3.0.52
+protobuf==6.33.5
 psutil==7.2.2
 ptyprocess==0.7.0
 pure_eval==0.2.3
-pyarrow==23.0.0
+pyarrow>=21.0.0
 pycparser==3.0
 Pygments==2.19.2
 pyparsing==3.3.2
@@ -128,7 +129,7 @@ ruff==0.14.14
 safetensors==0.7.0
 SciencePlots==2.2.0
 scikit-learn==1.8.0
-scipy==1.17.0
+scipy>=1.16.3
 seaborn==0.13.2
 Send2Trash==2.1.0
 sentencepiece==0.2.1
@@ -145,14 +146,14 @@ sympy==1.14.0
 terminado==0.18.1
 threadpoolctl==3.6.0
 tiktoken==0.12.0
-tinycss2==1.5.1
+tinycss2>=1.1.0
 tokenize_rt==6.2.0
 tokenizers==0.22.2
 torch==2.10.0
 tornado==6.5.4
 tqdm==4.67.2
 traitlets==5.14.3
-transformers==5.0.0
+transformers>=4.49.0
 typer-slim==0.21.1
 types-python-dateutil==2.9.0.20260124
 typing_extensions==4.15.0
